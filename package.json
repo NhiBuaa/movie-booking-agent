@@ -1,0 +1,15 @@
+{
+  "name": "movie-booking-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Comprehensive Movie Booking Platform featuring Web, Mobile, Organizer Portal, Cinema Core, and AI Agent.",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "test": "npm test --workspace=apps/web",
+    "test:all": "npm run test --workspaces --if-present"
+  }
+}

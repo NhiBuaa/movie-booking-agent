@@ -1,0 +1,124 @@
+.legendRoot {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 18px 24px;
+  background-color: var(--color-notte-profonda);
+  border-top: 1px solid var(--color-grafite);
+}
+
+.legendTitle {
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+}
+
+.legendItems {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.swatch {
+  width: 26px;
+  height: 22px;
+  border-radius: var(--radius-sharp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Swatch Variants */
+.swatchStandard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+}
+
+.swatchVip {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-bianco-ferrari);
+  position: relative;
+}
+
+.swatchVip::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-grafite);
+  pointer-events: none;
+}
+
+.swatchSweetbox {
+  width: 36px;
+  height: 22px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-rosso-corsa);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sharp);
+  box-shadow: 0 0 6px rgba(218, 41, 28, 0.25);
+  flex-shrink: 0;
+}
+
+.swatchSweetbox::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px dashed rgba(218, 41, 28, 0.5);
+  pointer-events: none;
+}
+
+.sweetboxDivider {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 50%;
+  width: 1px;
+  background-color: rgba(218, 41, 28, 0.5);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.swatchSelected {
+  background-color: var(--color-bianco-ferrari, #ffffff);
+  border: 1px solid var(--color-bianco-ferrari, #ffffff);
+  color: var(--color-carbone-nero, #000000);
+}
+
+.swatchSold {
+  background-color: #111111;
+  border: 1px solid #222222;
+  color: var(--color-piombo);
+}
+
+.legendLabel {
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-fumo);
+}
+
+@media (max-width: 900px) {
+  .legendRoot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

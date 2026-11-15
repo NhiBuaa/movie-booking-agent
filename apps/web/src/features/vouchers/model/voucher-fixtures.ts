@@ -1,0 +1,42 @@
+import type { VoucherItem } from './types.ts';
+
+export const VOUCHER_FIXTURES: VoucherItem[] = [
+  {
+    id: 'voucher-1',
+    code: 'CINE50K',
+    stubTitle: '50.000 đ',
+    stubSubtitle: 'GIẢM TIỀN VÉ',
+    title: 'TRI ÂN ĐIỆN ẢNH 2026',
+    description: 'Áp dụng cho đơn từ 2 vé xem phim trở lên tại mọi cụm rạp đối tác.',
+    expiryDate: '30/11/2026',
+    daysRemaining: 3,
+    discountType: 'amount',
+    discountValue: 50000,
+    minTicketCount: 2,
+    applicableCinemas: 'Mọi cụm rạp',
+  },
+  {
+    id: 'voucher-2',
+    code: 'FREEPOPCORN',
+    stubTitle: 'TẶNG 01 BẮP',
+    stubSubtitle: 'COMBO CONCESSIONS',
+    title: 'TẶNG BẮP PHÔ MAI KHI MUA 2 NƯỚC',
+    description: 'Áp dụng cho các suất chiếu từ Thứ 2 đến Thứ 5 hàng tuần.',
+    expiryDate: '15/12/2026',
+    discountType: 'free_item',
+    discountValue: 59000,
+    applicableCinemas: 'CGV, BHD, Galaxy',
+  },
+  {
+    id: 'voucher-3',
+    code: 'WEEKENDVISA',
+    stubTitle: 'GIẢM 20%',
+    stubSubtitle: 'VÍ ĐIỆN TỬ / THẺ VISA',
+    title: 'ƯU ĐÃI CHỦ THẺ CUỐI TUẦN',
+    description: 'Giảm tối đa 40.000đ khi thanh toán qua thẻ tín dụng liên kết.',
+    expiryDate: '31/12/2026',
+    discountType: 'percent',
+    discountValue: 20,
+    applicableCinemas: 'Mọi cụm rạp',
+  },
+];

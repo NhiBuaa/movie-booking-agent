@@ -1,0 +1,143 @@
+.cinemasSection {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 40px auto 0;
+  padding: 0 var(--page-padding-x);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.allLink {
+  border: 1px solid var(--color-grafite);
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.allLink:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #1a1a1a;
+}
+
+.allLink:active {
+  transform: var(--active-press-scale, scale(0.98));
+}
+
+.cinemasGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.cinemaCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.cinemaCard:hover {
+  transform: translateY(-4px);
+  border-color: #484848;
+}
+
+.cardTitle {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.address {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.features {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.showtimes {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 16px;
+  margin-top: auto;
+}
+
+.scheduleBtn {
+  border: 1px solid var(--color-grafite);
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.scheduleBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.scheduleBtn:active {
+  transform: var(--active-press-scale, scale(0.98));
+}
+
+@media (max-width: 1024px) {
+  .cinemasGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cinemasSection {
+    padding: 0 24px;
+  }
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

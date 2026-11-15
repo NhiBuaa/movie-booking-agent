@@ -1,0 +1,614 @@
+/**
+ * S22A - Movie Trailers & Video Teasers CSS Module
+ * Aligned with Figma Node 576:824 (W: 1440, H: 1273) & Ferrari Dark Theme
+ */
+
+.trailersPage {
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= 02. Sub-Header (H: 76px, Bg: #111111) ================= */
+.subHeader {
+  height: 76px;
+  background-color: #111111;
+  border-bottom: 1px solid #303030;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 72px; /* right below global header */
+  z-index: 40;
+}
+
+.subHeaderInner {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.subHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #181818;
+  border: 1px solid #303030;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.backBtn:hover {
+  background-color: #222222;
+  border-color: #444444;
+}
+
+.backBtn:active {
+  transform: scale(0.98);
+}
+
+.subHeaderDivider {
+  width: 1px;
+  height: 28px;
+  background-color: #303030;
+}
+
+.movieMetaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.movieTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.movieMetaRow1 {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.movieMetaRow2 {
+  font-size: 11px;
+  color: #666666;
+  margin: 0;
+}
+
+.subHeaderCenter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabBtnActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: #181818;
+  border: 1px solid #da291c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tabBtnInactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #8F8F8F;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.tabBtnInactive:hover {
+  color: #ffffff;
+  background-color: #181818;
+}
+
+.bookCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background-color: #da291c;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.bookCtaBtn:hover {
+  background-color: #b81f14;
+}
+
+.bookCtaBtn:active {
+  transform: scale(0.98);
+}
+
+/* ================= Main Content Layout ================= */
+.mainLayout {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 32px var(--page-padding-x) 48px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* ================= 03. Video Playlist Sidebar ================= */
+.sidebarPlaylist {
+  width: 340px;
+  flex-shrink: 0;
+  background-color: #181818;
+  border: 1px solid #303030;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 16px 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #303030;
+}
+
+.sidebarHeading {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.autoplayToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #8F8F8F;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: color 150ms ease-out;
+}
+
+.autoplayToggle:hover {
+  color: #ffffff;
+}
+
+.autoplayBadgeOn {
+  color: #da291c;
+  font-weight: 700;
+}
+
+.playlistItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.playlistItem {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  background-color: #141414;
+  border: 1px solid #282828;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  width: 100%;
+}
+
+.playlistItem:hover {
+  background-color: #202020;
+  border-color: #383838;
+}
+
+.playlistItemActive {
+  background-color: #1f1212;
+  border-color: #da291c;
+}
+
+.playlistItem:active {
+  transform: scale(0.98);
+}
+
+.thumbnailContainer {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  flex-shrink: 0;
+  background-color: #000000;
+  overflow: hidden;
+}
+
+.thumbnailImg {
+  object-fit: cover;
+}
+
+.thumbnailPlayOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.itemMeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.itemTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemStatusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #8F8F8F;
+}
+
+.playingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #da291c;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+}
+
+.sidebarFooterLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-top: 1px solid #303030;
+  color: #B0B0B0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  background-color: #141414;
+  transition: color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.sidebarFooterLink:hover {
+  color: #ffffff;
+  background-color: #1a1a1a;
+}
+
+/* ================= Right Section: Player, Controls & Synopsis ================= */
+.playerColumn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 04. Video Player Viewport */
+.videoPlayerViewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoBackdrop {
+  object-fit: cover;
+}
+
+.videoVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%),
+              linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.videoIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.bigPlayBtn {
+  position: relative;
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  background-color: #da291c;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 150ms ease-out, background-color 150ms ease-out;
+  box-shadow: 0 4px 20px rgba(218, 41, 28, 0.5);
+}
+
+.bigPlayBtn:hover {
+  background-color: #ff3324;
+  transform: scale(1.06);
+}
+
+.bigPlayBtn:active {
+  transform: scale(0.96);
+}
+
+.formatBadgeTopRight {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 4px 10px;
+  background-color: rgba(0, 0, 0, 0.75);
+  border: 1px solid #444444;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.08em;
+  z-index: 5;
+}
+
+/* 05. Video Controls & Scrubber */
+.controlsBar {
+  background-color: #181818;
+  border: 1px solid #303030;
+  border-top: none;
+  padding: 12px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scrubberTrackContainer {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.scrubberTrackBg {
+  width: 100%;
+  height: 6px;
+  background-color: #303030;
+  position: relative;
+  overflow: hidden;
+}
+
+.scrubberTrackPlayed {
+  height: 100%;
+  background-color: #da291c;
+  transition: width 100ms linear;
+}
+
+.scrubberKnob {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background-color: #ffffff;
+  border: 2px solid #da291c;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 6px rgba(218, 41, 28, 0.6);
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.controlsGroupLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.controlIconBtn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease-out, transform 150ms ease-out;
+}
+
+.controlIconBtn:hover {
+  color: #da291c;
+}
+
+.controlIconBtn:active {
+  transform: scale(0.95);
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.volumeSlider {
+  width: 60px;
+  accent-color: #da291c;
+  cursor: pointer;
+  height: 4px;
+}
+
+.videoTimeReadout {
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #B0B0B0;
+  letter-spacing: 0.05em;
+}
+
+.controlsGroupRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.captionsBtn {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  background-color: transparent;
+  border: 1px solid #444444;
+  color: #8F8F8F;
+  cursor: pointer;
+  transition: all 150ms ease-out;
+}
+
+.captionsBtnActive {
+  border-color: #da291c;
+  color: #ffffff;
+  background-color: #241414;
+}
+
+.resolutionSelector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background-color: #121212;
+  border: 1px solid #333333;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resolutionSelector:focus {
+  outline: 1px solid #da291c;
+}
+
+/* 06. Synopsis & Booking CTA */
+.synopsisCtaBar {
+  background-color: #111111;
+  border: 1px solid #303030;
+  border-top: none;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.synopsisInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.synopsisTitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.synopsisCredits {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.synopsisText {
+  font-size: 13px;
+  color: #B0B0B0;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+
+.actionBookBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background-color: #da291c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.actionBookBtn:hover {
+  background-color: #b81f14;
+}
+
+.actionBookBtn:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,345 @@
+.pageWrapper {
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  color: var(--color-bianco-ferrari, #ffffff);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1840px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 80px);
+}
+
+/* Nav & Breadcrumb */
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.backBtn:hover {
+  border-color: #ffffff;
+}
+
+.backBtn:active {
+  transform: scale(0.97);
+}
+
+.breadcrumbText {
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+/* Two-column Ticket Grid */
+.ticketLayoutGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(360px, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .ticketLayoutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Admission Ticket Card */
+.admissionCard {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ticketCountLabel {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.confirmedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background-color: #0d281e;
+  border: 1px solid #2e7d5b;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.movieTitle {
+  font-family: var(--font-roboto-slab, 'Roboto Slab', serif);
+  font-size: clamp(24px, 2.5vw, 30px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.movieSubtitle {
+  font-size: 14px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+/* 4-Field Grid */
+.fourFieldGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-grafite, #303030);
+  border-bottom: 1px solid var(--color-grafite, #303030);
+}
+
+@media (max-width: 640px) {
+  .fourFieldGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.fieldItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-fumo, #8f8f8f);
+  text-transform: uppercase;
+}
+
+.fieldValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fieldValueHighlight {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Concessions banner in ticket */
+.concessionsCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+}
+
+.comboTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.comboName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.comboCode {
+  font-size: 12.5px;
+  color: #ffffff;
+}
+
+.reminderRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+  line-height: 1.5;
+}
+
+/* Right QR Card */
+.qrCard {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.qrHeaderTitle {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.qrWell {
+  width: 256px;
+  height: 256px;
+  background-color: #ffffff;
+  border: 1px solid var(--color-grafite, #303030);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.qrCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+.qrDisclaimer {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-fumo, #8f8f8f);
+  margin-top: 16px;
+}
+
+.qrCodeNumber {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff;
+  margin: 6px 0;
+}
+
+.qrInstruction {
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.actionsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.primaryActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  color: #0a0a0a;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.primaryActionBtn:active {
+  transform: scale(0.97);
+}
+
+.secondaryActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 44px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.secondaryActionBtn:hover {
+  border-color: #ffffff;
+}
+
+.secondaryActionBtn:active {
+  transform: scale(0.97);
+}
+
+/* Zoom Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalContent {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 440px;
+  width: 90%;
+  animation: scaleUp 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalCloseBtn {
+  margin-top: 20px;
+  height: 40px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border: none;
+  color: #0a0a0a;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}

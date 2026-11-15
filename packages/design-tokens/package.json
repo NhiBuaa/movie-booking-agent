@@ -1,0 +1,9 @@
+{
+  "name": "@platform/design-tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design tokens (Ferrari Dark Cinema style) for Movie Booking Platform",
+  "exports": {
+    "./tokens.css": "./tokens.css"
+  }
+}

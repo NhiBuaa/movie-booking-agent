@@ -1,0 +1,570 @@
+/**
+ * S03 Chat Timeline Styles - Pixel-perfect to Figma Node 760:2625
+ * Ferrari Dark Theme: 0px border-radius, #000000, #181818, #303030, #da291c, #ffffff
+ */
+
+.timelineContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 8px 24px 24px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   03B / BUAA WELCOME AND TRUST BADGES (Figma Node 760:2703: h=132px, w=816px)
+   ========================================================================== */
+.welcomeCard {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  padding: 14px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.welcomeHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.robotAvatar {
+  width: 52px;
+  height: 52px;
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.welcomeTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.welcomeTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22px;
+  color: var(--color-bianco-ferrari, #ffffff);
+  margin: 0;
+}
+
+.welcomeDesc {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 17px;
+  color: var(--color-fumo, #8f8f8f);
+  margin: 0;
+}
+
+.trustBadgesRow {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-grafite, #303030);
+  flex-wrap: wrap;
+}
+
+.trustBadgeItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+/* ==========================================================================
+   TRENDING MOVIES SECTION (Figma Node 760:2722 - 760:2768)
+   ========================================================================== */
+.trendingSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sectionHeading {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.144px;
+  line-height: 19px;
+  color: var(--color-bianco-ferrari, #ffffff);
+  text-transform: uppercase;
+}
+
+.sectionLink {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--color-fumo, #8f8f8f);
+  text-decoration: none;
+  transition: color var(--transition-fast, 150ms ease);
+}
+
+.sectionLink:hover {
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.sectionHint {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10.2px;
+  font-weight: 500;
+  line-height: 17px;
+  color: var(--color-fumo, #8f8f8f);
+  text-transform: uppercase;
+}
+
+.movieGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.movieCard {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.movieCardTop {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.posterWrapper {
+  width: 76px;
+  height: 108px;
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.moviePoster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.movieInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.movieFormat {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 15px;
+  color: var(--color-fumo, #8f8f8f);
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 1px 6px;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+.movieTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  color: var(--color-bianco-ferrari, #ffffff);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movieMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.movieRatingStar {
+  color: var(--color-bianco-ferrari, #ffffff);
+  font-size: 12px;
+}
+
+.movieShowtimePill {
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 3px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: center;
+  margin-top: 2px;
+}
+
+.movieShowtimeTime {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 15px;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.movieShowtimeCinema {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 14px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.bookMovieBtnPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 38px;
+  background-color: var(--color-bianco-ferrari, #ffffff);
+  border: none;
+  color: var(--color-carbone-nero, #000000);
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sharp, 0px);
+  cursor: pointer;
+  transition: opacity var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.bookMovieBtnPrimary:hover {
+  opacity: 0.9;
+}
+
+.bookMovieBtnPrimary:active {
+  transform: scale(0.98);
+}
+
+.bookMovieBtnSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 38px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-bianco-ferrari, #ffffff);
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sharp, 0px);
+  cursor: pointer;
+  transition: border-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.bookMovieBtnSecondary:hover {
+  border-color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.bookMovieBtnSecondary:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   PROMPT STARTERS SECTION (Figma Node 760:2769 - 760:2798)
+   ========================================================================== */
+.promptStartersSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.promptGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.promptCard {
+  height: 68px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.promptCard:hover {
+  border-color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.promptCard:active {
+  transform: scale(0.99);
+}
+
+.promptIconBox {
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.promptTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.promptTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--color-bianco-ferrari, #ffffff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.promptDesc {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10.2px;
+  font-weight: 400;
+  line-height: 15px;
+  color: var(--color-fumo, #8f8f8f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   QUICK DISCOVERY TOPICS (Figma Node 760:2799: h=60px)
+   ========================================================================== */
+.topicsBar {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 14px;
+}
+
+.topicsLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.topicsTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 17px;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.topicsSubtitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10.5px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.topicsButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topicBtn {
+  height: 40px;
+  padding: 0 14px;
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-bianco-ferrari, #ffffff);
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  border-radius: var(--radius-sharp, 0px);
+  transition: border-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.topicBtn:hover {
+  border-color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.topicBtn:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   CONVERSATION MESSAGES STREAM
+   ========================================================================== */
+.messagesList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.messageWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.userWrapper {
+  justify-content: flex-end;
+}
+
+.agentWrapper {
+  justify-content: flex-start;
+}
+
+.agentMsgAvatar {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-carbone-nero, #000000);
+  border: 1px solid var(--color-grafite, #303030);
+  border-radius: var(--radius-sharp, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.messageContentCol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.userWrapper .messageContentCol {
+  align-items: flex-end;
+  max-width: 85%;
+}
+
+.bubble {
+  padding: 12px 16px;
+  border-radius: var(--radius-sharp, 0px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: fit-content;
+}
+
+.userBubble {
+  background-color: var(--color-grafite, #303030);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.agentBubble {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.bubbleText {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.timestamp {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 10px;
+  color: var(--color-fumo, #8f8f8f);
+  align-self: flex-end;
+}
+
+.embeddedCardContainer {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .movieGrid {
+    grid-template-columns: 1fr;
+  }
+  .promptGrid {
+    grid-template-columns: 1fr;
+  }
+  .topicsBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .topicsButtons {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}

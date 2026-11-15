@@ -1,0 +1,268 @@
+.gridRoot {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 36px;
+  background-color: var(--color-carbone-nero);
+}
+
+/* Zoom Controls Bar */
+.zoomControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+  margin-bottom: 24px;
+}
+
+.zoomBtn {
+  width: 44px;
+  height: 40px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  color: var(--color-bianco-ferrari);
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.zoomBtn:hover:not(:disabled) {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #242424;
+}
+
+.zoomBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.zoomBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.zoomLabel {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Scroll Area & Zoom Container */
+.scrollArea {
+  width: 100%;
+  max-width: var(--page-max-width);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 0 20px;
+  display: flex;
+  justify-content: center;
+  -webkit-overflow-scrolling: touch;
+}
+
+.zoomWrapper {
+  transform-origin: top center;
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 860px;
+}
+
+/* Column Numbers Row */
+.colNumbersRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 0 40px;
+}
+
+.colNumberGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.colNumberAisle {
+  width: 32px;
+}
+
+.colNumberItem {
+  width: 44px;
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-fumo);
+  text-align: center;
+  user-select: none;
+}
+
+/* Row of Seats */
+.matrixRows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seatRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rowLetter {
+  width: 28px;
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-fumo);
+  text-align: center;
+  user-select: none;
+}
+
+.seatGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.aisleGap {
+  width: 32px;
+  flex-shrink: 0;
+}
+
+/* Base Seat Button */
+.seat {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sharp);
+  border: 1px solid var(--color-grafite);
+  background-color: var(--color-notte-profonda);
+  color: var(--color-bianco-ferrari);
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1),
+              background-color 150ms ease,
+              border-color 150ms ease,
+              box-shadow 150ms ease;
+  will-change: transform;
+}
+
+/* Seat Available State */
+.seatAvailable:hover {
+  border-color: var(--color-bianco-ferrari);
+  transform: scale(1.06);
+  z-index: 2;
+}
+
+.seatAvailable:active {
+  transform: scale(0.95);
+}
+
+/* Seat VIP Variant */
+.seatVip {
+  border-color: var(--color-bianco-ferrari);
+  font-weight: 600;
+}
+
+.seatVip::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--color-grafite);
+  pointer-events: none;
+}
+
+.seatVip:hover {
+  border-color: var(--color-rosso-corsa);
+  transform: scale(1.06);
+  z-index: 2;
+}
+
+/* Sweetbox Couple Variant */
+.seatSweetbox {
+  border-color: var(--color-rosso-corsa);
+}
+
+.seatSweetbox::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px dashed rgba(218, 41, 28, 0.35);
+  pointer-events: none;
+}
+
+.seatSweetbox:hover {
+  border-color: #ff4d40;
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+/* Pair Hovered State: When hovering either seat in the couple, both glow */
+.seatPairHovered {
+  border-color: #ff4d40 !important;
+  box-shadow: 0 0 10px rgba(218, 41, 28, 0.45);
+  transform: scale(1.05);
+  z-index: 3;
+}
+
+.seatPairHovered::after {
+  border-color: rgba(255, 77, 64, 0.7) !important;
+}
+
+/* Selected State (Figma Node 513:340 - Pure White Seat with Sharp Contrast) */
+.seatSelected {
+  background-color: var(--color-bianco-ferrari, #ffffff) !important;
+  border-color: var(--color-bianco-ferrari, #ffffff) !important;
+  color: var(--color-carbone-nero, #000000) !important;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+  transform: scale(1.02);
+  z-index: 3;
+}
+
+.seatSelected:hover {
+  background-color: #f0f0f0 !important;
+  border-color: #f0f0f0 !important;
+  transform: scale(1.08);
+}
+
+.seatSelected:active {
+  transform: scale(0.96);
+}
+
+/* Sold / Reserved State */
+.seatSold {
+  background-color: #111111;
+  border-color: #222222;
+  color: var(--color-piombo);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.soldMark {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-piombo);
+}

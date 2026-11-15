@@ -1,0 +1,418 @@
+/* S13 Payment Success & ETicket Styles */
+
+.successContainer {
+  max-width: 1080px;
+  margin: 32px auto 48px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 40px clamp(24px, 3.5vw, 48px);
+  border-radius: var(--radius-sharp);
+  display: flex;
+  flex-direction: column;
+}
+
+.successHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.successIconWrapper {
+  width: 56px;
+  height: 56px;
+  background-color: #0d281e;
+  border: 2px solid #2e7d5b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.successCheckIcon {
+  width: 28px;
+  height: 28px;
+  color: #38b280;
+}
+
+.successTitle {
+  font-family: var(--font-family-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.successSubtitle {
+  font-size: 13px;
+  color: var(--color-fumo);
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+/* Booking confirmation strip */
+.confirmationStrip {
+  background-color: #222222;
+  border: 1px solid var(--color-grafite);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.bookingIdGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookingIdLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-fumo);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bookingIdCode {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.06em;
+}
+
+.confirmedBadge {
+  background-color: #0d281e;
+  border: 1px solid #2e7d5b;
+  color: #38b280;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shieldIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Two panels grid */
+.panelsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelHeading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--color-grafite);
+}
+
+.panelHeadingIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-fumo);
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.metaItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.metaLabel {
+  color: var(--color-fumo);
+}
+
+.metaValue {
+  color: var(--color-bianco-ferrari);
+  font-weight: 500;
+  text-align: right;
+}
+
+.metaValueHighlight {
+  color: var(--color-rosso-corsa);
+  font-weight: 600;
+}
+
+.totalRowSuccess {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-grafite);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.totalPaidLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+}
+
+.totalPaidAmount {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-bianco-ferrari);
+}
+
+.emailReceiptNotice {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-top: 10px;
+}
+
+/* Showtime & QR Panel */
+.movieNameSuccess {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 4px;
+}
+
+.movieSpecSuccess {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-bottom: 14px;
+}
+
+/* QR Section */
+.noticeInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-grafite, #303030);
+}
+
+.qrCodeSection {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-grafite);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.qrWrapper {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: var(--radius-sharp);
+  display: inline-flex;
+  margin-bottom: 10px;
+}
+
+.qrInstruction {
+  font-size: 11px;
+  color: var(--color-fumo);
+  line-height: 1.4;
+}
+
+/* Issued Banner */
+.issuedBanner {
+  background-color: #0d281e;
+  border: 1px solid #2e7d5b;
+  border-left: 4px solid #2e7d5b;
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.issuedIcon {
+  width: 24px;
+  height: 24px;
+  color: #38b280;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.issuedTextTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.issuedTextDesc {
+  font-size: 11px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+}
+
+/* Actions */
+.primaryActionsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.actionBtnPrimary {
+  height: 46px;
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  border: 1px solid var(--color-bianco-ferrari);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-normal);
+}
+
+.actionBtnPrimary:hover {
+  background-color: #e5e5e5;
+  border-color: #e5e5e5;
+}
+
+.actionBtnPrimary:active {
+  transform: var(--active-press-scale);
+}
+
+.actionBtnSecondary {
+  height: 46px;
+  background-color: var(--color-notte-profonda);
+  color: var(--color-bianco-ferrari);
+  border: 1px solid var(--color-bianco-ferrari);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-normal);
+}
+
+.actionBtnSecondary:hover {
+  background-color: #242424;
+}
+
+.actionBtnSecondary:active {
+  transform: var(--active-press-scale);
+}
+
+.secondaryActionsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.actionBtnTertiary {
+  height: 38px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-fumo);
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+}
+
+.actionBtnTertiary:hover {
+  border-color: var(--color-bianco-ferrari);
+  color: var(--color-bianco-ferrari);
+}
+
+.actionBtnTertiary:active {
+  transform: var(--active-press-scale);
+}
+
+/* PDF Modal Preview (optional) */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+
+.modalContent {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  max-width: 500px;
+  width: 100%;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .successContainer {
+    padding: 24px 16px;
+    margin: 16px 8px;
+  }
+  .confirmationStrip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .panelsGrid {
+    grid-template-columns: 1fr;
+  }
+  .primaryActionsRow {
+    grid-template-columns: 1fr;
+  }
+  .secondaryActionsRow {
+    grid-template-columns: 1fr;
+  }
+}

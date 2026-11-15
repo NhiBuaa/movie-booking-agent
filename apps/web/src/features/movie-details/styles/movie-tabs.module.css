@@ -1,0 +1,85 @@
+.tabsNavWrapper {
+  position: sticky;
+  top: 72px; /* Header height */
+  z-index: 10;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-grafite);
+}
+
+.tabsContainer {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .tabsContainer {
+    padding: 0 20px;
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabsContainer::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tabBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+  color: var(--color-fumo);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.tabBtn:hover {
+  color: var(--color-bianco-ferrari);
+}
+
+.tabBtn:active {
+  transform: scale(0.97);
+}
+
+.tabBtnActive {
+  color: var(--color-bianco-ferrari);
+}
+
+.activeIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-rosso-corsa);
+  transition: transform var(--transition-fast);
+}
+
+.tabBadge {
+  font-size: 10px;
+  padding: 2px 6px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-fumo);
+  border-radius: var(--radius-sharp);
+}
+
+.tabBtnActive .tabBadge {
+  border-color: var(--color-rosso-corsa);
+  color: var(--color-bianco-ferrari);
+}

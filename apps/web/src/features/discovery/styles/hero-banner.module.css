@@ -1,0 +1,187 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  background-color: var(--color-carbone-nero);
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  filter: brightness(0.7);
+}
+
+/* Scrim & Vignettes */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.vignetteLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.vignetteRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 240px;
+  height: 100%;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.bottomFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--color-carbone-nero));
+}
+
+.container {
+  position: relative;
+  z-index: 10;
+  max-width: var(--page-max-width);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.posterWrapper {
+  position: relative;
+  width: 208px;
+  height: 312px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-grafite);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.8);
+  transition: transform var(--transition-normal);
+}
+
+.posterWrapper:hover {
+  transform: translateY(-4px);
+}
+
+.posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 860px;
+}
+
+.title {
+  font-family: var(--font-family-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+
+.metadata {
+  font-size: 16px;
+  color: var(--color-fumo);
+  margin-bottom: 16px;
+}
+
+.formatTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-bianco-ferrari);
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.08em;
+  width: fit-content;
+  margin-bottom: 32px;
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 48px;
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sharp);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btnPrimary:hover {
+  background-color: var(--color-rosso-corsa);
+  color: var(--color-bianco-ferrari);
+}
+
+.btnPrimary:active {
+  transform: var(--active-press-scale);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 48px;
+  border: 1px solid var(--color-bianco-ferrari);
+  color: var(--color-bianco-ferrari);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sharp);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btnSecondary:hover {
+  background-color: #222222;
+  border-color: var(--color-fumo);
+}
+
+.btnSecondary:active {
+  transform: var(--active-press-scale);
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    height: auto;
+    padding: 48px 0;
+  }
+  .container {
+    flex-direction: column;
+    padding: 0 24px;
+  }
+  .title {
+    font-size: 32px;
+  }
+}

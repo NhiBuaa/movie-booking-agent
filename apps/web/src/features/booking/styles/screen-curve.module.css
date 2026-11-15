@@ -1,0 +1,79 @@
+.screenContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Cinematic Projection Light Wash */
+.lightWash {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 980px;
+  height: 220px;
+  background: radial-gradient(
+    ellipse 65% 55% at 50% 0%,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(218, 41, 28, 0.04) 30%,
+    rgba(255, 255, 255, 0.02) 60%,
+    transparent 100%
+  );
+  filter: blur(20px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Secondary diffuse beam */
+.lightBeamSpread {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 120px;
+  background: conic-gradient(
+    from 150deg at 50% -20%,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.12) 25deg,
+    rgba(255, 255, 255, 0.2) 30deg,
+    rgba(255, 255, 255, 0.12) 35deg,
+    transparent 60deg
+  );
+  filter: blur(14px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Curved Screen SVG Arc */
+.screenArcWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  height: 38px;
+}
+
+.screenSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Screen Label */
+.screenLabel {
+  margin-top: 10px;
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+  text-align: center;
+}

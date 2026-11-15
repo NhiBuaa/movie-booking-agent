@@ -1,0 +1,519 @@
+/**
+ * S22B - Movie Photo Gallery & Behind-the-Scenes CSS Module
+ * Aligned with Figma Node 580:884 (W: 1440, H: 1224) & Ferrari Dark Theme
+ */
+
+.galleryPage {
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= 02. Sub-Header (H: 72px, Bg: #111111) ================= */
+.subHeader {
+  height: 72px;
+  background-color: #111111;
+  border-bottom: 1px solid #303030;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+}
+
+.subHeaderInner {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.subHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #181818;
+  border: 1px solid #303030;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.backBtn:hover {
+  background-color: #222222;
+  border-color: #444444;
+}
+
+.backBtn:active {
+  transform: scale(0.98);
+}
+
+.subHeaderDivider {
+  width: 1px;
+  height: 28px;
+  background-color: #303030;
+}
+
+.movieMetaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.movieTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.movieMetadata {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.subHeaderCenter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tabLinkInactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background-color: transparent;
+  color: #8F8F8F;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 150ms ease-out;
+}
+
+.tabLinkInactive:hover {
+  color: #ffffff;
+}
+
+.tabLinkActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid #da291c;
+}
+
+.bookCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background-color: #181818;
+  border: 1px solid #303030;
+  border-left: 2px solid #da291c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.bookCtaBtn:hover {
+  background-color: #222222;
+  border-color: #444444;
+}
+
+.bookCtaBtn:active {
+  transform: scale(0.98);
+}
+
+/* ================= Main Container ================= */
+.mainContainer {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 24px var(--page-padding-x) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ================= 03. Gallery Toolbar ================= */
+.galleryToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+}
+
+.galleryHeading {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.viewModeControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewModeBtnActive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: #181818;
+  border: 1px solid #da291c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.viewModeBtnInactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: transparent;
+  border: 1px solid #303030;
+  color: #8F8F8F;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.viewModeBtnInactive:hover {
+  color: #ffffff;
+  border-color: #555555;
+}
+
+/* ================= 04. Gallery Categories ================= */
+.categoriesBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #222222;
+  height: 36px;
+}
+
+.categoryBtn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #8F8F8F;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 12px 8px;
+  cursor: pointer;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.categoryBtn:hover {
+  color: #ffffff;
+}
+
+.categoryBtnActive {
+  color: #ffffff;
+  font-weight: 700;
+  border-bottom-color: #da291c;
+}
+
+/* ================= 05. Photo Mosaic Grid (5 Columns) ================= */
+.mosaicGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.mosaicColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mosaicTile {
+  position: relative;
+  width: 100%;
+  background-color: #141414;
+  border: 1px solid #242424;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 200ms ease-out, border-color 200ms ease-out;
+}
+
+.mosaicTile:hover {
+  transform: scale(1.02);
+  border-color: #da291c;
+  z-index: 5;
+}
+
+.mosaicTile:active {
+  transform: scale(0.98);
+}
+
+.heroTile {
+  border-color: #444444;
+}
+
+.tileImage {
+  object-fit: cover;
+  transition: filter 200ms ease-out;
+}
+
+.mosaicTile:hover .tileImage {
+  filter: brightness(1.1);
+}
+
+.tileOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+
+.mosaicTile:hover .tileOverlay,
+.mosaicTile:focus-visible .tileOverlay {
+  opacity: 1;
+}
+
+.tileBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #444444;
+  font-size: 9px;
+  font-weight: 700;
+  color: #da291c;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tileZoomIcon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.tileTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.tileResolution {
+  font-size: 9px;
+  color: #8F8F8F;
+  margin: 2px 0 0;
+}
+
+/* ================= Lightbox Modal ================= */
+.lightboxBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.94);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 150ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightboxHeader {
+  height: 60px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #222222;
+  background-color: #0c0c0c;
+}
+
+.lightboxMetaLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.lightboxCounter {
+  font-size: 13px;
+  font-weight: 700;
+  color: #da291c;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.lightboxTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.lightboxCategoryTag {
+  padding: 2px 8px;
+  background-color: #1e1e1e;
+  border: 1px solid #333333;
+  font-size: 10px;
+  color: #B0B0B0;
+  font-weight: 600;
+}
+
+.lightboxCloseBtn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease-out, transform 150ms ease-out;
+}
+
+.lightboxCloseBtn:hover {
+  color: #da291c;
+}
+
+.lightboxCloseBtn:active {
+  transform: scale(0.92);
+}
+
+.lightboxBody {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 80px;
+  overflow: hidden;
+}
+
+.lightboxImageContainer {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxNavBtnPrev {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background-color: rgba(24, 24, 24, 0.8);
+  border: 1px solid #383838;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  z-index: 20;
+}
+
+.lightboxNavBtnPrev:hover {
+  background-color: #da291c;
+  border-color: #da291c;
+}
+
+.lightboxNavBtnNext {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background-color: rgba(24, 24, 24, 0.8);
+  border: 1px solid #383838;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+  z-index: 20;
+}
+
+.lightboxNavBtnNext:hover {
+  background-color: #da291c;
+  border-color: #da291c;
+}
+
+.lightboxFooter {
+  height: 72px;
+  padding: 0 32px;
+  background-color: #0c0c0c;
+  border-top: 1px solid #222222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lightboxCaptionText {
+  font-size: 13px;
+  color: #B0B0B0;
+  margin: 0;
+}
+
+.lightboxResolutionText {
+  font-size: 11px;
+  color: #666666;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}

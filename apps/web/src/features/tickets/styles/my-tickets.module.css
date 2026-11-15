@@ -1,0 +1,370 @@
+.pageWrapper {
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  color: var(--color-bianco-ferrari, #ffffff);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1840px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 80px);
+}
+
+/* 02. Page Heading */
+.headingSection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.headingMain {
+  max-width: 800px;
+}
+
+.pageTitle {
+  font-family: var(--font-roboto-slab, 'Roboto Slab', serif);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--color-fumo, #8f8f8f);
+  line-height: 1.5;
+}
+
+.breadcrumbText {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--color-fumo, #8f8f8f);
+  text-transform: uppercase;
+}
+
+/* 03. Status Tabs */
+.tabsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  border-bottom: 1px solid var(--color-grafite, #303030);
+  padding-bottom: 1px;
+}
+
+.tabBtn {
+  position: relative;
+  height: 40px;
+  padding: 0 20px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-fumo, #8f8f8f);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tabBtn:hover {
+  color: #ffffff;
+}
+
+.tabBtn:active {
+  transform: scale(0.97);
+}
+
+.tabBtnActive {
+  color: #ffffff;
+  border-color: var(--color-rosso-corsa, #da291c);
+  border-bottom: 2px solid var(--color-rosso-corsa, #da291c);
+}
+
+/* 04. Hero Upcoming Ticket */
+.heroTicketCard {
+  margin-top: 28px;
+  padding: 24px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+}
+
+.ticketTopBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.statusLeftGroup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.urgentStatusBadge {
+  padding: 6px 14px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-rosso-corsa, #da291c);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #ffffff;
+}
+
+.readyNotice {
+  font-size: 12.5px;
+  color: #2e7d5b;
+  font-weight: 500;
+}
+
+.bookingCode {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.ticketMainBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.posterCol {
+  position: relative;
+  width: 120px;
+  height: 175px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-grafite, #303030);
+  background-color: #000000;
+  overflow: hidden;
+}
+
+.posterImg {
+  object-fit: cover;
+}
+
+.ticketContentCol {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ticketHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.movieTitle {
+  font-family: var(--font-roboto-slab, 'Roboto Slab', serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.totalPriceText {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ticketSubtitle {
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.itineraryBox {
+  padding: 16px 20px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itineraryRow {
+  font-size: 14px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.itineraryRowMuted {
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.ticketActionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.primaryQrBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  color: #0a0a0a;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid #ffffff;
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.primaryQrBtn:active {
+  transform: scale(0.97);
+}
+
+.primaryQrBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.secondaryCancelBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  padding: 0 20px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.secondaryCancelBtn:hover {
+  border-color: #ffffff;
+}
+
+.secondaryCancelBtn:active {
+  transform: scale(0.97);
+}
+
+.directionLink {
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+/* 05. Other Upcoming Bookings */
+.otherBookingsSection {
+  margin-top: 40px;
+}
+
+.sectionHeading {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.compactTicketCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.compactTicketCard:hover {
+  border-color: #ffffff;
+}
+
+.compactPosterBox {
+  position: relative;
+  width: 70px;
+  height: 100px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-grafite, #303030);
+  overflow: hidden;
+}
+
+.compactInfoCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compactTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.compactTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.issuedBadge {
+  padding: 2px 8px;
+  background-color: #0d281e;
+  border: 1px solid #2e7d5b;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2e7d5b;
+}
+
+.compactMetaText {
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.compactDetailsText {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.compactActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 18px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.compactActionBtn:hover {
+  border-color: #ffffff;
+}
+
+.compactActionBtn:active {
+  transform: scale(0.97);
+}

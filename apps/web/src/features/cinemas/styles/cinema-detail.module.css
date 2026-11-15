@@ -1,0 +1,340 @@
+.detailPage {
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  color: var(--color-bianco-ferrari, #ffffff);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1840px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 80px);
+}
+
+/* 02. Breadcrumb and back */
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.backBtn:active {
+  transform: scale(0.97);
+}
+
+.backBtn:hover {
+  border-color: #ffffff;
+}
+
+.breadcrumbText {
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.breadcrumbActive {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 03. Editorial Billboard */
+.editorialBillboard {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  margin-top: 20px;
+  border: 1px solid var(--color-grafite, #303030);
+  overflow: hidden;
+}
+
+.billboardImage {
+  object-fit: cover;
+}
+
+.billboardScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.billboardTag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+/* 04. Venue Info & Amenities */
+.venueInfoCard {
+  margin-top: 24px;
+  padding: 24px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+}
+
+.venueTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.venueName {
+  font-family: var(--font-roboto-slab, 'Roboto Slab', serif);
+  font-size: clamp(20px, 2.5vw, 24px);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  background-color: #222222;
+  border: 1px solid var(--color-grafite, #303030);
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.addressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-fumo, #8f8f8f);
+  margin-bottom: 10px;
+}
+
+.actionsSubRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.mapLink {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-position: from-font;
+  font-weight: 600;
+}
+
+.hotlineText {
+  color: #ffffff;
+}
+
+.amenitiesDivider {
+  height: 1px;
+  background-color: var(--color-grafite, #303030);
+  margin-bottom: 18px;
+}
+
+.amenitiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.amenityItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+  font-size: 12px;
+  color: #ffffff;
+}
+
+/* 05. Showtimes calendar & filter */
+.calendarSection {
+  margin-top: 36px;
+}
+
+.calendarTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.datePillsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.datePill {
+  height: 38px;
+  padding: 0 18px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.datePillActive {
+  background-color: var(--color-bianco-ferrari, #ffffff);
+  color: var(--color-carbone-nero, #0a0a0a);
+  border-color: #ffffff;
+}
+
+.datePill:active {
+  transform: scale(0.97);
+}
+
+/* 06. Movies and Showtimes */
+.movieCardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.movieShowtimeCard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+}
+
+.moviePosterCol {
+  position: relative;
+  width: 120px;
+  height: 170px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-grafite, #303030);
+  overflow: hidden;
+}
+
+.moviePosterImg {
+  object-fit: cover;
+}
+
+.movieMetaCol {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.movieTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.movieInfoText {
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.detailLink {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+.verticalDivider {
+  width: 1px;
+  background-color: var(--color-grafite, #303030);
+  align-self: stretch;
+}
+
+.showtimesCol {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formatGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formatHeader {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.slotsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.slotCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: 10px 16px;
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  border: 1px solid var(--color-grafite, #303030);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.slotCardHot {
+  border-color: var(--color-rosso-corsa, #da291c);
+}
+
+.slotCard:hover {
+  border-color: #ffffff;
+}
+
+.slotCard:active {
+  transform: scale(0.97);
+}
+
+.slotTimePrice {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.slotSeats {
+  font-size: 11px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.slotSeatsHot {
+  color: var(--color-rosso-corsa, #da291c);
+  font-weight: 500;
+}

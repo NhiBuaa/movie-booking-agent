@@ -1,0 +1,175 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 72px;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-grafite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  height: 100%;
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.brand:hover {
+  opacity: 0.9;
+}
+
+.brand:active {
+  transform: var(--active-press-scale);
+}
+
+.brandIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-bianco-ferrari);
+}
+
+.brandName {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--color-fumo);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sharp);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navItem:hover {
+  color: var(--color-bianco-ferrari);
+}
+
+.navItem:active {
+  transform: var(--active-press-scale);
+}
+
+.navItemActive {
+  color: var(--color-bianco-ferrari);
+  font-weight: 700;
+  position: relative;
+}
+
+.navItemActive::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-rosso-corsa);
+}
+
+.navIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.utilities {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notificationBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.notificationBadge:hover {
+  border-color: var(--color-rosso-corsa);
+}
+
+.notificationBadge:active {
+  transform: var(--active-press-scale);
+}
+
+.notificationBadgeActive {
+  border-color: var(--color-rosso-corsa) !important;
+  color: var(--color-bianco-ferrari) !important;
+  background-color: rgba(218, 41, 28, 0.16) !important;
+}
+
+.accountBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.accountBtn:hover {
+  color: var(--color-rosso-corsa);
+}
+
+.accountBtnActive {
+  color: var(--color-bianco-ferrari) !important;
+  border: 1px solid var(--color-rosso-corsa) !important;
+  background-color: rgba(218, 41, 28, 0.16) !important;
+}
+
+.accountBtn:active {
+  transform: var(--active-press-scale);
+}
+
+@media (max-width: 1024px) {
+  .nav {
+    gap: 16px;
+  }
+  .container {
+    padding: 0 24px;
+  }
+}

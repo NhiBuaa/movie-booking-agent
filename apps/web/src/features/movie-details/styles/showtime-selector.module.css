@@ -1,0 +1,267 @@
+.selectorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 0;
+}
+
+/* Filter Controls Bar */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+}
+
+.filterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.filterLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-fumo);
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+}
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chipBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-fumo);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sharp);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.chipBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  color: var(--color-bianco-ferrari);
+}
+
+.chipBtn:active {
+  transform: scale(0.97);
+}
+
+.chipBtnActive {
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  border-color: var(--color-bianco-ferrari);
+}
+
+.chipBtnActive:hover {
+  background-color: #e5e5e5;
+  color: var(--color-carbone-nero);
+}
+
+/* Cinema List */
+.cinemaList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cinemaCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.cinemaCard:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.cinemaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-grafite);
+  background-color: rgba(24, 24, 24, 0.6);
+}
+
+.cinemaIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cinemaTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cinemaName {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cinemaBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-rosso-corsa);
+  color: var(--color-rosso-corsa);
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sharp);
+}
+
+.cinemaAddress {
+  font-size: 12px;
+  color: var(--color-fumo);
+}
+
+.showtimesCount {
+  font-size: 11px;
+  color: var(--color-fumo);
+  font-weight: 500;
+}
+
+/* Slots Group within Cinema */
+.cinemaBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formatGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formatLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-fumo);
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formatLabel::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-grafite);
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .slotsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Individual Showtime Slot Button */
+.slotCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  text-decoration: none;
+  border-radius: var(--radius-sharp);
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.slotCard:hover {
+  border-color: var(--color-rosso-corsa);
+  background-color: rgba(218, 41, 28, 0.05);
+}
+
+.slotCard:active {
+  transform: scale(0.97);
+}
+
+.slotTime {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.slotScreen {
+  font-size: 10px;
+  color: var(--color-fumo);
+  margin-top: 4px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.slotPrice {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.slotStatus {
+  position: absolute;
+  top: -8px;
+  right: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  background-color: var(--color-warning);
+  color: #000;
+  text-transform: uppercase;
+  border-radius: var(--radius-sharp);
+  letter-spacing: 0.05em;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 48px 24px;
+  text-align: center;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-fumo);
+  font-size: 13px;
+}

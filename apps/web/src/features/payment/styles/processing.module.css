@@ -1,0 +1,195 @@
+/* S12 Payment Processing Styles */
+
+.processingCard {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 32px 24px;
+  border-radius: var(--radius-sharp);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Spinner */
+.spinnerWrapper {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: var(--color-rosso-corsa);
+  border-right-color: var(--color-bianco-ferrari);
+  border-radius: 50%;
+  animation: spin 0.9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.processingHeading {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 12px;
+}
+
+.metaRow {
+  font-size: 12px;
+  color: var(--color-fumo);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.statusBadge {
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-rosso-corsa);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background-color: rgba(218, 41, 28, 0.08);
+  padding: 6px 12px;
+  border: 1px solid rgba(218, 41, 28, 0.3);
+}
+
+/* Security Alert Banner */
+.securityAlertBanner {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-rosso-corsa);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.alertIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-rosso-corsa);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alertText {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-bianco-ferrari);
+}
+
+.alertText strong {
+  color: var(--color-rosso-corsa);
+  font-weight: 700;
+}
+
+/* Support Hotline Buttons */
+.supportRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.supportBtn {
+  flex: 1;
+  height: 40px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+}
+
+.supportBtn:hover {
+  background-color: #242424;
+  border-color: var(--color-fumo);
+}
+
+/* Disabled CTA */
+.disabledCta {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-grafite);
+  color: var(--color-fumo);
+  border: 1px solid var(--color-grafite);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.subNotice {
+  font-size: 12px;
+  color: var(--color-fumo);
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Test simulation tool strip */
+.simulationBox {
+  margin-top: 24px;
+  padding: 12px;
+  background-color: #121212;
+  border: 1px dashed var(--color-grafite);
+  text-align: center;
+}
+
+.simulationLabel {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.simulationActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.simBtnSuccess {
+  background-color: #0d281e;
+  border: 1px solid #2e7d5b;
+  color: #38b280;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.simBtnFailed {
+  background-color: #241111;
+  border: 1px solid var(--color-rosso-corsa);
+  color: #ff6b61;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}

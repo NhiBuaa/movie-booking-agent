@@ -1,0 +1,946 @@
+/**
+ * S31 Authentication & Identity Flow Styles
+ * Ferrari Dark Theme: 0px border-radius, Carbone Nero (#000000), Notte Profonda (#181818),
+ * Grafite (#303030), Rosso Corsa (#da291c), Bianco Ferrari (#ffffff).
+ * Fully responsive at 1760px Widescreen & mobile.
+ */
+
+.pageWrapper {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  background-color: var(--color-carbone-nero);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   01 / SUBNAV BAR (Height 60px)
+   ========================================================================== */
+.subnav {
+  width: 100%;
+  height: 60px;
+  background-color: var(--color-notte-profonda);
+  border-bottom: 1px solid var(--color-grafite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subnavInner {
+  width: 100%;
+  max-width: var(--page-max-width);
+  padding: 0 var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 8px 16px;
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sharp);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.backBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.backBtn:active {
+  transform: var(--active-press-scale);
+}
+
+.breadcrumbSec {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-fumo);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-bianco-ferrari);
+  font-weight: 600;
+}
+
+.securityIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   02 / MAIN DOUBLE-STAGE LAYOUT (2 Columns)
+   ========================================================================== */
+.mainContainer {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 40px var(--page-padding-x) 64px;
+  flex: 1;
+}
+
+.doubleStageLayout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ==========================================================================
+   03 / STAGE LEFT (Inspiration & CineMember Perks)
+   ========================================================================== */
+.stageLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 01 / Landscape Backdrop Banner (Figma S31 Alignment) */
+.landscapeBanner {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  border-radius: var(--radius-sharp);
+  border: 1px solid var(--color-grafite);
+  background-color: var(--color-notte-profonda);
+}
+
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  display: block;
+}
+
+.bannerOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.45) 45%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+}
+
+.bannerTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  margin-bottom: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.bannerMeta {
+  font-size: 11.5px;
+  color: #d2d2d2;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.heroPitchCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leftHeroTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.leftHeroSubtitle {
+  font-size: 13.5px;
+  color: #a3a3a3;
+  line-height: 1.6;
+}
+
+/* 03 / Perks List & Items */
+.perksList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.perkItem {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 20px;
+  background-color: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sharp);
+  transition: background-color var(--transition-hover-ease), border-color var(--transition-hover-ease);
+}
+
+.perkItem:hover {
+  background-color: #181818;
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.perkIconRaw {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #ffffff;
+}
+
+.perkIconBox {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-sharp);
+  color: var(--color-rosso-corsa);
+}
+
+.perkTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perkTitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.perkDesc {
+  font-size: 12.5px;
+  color: #a3a3a3;
+  line-height: 1.55;
+}
+
+/* 04 / Bottom Cinematic Quote */
+.bottomQuote {
+  font-family: var(--font-family-slab);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #888888;
+  text-align: center;
+  margin: 6px 0 0;
+  padding: 0 8px;
+}
+
+.quoteBlock {
+  padding: 24px 28px;
+  background-color: var(--color-notte-profonda);
+  border-left: 3px solid var(--color-rosso-corsa);
+  border-top: 1px solid var(--color-grafite);
+  border-right: 1px solid var(--color-grafite);
+  border-bottom: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+}
+
+.quoteText {
+  font-family: var(--font-family-slab);
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 8px;
+}
+
+.quoteAuthor {
+  font-size: 12px;
+  color: var(--color-fumo);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.movieHighlightCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.movieBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--color-rosso-corsa);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
+.moviePosterMini {
+  width: 56px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sharp);
+  border: 1px solid var(--color-grafite);
+  flex-shrink: 0;
+}
+
+.movieInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.movieTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+}
+
+.movieMeta {
+  font-size: 12px;
+  color: var(--color-fumo);
+}
+
+/* ==========================================================================
+   04 / STAGE RIGHT (Form Container Card)
+   ========================================================================== */
+.stageRight {
+  display: flex;
+  justify-content: center;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 540px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  padding: 36px 36px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Segmented Switcher (44px) */
+.segmentedSwitcher {
+  width: 100%;
+  height: 44px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.switcherTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-fumo);
+  text-decoration: none;
+  border-radius: var(--radius-sharp);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.switcherTab:hover {
+  color: var(--color-bianco-ferrari);
+}
+
+.switcherTabActive {
+  background-color: var(--color-grafite);
+  color: var(--color-bianco-ferrari) !important;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Social SSO Buttons */
+.socialButtonsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.socialBtn {
+  height: 44px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.socialBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.socialBtn:active {
+  transform: var(--active-press-scale);
+}
+
+/* Divider with text */
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--color-piombo);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-grafite);
+}
+
+/* Form inputs */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputRowTwoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.inputLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-argento-chiaro);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-fumo);
+  pointer-events: none;
+}
+
+.inputField {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  padding: 0 44px 0 42px;
+  color: var(--color-bianco-ferrari);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.inputFieldNoIcon {
+  padding-left: 16px;
+}
+
+.inputField:focus {
+  border-color: var(--color-rosso-corsa);
+  background-color: #0d0d0d;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--color-fumo);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.eyeBtn:hover {
+  color: var(--color-bianco-ferrari);
+}
+
+/* Password Strength Meter */
+.strengthMeter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.strengthBars {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  height: 4px;
+}
+
+.strengthBar {
+  background-color: var(--color-grafite);
+  height: 100%;
+  border-radius: var(--radius-sharp);
+  transition: background-color var(--transition-fast);
+}
+
+.strengthText {
+  font-size: 11px;
+  color: var(--color-fumo);
+}
+
+/* Match feedback */
+.matchFeedback {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.matchSuccess {
+  color: #22c55e;
+}
+
+.matchError {
+  color: var(--color-rosso-corsa);
+}
+
+/* Helper Row (Checkbox + Forgot Link) */
+.helperRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-fumo);
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-rosso-corsa);
+  cursor: pointer;
+}
+
+.forgotLink {
+  color: var(--color-bianco-ferrari);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 12px;
+  transition: color var(--transition-fast);
+}
+
+.forgotLink:hover {
+  color: var(--color-rosso-corsa);
+}
+
+/* Primary CTA Button (48px) */
+.submitBtn {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-rosso-corsa);
+  border: 1px solid var(--color-rosso-corsa);
+  border-radius: var(--radius-sharp);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  margin-top: 6px;
+}
+
+.submitBtn:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+}
+
+.submitBtn:active {
+  transform: var(--active-press-scale);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.submitBtnWhite {
+  background-color: var(--color-bianco-ferrari);
+  border-color: var(--color-bianco-ferrari);
+  color: #000000;
+}
+
+.submitBtnWhite:hover {
+  background-color: #e5e5e5;
+  border-color: #e5e5e5;
+}
+
+/* Terms notice */
+.termsText {
+  font-size: 11px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+  text-align: center;
+  margin-top: 14px;
+}
+
+.termsText a {
+  color: var(--color-argento-chiaro);
+  text-decoration: underline;
+}
+
+/* Guest Recovery Box (Dashed border) */
+.guestRecoveryBox {
+  margin-top: 24px;
+  padding: 16px 18px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.guestRecoveryTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-argento-chiaro);
+  letter-spacing: 0.03em;
+}
+
+.guestBtn {
+  width: 100%;
+  height: 38px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.guestBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.guestBtn:active {
+  transform: var(--active-press-scale);
+}
+
+/* Switch auth row */
+.switchAuthRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-fumo);
+  margin-top: 20px;
+}
+
+.switchAuthLink {
+  color: var(--color-rosso-corsa);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.switchAuthLink:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   05 / S31-ST04 OTP VERIFICATION 6-BOX INPUT
+   ========================================================================== */
+.otpCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.03em;
+}
+
+.cardSubtitle {
+  font-size: 13px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+}
+
+.otpGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.otpBox {
+  width: 100%;
+  min-width: 0;
+  height: 64px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  color: var(--color-bianco-ferrari);
+  font-family: var(--font-family-slab);
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.otpBox:focus {
+  border-color: var(--color-rosso-corsa);
+  background-color: #0f0a0a;
+}
+
+.timerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-fumo);
+  margin-bottom: 20px;
+}
+
+.timerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-warning);
+  font-weight: 600;
+}
+
+.resendBtn {
+  color: var(--color-bianco-ferrari);
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 12px;
+}
+
+.resendBtnDisabled {
+  color: var(--color-piombo);
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.supportHotlineBox {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background-color: #121212;
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  font-size: 12px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+}
+
+.supportHotlineBox strong {
+  color: var(--color-bianco-ferrari);
+}
+
+/* ==========================================================================
+   06 / S31-ST05 STEPPER & STEP 3
+   ========================================================================== */
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+}
+
+.stepItemActive {
+  border-left: 3px solid var(--color-rosso-corsa);
+  background-color: #1c1414;
+}
+
+.stepItemCompleted {
+  border-color: #2e7d5b;
+}
+
+.stepBadge {
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-grafite);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sharp);
+}
+
+.stepBadgeCompleted {
+  background-color: #2e7d5b;
+}
+
+.stepBadgeActive {
+  background-color: var(--color-rosso-corsa);
+}
+
+.stepInfoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepItemTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+}
+
+.stepItemStatus {
+  font-size: 11px;
+  color: var(--color-fumo);
+}
+
+.stepBadgePill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: rgba(218, 41, 28, 0.16);
+  border: 1px solid var(--color-rosso-corsa);
+  color: var(--color-rosso-corsa);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .doubleStageLayout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .stageLeft {
+    display: none;
+  }
+  .authCard {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+  .otpGrid {
+    gap: 6px;
+  }
+  .otpBox {
+    height: 52px;
+    font-size: 20px;
+  }
+}

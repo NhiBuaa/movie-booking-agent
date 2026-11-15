@@ -1,0 +1,280 @@
+.viewRoot {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-carbone-nero);
+  color: var(--color-bianco-ferrari);
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Stepper Bar */
+.stepperSection {
+  width: 100%;
+  background-color: var(--color-notte-profonda);
+  border-bottom: 1px solid var(--color-grafite);
+  padding: 24px var(--page-padding-x);
+}
+
+.stepperContainer {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+  min-width: 140px;
+}
+
+.stepCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+}
+
+.stepCircleDone {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+}
+
+.stepCircleActive {
+  background-color: var(--color-bianco-ferrari);
+  border: 1px solid var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+}
+
+.stepCircleUpcoming {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-piombo);
+}
+
+.stepLabel {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.stepLabelDone {
+  color: var(--color-fumo);
+}
+
+.stepLabelActive {
+  color: var(--color-bianco-ferrari);
+}
+
+.stepLabelUpcoming {
+  color: var(--color-piombo);
+}
+
+.stepperConnector {
+  flex: 1;
+  max-width: 160px;
+  height: 1px;
+  background-color: var(--color-grafite);
+  margin: 0 -20px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.stepperConnectorDone {
+  background-color: var(--color-fumo);
+}
+
+/* Movie Context Card */
+.movieCard {
+  width: 100%;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.movieCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.moviePoster {
+  width: 72px;
+  height: 108px;
+  object-fit: cover;
+  border: 1px solid var(--color-grafite);
+  flex-shrink: 0;
+}
+
+.movieDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.movieTitle {
+  font-family: var(--font-family-base);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-bianco-ferrari);
+}
+
+.movieShowtimeInfo {
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-bianco-ferrari);
+}
+
+.movieMeta {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  color: var(--color-fumo);
+}
+
+.changeShowtimeBtn {
+  height: 44px;
+  padding: 0 20px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  color: var(--color-bianco-ferrari);
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.changeShowtimeBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #242424;
+}
+
+.changeShowtimeBtn:active {
+  transform: var(--active-press-scale);
+}
+
+.btnTicketIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Validation Alert / Toast */
+.alertToast {
+  padding: 12px 20px;
+  background-color: #240a08;
+  border: 1px solid var(--color-rosso-corsa);
+  color: var(--color-bianco-ferrari);
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: slideDown 200ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alertCloseBtn {
+  background: none;
+  border: none;
+  color: var(--color-fumo);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.alertCloseBtn:hover {
+  color: var(--color-bianco-ferrari);
+}
+
+/* Seat Map Wrapper */
+.seatMapSection {
+  width: 100%;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.orderBarDock {
+  width: 100%;
+  position: relative;
+  /* Chứa BookingOrderBar và giữ chỗ không làm gián đoạn layout khi thanh chuyển trạng thái */
+}
+
+@media (max-width: 900px) {
+  .mainContainer {
+    padding: 0 16px 32px;
+  }
+
+  .movieCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .changeShowtimeBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stepperSection {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .stepperConnector {
+    max-width: 40px;
+  }
+}

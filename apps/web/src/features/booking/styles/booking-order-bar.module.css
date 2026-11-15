@@ -1,0 +1,239 @@
+.stickyBar {
+  width: 100%;
+  background-color: var(--color-notte-profonda);
+  border-top: 1px solid var(--color-grafite);
+  z-index: 50;
+  transition: box-shadow 150ms ease, background-color 150ms ease;
+}
+
+/* Floating State: Fixed at bottom of viewport */
+.floatingBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Docked State: Rests in natural flow above the Footer */
+.dockedBar {
+  position: relative;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 18px var(--page-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* Left Section: Selected Seats & Badges */
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 320px;
+}
+
+.summaryText {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+}
+
+.badgesWrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seatBadge {
+  height: 40px;
+  padding: 0 14px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  border-radius: var(--radius-sharp);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+  transition: border-color var(--transition-fast);
+}
+
+.seatBadge:hover {
+  border-color: var(--color-bianco-ferrari);
+}
+
+.seatBadgeSweetbox {
+  border-color: rgba(218, 41, 28, 0.6);
+  background: linear-gradient(180deg, #1c1313 0%, var(--color-carbone-nero) 100%);
+}
+
+.seatBadgeSweetbox:hover {
+  border-color: var(--color-rosso-corsa);
+}
+
+.sweetboxTag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-rosso-corsa);
+  background-color: rgba(218, 41, 28, 0.15);
+  padding: 2px 6px;
+  border-radius: var(--radius-sharp);
+  border: 1px solid rgba(218, 41, 28, 0.3);
+}
+
+.removeSeatBtn {
+  background: none;
+  border: none;
+  color: var(--color-fumo);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.removeSeatBtn:hover {
+  color: var(--color-rosso-corsa);
+  transform: scale(1.15);
+}
+
+.removeSeatBtn:active {
+  transform: scale(0.9);
+}
+
+.noSeatNotice {
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  color: var(--color-piombo);
+  font-style: italic;
+}
+
+/* Middle Section: Total Price & Hold Countdown */
+.middleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.totalPrice {
+  font-family: var(--font-family-base);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-bianco-ferrari);
+  text-transform: uppercase;
+}
+
+.totalAmountHighlight {
+  color: var(--color-bianco-ferrari);
+}
+
+.holdNotice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family-base);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-fumo);
+}
+
+.clockIcon {
+  width: 15px;
+  height: 15px;
+  color: var(--color-fumo);
+  flex-shrink: 0;
+}
+
+/* Right Section: Action Button */
+.rightSection {
+  display: flex;
+  align-items: center;
+}
+
+.confirmBtn {
+  height: 48px;
+  min-width: 200px;
+  padding: 0 24px;
+  background-color: var(--color-bianco-ferrari);
+  border: 1px solid var(--color-bianco-ferrari);
+  border-radius: var(--radius-sharp);
+  color: var(--color-carbone-nero);
+  font-family: var(--font-family-base);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.confirmBtn:hover:not(:disabled) {
+  background-color: #e5e5e5;
+  border-color: #e5e5e5;
+}
+
+.confirmBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.confirmBtn:disabled {
+  background-color: #242424;
+  border-color: #303030;
+  color: var(--color-piombo);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnArrow {
+  width: 16px;
+  height: 16px;
+  filter: invert(1);
+}
+
+.confirmBtn:disabled .btnArrow {
+  filter: opacity(0.3);
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 24px;
+    gap: 16px;
+  }
+
+  .rightSection {
+    width: 100%;
+  }
+
+  .confirmBtn {
+    width: 100%;
+  }
+}

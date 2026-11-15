@@ -1,0 +1,7 @@
+.discoveryView {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-carbone-nero);
+  display: flex;
+  flex-direction: column;
+}

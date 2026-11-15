@@ -1,0 +1,724 @@
+/**
+ * S27 - User Profile & CinePreferences CSS Module
+ * Aligned with Figma Frame 593:1014 (W: 1440, H: 1444) & Ferrari Dark Theme
+ */
+
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 32px var(--page-padding-x) 56px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= 02. Title & Breadcrumb ================= */
+.titleSection {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pageTitle {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #8F8F8F;
+}
+
+.breadcrumbLink {
+  color: #8F8F8F;
+  text-decoration: none;
+  transition: color 150ms ease-out;
+}
+
+.breadcrumbLink:hover {
+  color: #ffffff;
+}
+
+.breadcrumbActive {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.pageSubtitle {
+  font-size: 13px;
+  color: #8F8F8F;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ================= 03. Profile Overview & Shortcuts ================= */
+.overviewCard {
+  background-color: #181818;
+  border: 1px solid #303030;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.overviewLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatarSquare {
+  width: 80px;
+  height: 80px;
+  background-color: #121212;
+  border: 1px solid #383838;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.identityMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profileName {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.contactLine {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.membershipLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.vipBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: #241c10;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.memberCodePoints {
+  font-size: 12px;
+  color: #B0B0B0;
+  margin: 0;
+}
+
+.shortcutsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 260px);
+  gap: 10px;
+}
+
+.shortcutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background-color: #141414;
+  border: 1px solid #303030;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.shortcutBtn:hover {
+  background-color: #222222;
+  border-color: #555555;
+}
+
+.shortcutBtn:active {
+  transform: scale(0.98);
+}
+
+.shortcutLabelGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ================= Main 2-Column Grid ================= */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* ================= 04. Personal Information & Security ================= */
+.personalColumn {
+  background-color: #181818;
+  border: 1px solid #303030;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 12px;
+}
+
+.sectionHeading {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.sectionDesc {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #B0B0B0;
+  letter-spacing: 0.02em;
+}
+
+.inputControl {
+  width: 100%;
+  height: 40px;
+  background-color: #121212;
+  border: 1px solid #303030;
+  color: #ffffff;
+  font-size: 13px;
+  padding: 0 12px;
+  font-family: inherit;
+  transition: border-color 150ms ease-out;
+}
+
+.inputControl:focus {
+  outline: none;
+  border-color: #da291c;
+}
+
+.phoneRow {
+  display: flex;
+  gap: 8px;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  background-color: #132014;
+  border: 1px solid #2a6634;
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.radioGroupRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 4px;
+}
+
+.radioLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radioInput {
+  accent-color: #da291c;
+  cursor: pointer;
+}
+
+.securitySubSection {
+  border-top: 1px solid #282828;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.securityHeading {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.securityStatusText {
+  font-size: 12px;
+  color: #8F8F8F;
+  margin: 0;
+}
+
+.changePasswordBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 8px 14px;
+  background-color: #141414;
+  border: 1px solid #383838;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.changePasswordBtn:hover {
+  background-color: #222222;
+  border-color: #555555;
+}
+
+.checkboxRow {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkboxInput {
+  accent-color: #da291c;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.logoutBtn {
+  width: 100%;
+  height: 38px;
+  background-color: #141414;
+  border: 1px solid #383838;
+  color: #8F8F8F;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 150ms ease-out, border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.logoutBtn:hover {
+  color: #da291c;
+  border-color: #da291c;
+  background-color: #1a1212;
+}
+
+.savePersonalBtn {
+  width: 100%;
+  height: 44px;
+  background-color: #141414;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.savePersonalBtn:hover {
+  background-color: #222222;
+}
+
+.savePersonalBtn:active {
+  transform: scale(0.98);
+}
+
+/* ================= 05. CinePreferences for Buaa AI ================= */
+.preferencesColumn {
+  background-color: #181818;
+  border: 1px solid #303030;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prefHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 12px;
+}
+
+.aiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: #112214;
+  border: 1px solid #24552b;
+  color: #4ade80;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.prefGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prefGroupHeading {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.cinemaSelect {
+  width: 100%;
+  height: 40px;
+  background-color: #121212;
+  border: 1px solid #303030;
+  color: #ffffff;
+  font-size: 13px;
+  padding: 0 12px;
+  cursor: pointer;
+  transition: border-color 150ms ease-out;
+}
+
+.cinemaSelect:focus {
+  outline: none;
+  border-color: #da291c;
+}
+
+/* 4-Column Checkbox Grid */
+.checkboxGrid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.prefCheckboxCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background-color: #141414;
+  border: 1px solid #282828;
+  font-size: 12px;
+  color: #B0B0B0;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.prefCheckboxCard:hover {
+  background-color: #1e1e1e;
+  border-color: #444444;
+}
+
+.prefCheckboxCardSelected {
+  border-color: #da291c;
+  background-color: #1f1414;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.prefRadioGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.prefRadioCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background-color: #141414;
+  border: 1px solid #282828;
+  font-size: 12px;
+  color: #B0B0B0;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.prefRadioCard:hover {
+  background-color: #1e1e1e;
+  border-color: #444444;
+}
+
+.prefRadioCardSelected {
+  border-color: #da291c;
+  background-color: #1f1414;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.syncStatusBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background-color: #141414;
+  border: 1px solid #282828;
+  font-size: 11px;
+  color: #8F8F8F;
+  margin-top: 4px;
+}
+
+.prefActionsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.restoreDefaultBtn {
+  flex: 1;
+  height: 44px;
+  background-color: #141414;
+  border: 1px solid #383838;
+  color: #8F8F8F;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.restoreDefaultBtn:hover {
+  color: #ffffff;
+  border-color: #666666;
+}
+
+.saveCinePrefBtn {
+  flex: 1.5;
+  height: 44px;
+  background-color: #da291c;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.saveCinePrefBtn:hover {
+  background-color: #b81f14;
+}
+
+.saveCinePrefBtn:active {
+  transform: scale(0.98);
+}
+
+.talkToBuaaBtn {
+  flex: 1.3;
+  height: 44px;
+  background-color: #181818;
+  border: 1px solid #da291c;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 150ms ease-out, transform 150ms ease-out;
+}
+
+.talkToBuaaBtn:hover {
+  background-color: #241414;
+}
+
+.talkToBuaaBtn:active {
+  transform: scale(0.98);
+}
+
+/* ================= Toast Notification ================= */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background-color: #1a1a1a;
+  border: 1px solid #da291c;
+  color: #ffffff;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 200;
+  animation: slideUp 150ms ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ================= Password Change Modal ================= */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: fadeIn 150ms ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalCard {
+  width: 440px;
+  background-color: #181818;
+  border: 1px solid #383838;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.9);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 12px;
+}
+
+.modalTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  color: #8F8F8F;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease-out;
+}
+
+.modalCloseBtn:hover {
+  color: #ffffff;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.modalCancelBtn {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: 1px solid #383838;
+  color: #8F8F8F;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modalSubmitBtn {
+  padding: 8px 18px;
+  background-color: #da291c;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}

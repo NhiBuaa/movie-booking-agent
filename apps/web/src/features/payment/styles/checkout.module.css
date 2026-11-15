@@ -1,0 +1,792 @@
+/* S11 Checkout & S11/S12/S14 Stepper & Layout Styles */
+
+.pageWrapper {
+  background-color: var(--color-carbone-nero);
+  min-height: 100vh;
+  color: var(--color-bianco-ferrari);
+  font-family: var(--font-family-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x);
+}
+
+/* 02 / Stepper Bar */
+.stepperBar {
+  width: 100%;
+  height: 105px;
+  background-color: var(--color-notte-profonda, #181818);
+  border-bottom: 1px solid var(--color-grafite, #303030);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.stepperTrack {
+  width: 100%;
+  max-width: 980px;
+  height: 105px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 14px;
+}
+
+.stepperConnector {
+  position: absolute;
+  top: 36px;
+  left: 100px;
+  right: 100px;
+  height: 2px;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+.stepperStep {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.stepCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  transition: transform var(--transition-fast), background-color var(--transition-normal);
+}
+
+.stepDone {
+  background-color: #303030;
+  color: var(--color-bianco-ferrari, #ffffff);
+  border: 1px solid #303030;
+}
+
+.stepActive {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+}
+
+.stepSuccess {
+  background-color: #107c41;
+  color: #ffffff;
+  border: 1px solid #107c41;
+}
+
+.stepFailed {
+  background-color: var(--color-rosso-corsa, #da291c);
+  color: #ffffff;
+  border: 1px solid var(--color-rosso-corsa, #da291c);
+}
+
+.stepLabel {
+  margin-top: 7px;
+  width: 200px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-fumo, #8f8f8f);
+  text-align: center;
+}
+
+.stepLabelActive {
+  color: var(--color-bianco-ferrari, #ffffff);
+  font-weight: 600;
+}
+
+.stepLabelFailed {
+  color: var(--color-rosso-corsa, #da291c);
+  font-weight: 600;
+}
+
+/* 03 / Hold Timer Banner */
+.timerBanner {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 14px 24px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.timerBannerWarning {
+  border-color: var(--color-rosso-corsa);
+  background: linear-gradient(90deg, #241111 0%, var(--color-notte-profonda) 100%);
+  animation: pulseBorder 2s infinite ease-in-out;
+}
+
+@keyframes pulseBorder {
+  0%, 100% { border-color: var(--color-rosso-corsa); }
+  50% { border-color: #ff5247; }
+}
+
+.timerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+}
+
+.timerIcon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-rosso-corsa);
+}
+
+.timerCenter {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-rosso-corsa);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.timerRight {
+  font-size: 12px;
+  color: var(--color-fumo);
+  text-align: right;
+}
+
+/* 04 / Three Columns Layout */
+.mainLayout {
+  display: grid;
+  grid-template-columns: 360px 1fr 360px;
+  gap: 24px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+
+.card {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 24px;
+  border-radius: var(--radius-sharp);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeading {
+  font-family: var(--font-family-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Voucher block */
+.voucherSection {
+  margin-bottom: 20px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: var(--color-fumo);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.voucherInputGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.voucherInput {
+  flex: 1;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sharp);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.voucherInput:focus {
+  border-color: var(--color-bianco-ferrari);
+}
+
+.voucherBtn {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+}
+
+.voucherBtn:hover:not(:disabled) {
+  background-color: var(--color-grafite);
+}
+
+.voucherBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.voucherBtnApplied {
+  color: var(--color-piombo);
+  cursor: not-allowed;
+}
+
+.voucherSuccessFeedback {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-bianco-ferrari);
+}
+
+.voucherIcon {
+  width: 14px;
+  height: 14px;
+  color: #2e7d5b;
+}
+
+/* Combo Section */
+.comboSection {
+  margin-bottom: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-grafite);
+}
+
+.comboItemRow {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 14px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comboInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.comboTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+}
+
+.comboDesc {
+  font-size: 11px;
+  color: var(--color-fumo);
+}
+
+.comboPrice {
+  font-size: 12px;
+  color: var(--color-fumo);
+  font-weight: 500;
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qtyBtn {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+}
+
+.qtyBtn:hover:not(:disabled) {
+  background-color: var(--color-grafite);
+}
+
+.qtyBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.qtyBtn:disabled {
+  color: var(--color-piombo);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.qtyValue {
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+}
+
+/* Breakdown List */
+.breakdownList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-grafite);
+}
+
+.breakdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.breakdownLabel {
+  color: var(--color-fumo);
+}
+
+.breakdownValue {
+  color: var(--color-bianco-ferrari);
+  font-weight: 500;
+}
+
+.discountValue {
+  color: var(--color-rosso-corsa);
+  font-weight: 600;
+}
+
+.totalRow {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-grafite);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.totalLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+}
+
+.totalAmount {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: -0.02em;
+}
+
+/* 04B Payment Methods */
+.methodTabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.methodTab {
+  height: 48px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.methodTab:hover:not(:disabled) {
+  border-color: var(--color-fumo);
+}
+
+.methodTabActive {
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  border-color: var(--color-bianco-ferrari);
+  font-weight: 700;
+}
+
+.methodTab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paymentNotice {
+  font-size: 12px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.instructionCard {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 24px;
+  border-radius: var(--radius-sharp);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.qrVectorPlaceholder {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 12px;
+  color: var(--color-bianco-ferrari);
+}
+
+.instructionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 8px;
+}
+
+.instructionDesc {
+  font-size: 12px;
+  color: var(--color-fumo);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  max-width: 440px;
+}
+
+.instructionAmount {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+}
+
+.termsRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--color-bianco-ferrari);
+  cursor: pointer;
+}
+
+.checkboxInput {
+  margin-top: 2px;
+  accent-color: var(--color-rosso-corsa);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.termsButtons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.termsAuxBtn {
+  flex: 1;
+  height: 40px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sharp);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.termsAuxBtn:hover {
+  background-color: #222222;
+  border-color: var(--color-fumo);
+}
+
+.primaryPayBtn {
+  width: 100%;
+  height: 48px;
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  border: 1px solid var(--color-bianco-ferrari);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sharp);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.primaryPayBtn:hover:not(:disabled) {
+  background-color: #e5e5e5;
+  border-color: #e5e5e5;
+}
+
+.primaryPayBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.primaryPayBtn:disabled {
+  background-color: var(--color-grafite);
+  color: var(--color-fumo);
+  border-color: var(--color-grafite);
+  cursor: not-allowed;
+}
+
+.securityNote {
+  font-size: 11px;
+  color: var(--color-fumo);
+  line-height: 1.5;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* 04C Ticket Preview Card */
+.ticketCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 24px 20px;
+  border-radius: var(--radius-sharp);
+  position: relative;
+}
+
+.ticketTopBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.ticketPoster {
+  width: 160px;
+  height: 228px;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  display: block;
+  border: 1px solid var(--color-grafite);
+}
+
+.ticketMovieTitle {
+  font-family: var(--font-family-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Perforation line */
+.perforationContainer {
+  position: relative;
+  margin: 20px -20px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cutoutLeft, .cutoutRight {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-carbone-nero);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  border: 1px solid var(--color-grafite);
+}
+
+.cutoutLeft {
+  left: -10px;
+}
+
+.cutoutRight {
+  right: -10px;
+}
+
+.perforationDashes {
+  width: 100%;
+  border-top: 1px dashed var(--color-fumo);
+  margin: 0 16px;
+}
+
+.ticketDetailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ticketDetailLabel {
+  font-size: 11px;
+  color: var(--color-fumo);
+  text-transform: uppercase;
+}
+
+.ticketDetailValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+}
+
+.ticketCinemaName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-top: 8px;
+}
+
+.ticketFormat {
+  font-size: 12px;
+  color: var(--color-fumo);
+  margin-bottom: 4px;
+}
+
+.ticketSeats {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-bianco-ferrari);
+  margin-top: 10px;
+}
+
+.ticketHoldStatus {
+  margin-top: 16px;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari);
+}
+
+/* Bottom Bar */
+.bottomNavRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 32px;
+}
+
+.backBtn {
+  width: 224px;
+  height: 48px;
+  padding: 0;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.backBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.backBtn:active {
+  transform: var(--active-press-scale);
+}
+
+.disclaimerText {
+  font-size: 12px;
+  color: var(--color-fumo);
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .mainLayout {
+    grid-template-columns: 1fr 1fr;
+  }
+  .card:first-child {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  .mainLayout {
+    grid-template-columns: 1fr;
+  }
+  .card:first-child {
+    grid-column: span 1;
+  }
+  .methodTabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .timerBanner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .timerRight {
+    text-align: center;
+  }
+  .bottomNavRow {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  .disclaimerText {
+    text-align: center;
+  }
+}

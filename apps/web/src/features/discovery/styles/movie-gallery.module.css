@@ -1,0 +1,222 @@
+.gallerySection {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 32px auto 0;
+  padding: 0 var(--page-padding-x);
+}
+
+/* Controls Header */
+.galleryControlsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.tabsGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tabBtn {
+  width: 150px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sharp);
+  transition: all var(--transition-fast);
+}
+
+.tabActive {
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  font-weight: 700;
+  border: 1px solid var(--color-bianco-ferrari);
+}
+
+.tabInactive {
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-fumo);
+}
+
+.tabInactive:hover {
+  color: var(--color-bianco-ferrari);
+  border-color: #555555;
+}
+
+.tabInactive:active {
+  transform: var(--active-press-scale);
+}
+
+.navArrowsGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrowBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 112px;
+  height: 44px;
+  padding: 0 16px;
+  white-space: nowrap;
+  background-color: var(--color-carbone-nero);
+  border: 1px solid var(--color-grafite);
+  color: var(--color-bianco-ferrari);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sharp);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.arrowBtn:hover:not(:disabled) {
+  border-color: #555555;
+  background-color: #1a1a1a;
+}
+
+.arrowBtn:active:not(:disabled) {
+  transform: var(--active-press-scale);
+}
+
+.arrowBtn:disabled {
+  border-color: #222222;
+  color: var(--color-piombo);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.chevronIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Cards Grid / Carousel */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.movieCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-sharp);
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
+  text-decoration: none;
+}
+
+.movieCard:hover {
+  transform: translateY(-6px);
+  border-color: #484848;
+}
+
+.posterContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 294 / 383;
+  overflow: hidden;
+  background-color: #111111;
+  margin-bottom: 14px;
+}
+
+.posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease-out;
+}
+
+.movieCard:hover .posterImg {
+  transform: scale(1.03);
+}
+
+.formatBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-bianco-ferrari);
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardMetadata {
+  font-size: 11px;
+  color: var(--color-fumo);
+  margin-bottom: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookBtn {
+  width: 100%;
+  height: 38px;
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sharp);
+  margin-top: auto;
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.bookBtn:hover {
+  background-color: var(--color-rosso-corsa);
+  color: var(--color-bianco-ferrari);
+}
+
+.bookBtn:active {
+  transform: var(--active-press-scale);
+}
+
+@media (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallerySection {
+    padding: 0 24px;
+  }
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .galleryControlsHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+}

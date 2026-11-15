@@ -1,0 +1,209 @@
+.vouchersSection {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 40px auto 0;
+  padding: 0 var(--page-padding-x);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.heading {
+  font-family: var(--font-family-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.allLink {
+  border: 1px solid var(--color-grafite);
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.allLink:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #1a1a1a;
+}
+
+.allLink:active {
+  transform: var(--active-press-scale, scale(0.98));
+}
+
+.vouchersGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.voucherCard {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 135px;
+  transition: border-color var(--transition-fast);
+}
+
+.voucherCard:hover {
+  border-color: #484848;
+}
+
+.cardTitle {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  margin-bottom: 6px;
+  letter-spacing: 0.03em;
+}
+
+.desc {
+  font-size: 10.5px;
+  color: var(--color-fumo);
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.voucherCode {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.05em;
+}
+
+.saveBtn {
+  width: 130px;
+  height: 32px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sharp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-fast, 150ms ease);
+}
+
+.saveBtnDefault {
+  background-color: var(--color-bianco-ferrari);
+  color: var(--color-carbone-nero);
+}
+
+.saveBtnDefault:hover {
+  background-color: #dddddd;
+}
+
+.saveBtnDefault:active {
+  transform: var(--active-press-scale, scale(0.98));
+}
+
+.saveBtnSaving {
+  background-color: #888888;
+  color: var(--color-carbone-nero);
+  cursor: wait;
+}
+
+.saveBtnSaved {
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-success);
+  color: var(--color-bianco-ferrari);
+}
+
+/* Cinora Club Strip */
+.clubStrip {
+  margin-top: 20px;
+  background-color: var(--color-notte-profonda);
+  border: 1px solid var(--color-grafite);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: border-color var(--transition-fast);
+}
+
+.clubStrip:hover {
+  border-color: #484848;
+}
+
+.clubMessage {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-bianco-ferrari);
+  line-height: 1.4;
+}
+
+.clubBtn {
+  border: 1px solid var(--color-grafite);
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-bianco-ferrari);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: border-color var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.clubBtn:hover {
+  border-color: var(--color-bianco-ferrari);
+  background-color: #222222;
+}
+
+.clubBtn:active {
+  transform: var(--active-press-scale, scale(0.98));
+}
+
+@media (max-width: 1024px) {
+  .vouchersGrid {
+    grid-template-columns: 1fr;
+  }
+  .clubStrip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .vouchersSection {
+    padding: 0 24px;
+  }
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

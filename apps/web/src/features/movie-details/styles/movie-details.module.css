@@ -1,0 +1,295 @@
+.pageWrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-carbone-nero, #000000);
+  color: var(--color-bianco-ferrari, #ffffff);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   03 / SAME GENRE CAROUSEL (Figma Node 471:310: h=568px, 5 cards)
+   ========================================================================== */
+.carouselSection {
+  width: 100%;
+  background-color: var(--color-carbone-nero, #000000);
+  padding: 48px 0 64px;
+}
+
+.carouselContainer {
+  width: 100%;
+  max-width: var(--page-max-width, 1840px);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x, clamp(24px, 4vw, 80px));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.carouselHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.carouselTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari, #ffffff);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.carouselNavControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carouselNavBtn {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: var(--color-bianco-ferrari, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: var(--radius-sharp, 0px);
+  transition: border-color var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease), background-color var(--transition-fast, 150ms ease);
+}
+
+.carouselNavBtn:hover:not(:disabled) {
+  border-color: var(--color-bianco-ferrari, #ffffff);
+  background-color: #222222;
+}
+
+.carouselNavBtn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.carouselNavBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  border-color: #252525;
+}
+
+/* Smooth Carousel Track */
+.carouselViewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carouselTrack {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.relatedCard {
+  flex: 0 0 calc((100% - (4 * 24px)) / 5);
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition-fast, 150ms ease);
+}
+
+.relatedCard:hover {
+  transform: translateY(-4px);
+}
+
+.posterContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 248 / 324;
+  border: 1px solid var(--color-grafite, #303030);
+  background-color: var(--color-notte-profonda, #181818);
+  overflow: hidden;
+  border-radius: var(--radius-sharp, 0px);
+  transition: border-color var(--transition-fast, 150ms ease);
+}
+
+.relatedCard:hover .posterContainer {
+  border-color: var(--color-bianco-ferrari, #ffffff);
+}
+
+.posterImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.cardCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 0 16px;
+}
+
+.relatedMovieTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--color-bianco-ferrari, #ffffff);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.relatedMovieGenre {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-fumo, #8f8f8f);
+  margin: 0;
+}
+
+/* ==========================================================================
+   04 / STICKY BOOKING BAR (Figma Node 471:351: 80px bar)
+   ========================================================================== */
+.stickyBookingBar {
+  width: 100%;
+  height: 80px;
+  background-color: var(--color-notte-profonda, #181818);
+  border-top: 1px solid var(--color-grafite, #303030);
+  border-bottom: 1px solid var(--color-grafite, #303030);
+  display: flex;
+  align-items: center;
+}
+
+.stickyBarInner {
+  width: 100%;
+  max-width: var(--page-max-width, 1840px);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x, clamp(24px, 4vw, 80px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stickyMovieTitle {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--color-bianco-ferrari, #ffffff);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.stickyMovieMeta {
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-fumo, #8f8f8f);
+  letter-spacing: 0.05em;
+  padding: 0 32px;
+}
+
+.stickyBookingCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 260px;
+  height: 48px;
+  background-color: var(--color-bianco-ferrari, #ffffff);
+  border: 1px solid var(--color-bianco-ferrari, #ffffff);
+  color: var(--color-carbone-nero, #000000);
+  font-family: var(--font-family-base, 'Inter', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.25px;
+  border-radius: var(--radius-sharp, 0px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast, 150ms ease), transform var(--transition-fast, 150ms ease);
+}
+
+.stickyBookingCta:hover {
+  opacity: 0.9;
+}
+
+.stickyBookingCta:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   05 / TRUST & TRANSPARENCY STRIP
+   ========================================================================== */
+.trustStrip {
+  background-color: var(--color-carbone-nero, #000000);
+  border-bottom: 1px solid var(--color-grafite, #303030);
+  padding: 24px 0;
+}
+
+.trustContainer {
+  max-width: var(--page-max-width, 1760px);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x, clamp(24px, 3.5vw, 64px));
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 24px;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-fumo, #8f8f8f);
+  letter-spacing: 0.083em;
+  text-transform: uppercase;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .relatedCard {
+    flex: 0 0 calc((100% - (3 * 20px)) / 4);
+  }
+}
+
+@media (max-width: 900px) {
+  .relatedCard {
+    flex: 0 0 calc((100% - (2 * 16px)) / 3);
+  }
+}
+
+@media (max-width: 640px) {
+  .relatedCard {
+    flex: 0 0 calc((100% - 12px) / 2);
+  }
+  .stickyBarInner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    height: auto;
+    padding: 16px 20px;
+  }
+  .stickyBookingBar {
+    height: auto;
+  }
+  .stickyBookingCta {
+    width: 100%;
+  }
+  .trustContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

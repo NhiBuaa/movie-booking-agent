@@ -1,0 +1,8 @@
+{
+  "name": "@platform/ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared React UI components styled with Ferrari Dark Cinema design system",
+  "main": "index.ts",
+  "types": "index.ts"
+}

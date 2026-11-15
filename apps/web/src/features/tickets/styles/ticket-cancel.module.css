@@ -1,0 +1,219 @@
+.pageWrapper {
+  background-color: var(--color-carbone-nero, #0a0a0a);
+  color: var(--color-bianco-ferrari, #ffffff);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 var(--page-padding-x, clamp(24px, 4vw, 48px));
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.backBtn:hover {
+  border-color: #ffffff;
+}
+
+.breadcrumbText {
+  font-size: 12px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.headingSection {
+  margin-top: 28px;
+  border-bottom: 1px solid var(--color-grafite, #303030);
+  padding-bottom: 20px;
+}
+
+.pageTitle {
+  font-family: var(--font-roboto-slab, 'Roboto Slab', serif);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.ticketSummaryCard {
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  padding: 24px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ticketMovieTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.ticketDetails {
+  font-size: 13px;
+  color: var(--color-fumo, #8f8f8f);
+}
+
+.refundAmountBox {
+  text-align: right;
+}
+
+.refundAmountLabel {
+  font-size: 11px;
+  color: var(--color-fumo, #8f8f8f);
+  text-transform: uppercase;
+}
+
+.refundAmountValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.formSection {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.reasonOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  cursor: pointer;
+  transition: border-color 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reasonOption:hover {
+  border-color: #555555;
+}
+
+.reasonOptionActive {
+  border-color: #da291c;
+  background-color: rgba(218, 41, 28, 0.08);
+}
+
+.radioCircle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radioCircleActive {
+  border-color: #da291c;
+}
+
+.radioDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #da291c;
+}
+
+.policyNoticeBox {
+  background-color: rgba(218, 41, 28, 0.1);
+  border: 1px solid #da291c;
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.policyNoticeText {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.submitCancelBtn {
+  height: 48px;
+  padding: 0 32px;
+  background-color: #da291c;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.submitCancelBtn:hover {
+  opacity: 0.9;
+}
+
+.submitCancelBtn:active {
+  transform: scale(0.97);
+}
+
+.keepTicketBtn {
+  height: 48px;
+  padding: 0 24px;
+  background-color: var(--color-notte-profonda, #181818);
+  border: 1px solid var(--color-grafite, #303030);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
