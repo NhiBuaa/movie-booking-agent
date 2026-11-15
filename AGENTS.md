@@ -1,47 +1,77 @@
-# Movie Booking Platform — Repository Guidance for AI Agents
+# Repository Guidance
 
-Trước khi thực hiện bất kỳ nhiệm vụ nào trong repository này, agent phải đọc kỹ các nguyên tắc kỹ thuật dưới đây.
+## Mission
 
----
+Build and maintain the comprehensive Movie Booking Platform featuring a Next.js 16 user-facing Web app, Mobile app, Cinema Organizer Portal, Cinema Core transactional backend, and Conversational AI Agent service within a unified, high-craft Monorepo.
 
-## 1. Nguồn thẩm quyền kỹ thuật (Authoritative Sources)
+## Authority Map
 
-| Lĩnh vực | Tài liệu chuẩn |
-| :--- | :--- |
-| **Tầm nhìn sản phẩm & Phân hệ** | [`PRODUCT.md`](PRODUCT.md) |
-| **Quy chuẩn thiết kế & Tokens** | [`DESIGN.md`](DESIGN.md) và `packages/design-tokens/tokens.css` |
-| **Kiến trúc hệ thống & Ranh giới** | [`docs/architecture/system-boundaries.md`](docs/architecture/system-boundaries.md) |
-| **Kiến trúc Web Frontend (Next.js)** | [`docs/architecture/frontend-architecture.md`](docs/architecture/frontend-architecture.md) |
-| **Quy tắc nghiệp vụ & Trạng thái giao dịch**| [`docs/specs/domain-context.md`](docs/specs/domain-context.md) |
-| **Đặc tả đặt vé qua hội thoại (AI Agent)**| [`docs/specs/conversational-booking.md`](docs/specs/conversational-booking.md) |
-| **Tiêu chuẩn chất lượng giao diện (UI)** | [`docs/standards/ui-quality.md`](docs/standards/ui-quality.md) |
+- `PROJECT-OVERVIEW.md` — project foundation, scope, architecture direction, and explicit open questions.
+- `CONTEXT.md` — current project-state projection and boundary conditions.
+- `DESIGN.md` — canonical visual identity and design system (Ferrari Dark Cinema).
+- `docs/` — durable project knowledge (architecture, standards, specs, decisions, guides).
+- `.agents/rules/` — detailed and scoped agent-only rules (e.g. `ui-skill-routing.md`).
+- `.agents/references/` — non-normative supporting material for agents.
+- Issues — task scope, planning, progress, and handoff state.
+- Pull Requests — implementation discussion, review, CI, and verification.
+- source code and tests — implementation reality.
 
----
+Do not duplicate Issue/PR state in repository markdown files.
 
-## 2. Cấu trúc Monorepo & Ranh giới trách nhiệm
+## Read Order
 
-- **`apps/web`**: Web app đặt vé cho khách hàng (Next.js 16 App Router + React 19).
-- **`apps/organizer`**: Portal quản trị dành cho nhà tổ chức/rạp chiếu (upload phim, xếp lịch, quản lý phòng/ghế).
-- **`apps/mobile`**: Ứng dụng di động cho khách hàng và nhân viên soát vé QR tại rạp.
-- **`services/cinema-core`**: Dịch vụ backend thẩm quyền duy nhất về tồn kho ghế, khóa giữ chỗ (Hold TTL), thanh toán và vé.
-- **`services/agent-service`**: Bộ não AI Agent điều phối hội thoại và gọi công cụ tới Cinema Core.
-- **`packages/*`**: Các thư viện dùng chung (`design-tokens`, `contracts`, `ui`, `shared-logic`).
+For meaningful work:
 
----
+1. Read this file.
+2. Read `PROJECT-OVERVIEW.md` and `CONTEXT.md` when the task requires project-level context.
+3. Read root `DESIGN.md` and `.agents/rules/ui-skill-routing.md` when the task touches user interfaces.
+4. Read the relevant Issue or task.
+5. Read only the relevant numbered `docs/` areas (e.g., `docs/04-standards/ui-quality.md` when working on UI implementation and verification).
+6. Read applicable `.agents/rules/` or `.agents/references/` when useful.
+7. Inspect implementation and tests.
 
-## 3. Quy chuẩn phát triển với GitHub Spec Kit
+## Critical Invariants
 
-Repository sử dụng **GitHub Spec Kit** trong thư mục `.specify/`. Khi phát triển tính năng hoặc sửa lỗi phức tạp:
-1. Thực hiện theo luồng chuẩn: `specify -> plan -> tasks -> implement -> converge`.
-2. Tài liệu kỹ thuật nằm tại `docs/` là nguồn thẩm quyền lâu dài.
-3. Không tự ý sửa đổi hoặc xóa các mẫu cấu hình trong `.specify/`.
+- **Authoritative Core:** Cinema Core (`services/cinema-core`) is the single source of truth for seat availability, pricing, hold TTL, payment confirmation, and ticket issuance. Client apps and AI Agent never assume authoritative status.
+- **Conversational Booking Safety:** The AI Agent interprets intent and coordinates tools. It must NEVER claim or present an order as confirmed or ticket as issued without cryptographic or explicit signature verification from Cinema Core.
+- **Visual Identity Discipline:** All user interfaces (`apps/web`, `apps/organizer`, `apps/mobile`) must adhere strictly to the Ferrari Dark Cinema design tokens in root `DESIGN.md` and `packages/design-tokens/tokens.css`.
+- **Preserve Security Boundaries:** Role separation between `CUSTOMER`, `CINEMA_STAFF`, and `ORGANIZER_ADMIN` must be strictly enforced. Never expose secrets or credentials in client bundles.
+- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` and pass 100% (83/83 unit/logic tests) before claiming task completion.
 
----
+## Working Agreements
 
-## 4. Quy ước nhánh, Commit và Kiểm chứng
+- Understand existing implementation before editing.
+- Prefer the smallest independently verifiable change.
+- Avoid unrelated refactors.
+- Preserve unresolved questions instead of guessing.
+- Promote durable findings into the correct `docs/` category when needed.
+- Follow the GitHub Spec Kit workflow (`.specify/`) for major feature development (`constitution -> specify -> plan -> tasks -> implement -> converge`).
 
-- **Tên nhánh mới**: Tuân theo định dạng `<loại>/<mô-tả-ngắn>` (ví dụ: `feat/organizer-showtime-scheduler`, `fix/seat-hold-timeout`).
-- **Xác minh trước khi kết luận**:
-  - Với thay đổi code trong `apps/web`: bắt buộc chạy `npm test` và đảm bảo toàn bộ bộ kiểm thử đạt kết quả tốt (100% pass).
-  - Với thay đổi giao diện: kiểm tra tính nhất quán với `DESIGN.md` và tiêu chuẩn tại `docs/standards/ui-quality.md`.
-  - Tuyệt đối không tuyên bố hoàn tất nếu chưa chạy lệnh kiểm chứng thực tế và có kết quả cụ thể.
+## Agent Configuration Rules
+
+- `.agents/rules/` is for agent-only behavior.
+- `.agents/references/` is non-normative support material.
+- If humans or the software must obey a rule too, prefer `docs/04-standards/`.
+- Do not create `.agents/commands/`, `.agents/hooks/`, or `.agents/skills/` unless the project has a concrete need for them.
+
+## Selective Issue/PR Closeout
+
+At normal task closeout, consider only reusable findings; no new lesson is a valid outcome.
+
+- Verify each candidate against code/tests or an accepted decision, and link its Issue/PR evidence or commit. Distinguish proposed, implemented, accepted, merged and deployed; one does not imply the others.
+- Update an existing owner, not a second copy: decisions in the relevant architecture record, software invariants in standards, operational pitfalls in the relevant guide/runbook, and agent-only routing in AGENTS or scoped rules. Prefer a regression check for executable behavior; do not create a skill, hook or knowledge store just to record a lesson.
+- Make small, safe corrections within the already approved scope without another approval checkpoint. Include them in the normal diff and completion report.
+- Propose out-of-scope policy, architecture or knowledge-authority changes for approval before applying them. Do not block unrelated approved completion on such a proposal. Closeout never grants publication, deployment, installation or permission changes.
+- Keep transient progress in the Issue/PR. Preserve historical evidence and untracked files; link rather than copy logs or conversations. Memory and old notes are retrieval aids, not overrides of verified implementation or accepted decisions.
+
+Report briefly: no reusable finding, updated owner + evidence, or an out-of-scope proposal awaiting approval.
+
+## Validation
+
+```bash
+# Run all unit and logic tests across apps/web
+npm test
+
+# Check kit conformance and markdown link integrity
+powershell -ExecutionPolicy Bypass -File "C:\Developer\Projects\agentic-repo-kit-reference\scripts\check-kit.ps1" -TargetPath .
+```
