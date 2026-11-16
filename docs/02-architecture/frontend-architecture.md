@@ -20,6 +20,10 @@ flowchart LR
     AGENT --> CORE
 ```
 
+> [!NOTE]
+> **Hiện trạng mô phỏng tầng BFF:**
+> Dịch vụ backend `services/cinema-core` là kiến trúc đích độc lập (theo [ADR-0001](../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md)), hiện tại chưa triển khai runtime thực tế. Biến môi trường `CINEMA_CORE_URL` là ranh giới kiến trúc tương lai, chưa được đấu nối. Tầng BFF Route Handlers (`src/app/api/...`) hiện vận hành thông qua các in-memory adapters (`src/server/`) có độ trung thực cao, tuân thủ đúng hợp đồng `@platform/contracts`.
+
 ---
 
 ## 2. Cấu trúc thư mục ứng dụng Web (`apps/web`)
@@ -52,7 +56,7 @@ apps/web/
 │   └── styles/
 │       ├── globals.css         # Reset CSS và layout toàn cục
 │       └── tokens.css          # CSS Variables từ DESIGN.md
-└── tests/                      # Bộ kiểm thử tự động (83 tests pass 100%)
+└── tests/                      # Bộ kiểm thử tự động (100% tests pass)
 ```
 
 ---

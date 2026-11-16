@@ -36,7 +36,7 @@ For meaningful work:
 - **Conversational Booking Safety:** The AI Agent interprets intent and coordinates tools. It must NEVER claim or present an order as confirmed or ticket as issued without cryptographic or explicit signature verification from Cinema Core.
 - **Visual Identity Discipline:** All user interfaces (`apps/web`, `apps/organizer`, `apps/mobile`) must adhere strictly to the Ferrari Dark Cinema design tokens in root `DESIGN.md` and `packages/design-tokens/tokens.css`.
 - **Preserve Security Boundaries:** Role separation between `CUSTOMER`, `CINEMA_STAFF`, and `ORGANIZER_ADMIN` must be strictly enforced. Never expose secrets or credentials in client bundles.
-- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` and pass 100% (83/83 unit/logic tests) before claiming task completion.
+- **Verification Before Completion:** Every code change in `apps/web` must run test suites (`npm test` or `npm run test:all`) and pass 100% before claiming task completion.
 
 ## Working Agreements
 
