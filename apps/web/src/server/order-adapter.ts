@@ -29,7 +29,10 @@ export interface PaymentAttempt {
   transactionId: string;
   paymentMethod: PaymentMethod;
   amount: number;
+  status: PaymentStatus;
   createdAt: number;
+  reconciliationRequired?: boolean;
+  reconciliationReason?: string;
 }
 
 export interface InternalOrderSummaryDto extends OrderSummaryDto {
@@ -358,17 +361,27 @@ export function createPaymentIntent(
     order.paymentAttempts = new Map<string, PaymentAttempt>();
   }
 
-  // Idempotent retry: Reuse active transactionId if method is identical and within TTL
-  let transactionId = order.transactionId;
-  if (!transactionId || order.paymentMethod !== req.paymentMethod || !order.paymentAttempts.has(transactionId)) {
-    // Cryptographically secure transaction ID
-    transactionId = `TXN-${crypto.randomUUID().replace(/-/g, '').slice(0, 16).toUpperCase()}`;
+  // Idempotent retry: Reuse active transactionId if and only if attempt is PENDING, method is identical, and within TTL
+  const activeTxnId = order.transactionId;
+  const currentAttempt = activeTxnId ? order.paymentAttempts.get(activeTxnId) : undefined;
+  const canReuse =
+    Boolean(activeTxnId) &&
+    currentAttempt?.status === PaymentStatus.PENDING &&
+    order.paymentMethod === req.paymentMethod;
+
+  const transactionId: string = canReuse && activeTxnId
+    ? activeTxnId
+    : `TXN-${crypto.randomUUID().replace(/-/g, '').slice(0, 16).toUpperCase()}`;
+
+  if (!canReuse) {
     order.transactionId = transactionId;
     order.paymentMethod = req.paymentMethod;
+    order.paymentStatus = PaymentStatus.PENDING;
     order.paymentAttempts.set(transactionId, {
       transactionId,
       paymentMethod: req.paymentMethod,
       amount: order.totalAmount,
+      status: PaymentStatus.PENDING,
       createdAt: Date.now(),
     });
   }
@@ -466,21 +479,7 @@ export function processPaymentWebhook(
     };
   }
 
-  // 3. Idempotency Check: Already confirmed order returns existing ticket without duplicating
-  if (order.status === BookingStatus.CONFIRMED) {
-    const existingTicket = ticketsStore.get(order.bookingId);
-    return {
-      success: true,
-      response: {
-        received: true,
-        bookingStatus: BookingStatus.CONFIRMED,
-        message: 'Đơn hàng đã được xác nhận trước đó.',
-      },
-      ticket: existingTicket,
-    };
-  }
-
-  // 4. Cross-Reconciliation Checks (Đối soát giao dịch)
+  // 3. Cross-Reconciliation Checks (Đối soát giao dịch)
   // Ensure order has initialized at least one payment transaction attempt (Finding 3)
   if (!order.paymentAttempts || order.paymentAttempts.size === 0) {
     return {
@@ -491,7 +490,7 @@ export function processPaymentWebhook(
     };
   }
 
-  // Reconcile transactionId against registered payment attempts (Finding 3 & 4)
+  // Reconcile transactionId against registered payment attempts
   const attempt = order.paymentAttempts.get(payload.transactionId);
   if (!attempt) {
     return {
@@ -522,8 +521,54 @@ export function processPaymentWebhook(
     };
   }
 
+  // 4. Handle already-confirmed order (Finding 1 & 2)
+  if (order.status === BookingStatus.CONFIRMED) {
+    // Idempotent retry: Same transaction that confirmed the order returns existing ticket
+    if (payload.transactionId === order.transactionId) {
+      const existingTicket = ticketsStore.get(order.bookingId);
+      if (existingTicket) {
+        return {
+          success: true,
+          response: {
+            received: true,
+            bookingStatus: BookingStatus.CONFIRMED,
+            message: 'Đơn hàng đã được xác nhận trước đó.',
+          },
+          ticket: existingTicket,
+        };
+      }
+    }
+
+    // Different transaction attempting to settle already-confirmed order (Finding 2)
+    if (payload.status === PaymentStatus.SUCCEEDED) {
+      attempt.status = PaymentStatus.SUCCEEDED;
+      attempt.reconciliationRequired = true;
+      attempt.reconciliationReason = 'DUPLICATE_PAYMENT_ON_CONFIRMED_ORDER';
+
+      return {
+        success: false,
+        code: 'DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED',
+        error: `Giao dịch '${payload.transactionId}' đã thanh toán thành công nhưng đơn hàng đã được xác nhận bởi giao dịch '${order.transactionId}'. Cần đối soát hoàn tiền khoản thu bổ sung.`,
+        status: 409,
+      };
+    }
+
+    if (payload.status === PaymentStatus.FAILED) {
+      attempt.status = PaymentStatus.FAILED;
+      return {
+        success: true,
+        response: {
+          received: true,
+          bookingStatus: BookingStatus.CONFIRMED,
+          message: `Giao dịch '${payload.transactionId}' thất bại (đơn hàng đã được xác nhận trước đó).`,
+        },
+      };
+    }
+  }
+
   // 5. Check order lifecycle & late-arriving webhook
   if (order.status === BookingStatus.CANCELLED) {
+    attempt.status = payload.status;
     return {
       success: false,
       code: 'ORDER_CANCELLED',
@@ -534,6 +579,9 @@ export function processPaymentWebhook(
 
   if (order.holdExpiresAt <= Date.now() || order.status === BookingStatus.EXPIRED) {
     order.status = BookingStatus.EXPIRED;
+    attempt.status = payload.status;
+    attempt.reconciliationRequired = true;
+    attempt.reconciliationReason = 'PAYMENT_EXPIRED_RECONCILIATION_REQUIRED';
     return {
       success: false,
       code: 'PAYMENT_EXPIRED_RECONCILIATION_REQUIRED',
@@ -544,11 +592,6 @@ export function processPaymentWebhook(
 
   // 6. Payment Success Processing
   if (payload.status === PaymentStatus.SUCCEEDED) {
-    order.status = BookingStatus.CONFIRMED;
-    order.paymentStatus = PaymentStatus.SUCCEEDED;
-    order.transactionId = attempt.transactionId;
-    order.paymentMethod = attempt.paymentMethod;
-
     // Issue authoritative ticket with collision-proof ticketCode
     let ticketCode: string;
     do {
@@ -572,6 +615,7 @@ export function processPaymentWebhook(
         expiresAt,
       });
     } catch (_err) {
+      // Preserve order state as PENDING_PAYMENT on signature configuration error (Finding 1)
       return {
         success: false,
         code: 'SERVER_CONFIGURATION_ERROR',
@@ -610,6 +654,13 @@ export function processPaymentWebhook(
       qrPayload: JSON.stringify(qrData),
     };
 
+    // Atomic state transition: Only confirm order once ticket is generated and stored
+    attempt.status = PaymentStatus.SUCCEEDED;
+    order.status = BookingStatus.CONFIRMED;
+    order.paymentStatus = PaymentStatus.SUCCEEDED;
+    order.transactionId = attempt.transactionId;
+    order.paymentMethod = attempt.paymentMethod;
+
     ticketsStore.set(ticketCode, ticket);
     ticketsStore.set(order.bookingId, ticket);
 
@@ -625,7 +676,12 @@ export function processPaymentWebhook(
   }
 
   if (payload.status === PaymentStatus.FAILED) {
+    attempt.status = PaymentStatus.FAILED;
     order.paymentStatus = PaymentStatus.FAILED;
+    // Clear active transactionId so subsequent retry creates a fresh attempt (Finding 3)
+    if (order.transactionId === attempt.transactionId) {
+      order.transactionId = undefined;
+    }
     return {
       success: true,
       response: {

@@ -16,6 +16,7 @@ import {
   signWebhookPayload,
   verifyTicketQrSignature,
   getCinemaCoreWebhookSecret,
+  getCinemaCoreTicketSecret,
 } from '../src/server/crypto-utils.ts';
 import type { TicketQrPayload } from '@platform/contracts';
 
@@ -1113,5 +1114,324 @@ describe('BFF Route Handlers — Integration & Contract Validation', () => {
     assert.equal(resValidAliasShowtimes.status, 200);
     const bodyValidAliasShowtimes = (await resValidAliasShowtimes.json()) as any;
     assert.ok(bodyValidAliasShowtimes.data.length > 0);
+  });
+
+  it('P1-7: Thiếu ticket secret không xác nhận đơn dở dang, retry sau khi cấu hình secret tạo vé thành công', async () => {
+    const origNodeEnv = process.env.NODE_ENV;
+    const origWebhookSecret = process.env.CINEMA_CORE_WEBHOOK_SECRET;
+    const origTicketSecret = process.env.CINEMA_CORE_TICKET_SECRET;
+
+    try {
+      // 1. Create hold and order
+      const reqHold = new Request('http://localhost:3000/api/hold', {
+        method: 'POST',
+        body: JSON.stringify({
+          showtimeId: 'slot-dk-04-1',
+          seatIds: ['F8'],
+          userEmail: 'atomic.ticket@example.com',
+        }),
+      });
+      const resHold = await postHold(reqHold);
+      assert.equal(resHold.status, 201);
+      const { data: hold } = (await resHold.json()) as any;
+
+      const reqOrder = new Request('http://localhost:3000/api/orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          holdId: hold.holdId,
+          showtimeId: hold.showtimeId,
+          userEmail: 'atomic.ticket@example.com',
+          paymentMethod: 'momo',
+        }),
+      });
+      const resOrder = await postOrder(reqOrder);
+      assert.equal(resOrder.status, 201);
+      const { data: order } = (await resOrder.json()) as any;
+
+      // 2. Create intent
+      const reqIntent = new Request('http://localhost:3000/api/payment/intent', {
+        method: 'POST',
+        headers: { 'x-user-email': 'atomic.ticket@example.com' },
+        body: JSON.stringify({
+          bookingId: order.bookingId,
+          paymentMethod: 'momo',
+        }),
+      });
+      const resIntent = await postPaymentIntent(reqIntent);
+      assert.equal(resIntent.status, 201);
+      const { data: intent } = (await resIntent.json()) as any;
+
+      // 3. Simulate production with valid webhook secret but MISSING ticket secret
+      (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
+      process.env.CINEMA_CORE_WEBHOOK_SECRET = 'valid-prod-webhook-secret-for-test';
+      delete process.env.CINEMA_CORE_TICKET_SECRET;
+
+      const payload = {
+        transactionId: intent.transactionId,
+        bookingId: order.bookingId,
+        partnerTxnId: 'MOMO-ATOMIC-001',
+        paymentMethod: 'momo' as const,
+        amount: order.totalAmount,
+        status: 'succeeded' as const,
+        payloadTimestamp: new Date().toISOString(),
+      };
+      const reqWebhookFail = new Request('http://localhost:3000/api/payment/webhook', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...payload,
+          signature: signWebhookPayload(payload, 'valid-prod-webhook-secret-for-test'),
+        }),
+      });
+      const resWebhookFail = await postPaymentWebhook(reqWebhookFail);
+      assert.equal(resWebhookFail.status, 500);
+      const bodyFail = (await resWebhookFail.json()) as any;
+      assert.equal(bodyFail.error.code, 'SERVER_CONFIGURATION_ERROR');
+
+      // 4. Ticket MUST NOT exist prematurely, and order MUST NOT be marked confirmed
+      const reqTicketBefore = new Request(`http://localhost:3000/api/tickets/${order.bookingId}`, {
+        headers: { 'x-user-email': 'atomic.ticket@example.com' },
+      });
+      const resTicketBefore = await getTicketById(reqTicketBefore, {
+        params: Promise.resolve({ id: order.bookingId }),
+      });
+      assert.equal(resTicketBefore.status, 404);
+
+      // 5. Admin configures ticket secret and retries webhook
+      process.env.CINEMA_CORE_TICKET_SECRET = 'valid-prod-ticket-signing-secret-for-test';
+
+      const reqWebhookRetry = new Request('http://localhost:3000/api/payment/webhook', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...payload,
+          signature: signWebhookPayload(payload, 'valid-prod-webhook-secret-for-test'),
+        }),
+      });
+      const resWebhookRetry = await postPaymentWebhook(reqWebhookRetry);
+      assert.equal(resWebhookRetry.status, 200);
+      const bodyRetry = (await resWebhookRetry.json()) as any;
+      assert.equal(bodyRetry.data.bookingStatus, 'CONFIRMED');
+
+      // 6. Ticket can now be successfully retrieved
+      const reqTicketAfter = new Request(`http://localhost:3000/api/tickets/${order.bookingId}`, {
+        headers: { 'x-user-email': 'atomic.ticket@example.com' },
+      });
+      const resTicketAfter = await getTicketById(reqTicketAfter, {
+        params: Promise.resolve({ id: order.bookingId }),
+      });
+      assert.equal(resTicketAfter.status, 200);
+      const bodyTicketAfter = (await resTicketAfter.json()) as any;
+      assert.ok(bodyTicketAfter.data.ticketCode.startsWith('TKT-'));
+      assert.equal(bodyTicketAfter.data.bookingId, order.bookingId);
+    } finally {
+      (process.env as Record<string, string | undefined>).NODE_ENV = origNodeEnv;
+      if (origWebhookSecret !== undefined) {
+        process.env.CINEMA_CORE_WEBHOOK_SECRET = origWebhookSecret;
+      } else {
+        delete process.env.CINEMA_CORE_WEBHOOK_SECRET;
+      }
+      if (origTicketSecret !== undefined) {
+        process.env.CINEMA_CORE_TICKET_SECRET = origTicketSecret;
+      } else {
+        delete process.env.CINEMA_CORE_TICKET_SECRET;
+      }
+    }
+  });
+
+  it('P1-8: Phân biệt webhook lặp cùng giao dịch (200) với khoản thanh toán thành công thứ hai (409 đối soát)', async () => {
+    // 1. Create hold and order
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['G2'],
+        userEmail: 'duplicate.pay@example.com',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    const { data: hold } = (await resHold.json()) as any;
+
+    const reqOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'duplicate.pay@example.com',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrder = await postOrder(reqOrder);
+    const { data: order } = (await resOrder.json()) as any;
+
+    // 2. Create first intent (MoMo)
+    const reqIntent1 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'duplicate.pay@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntent1 = await postPaymentIntent(reqIntent1);
+    const { data: intent1 } = (await resIntent1.json()) as any;
+
+    // 3. Switch method and create second intent (VNPAY)
+    const reqIntent2 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'duplicate.pay@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'vnpay',
+      }),
+    });
+    const resIntent2 = await postPaymentIntent(reqIntent2);
+    const { data: intent2 } = (await resIntent2.json()) as any;
+
+    // 4. Webhook confirms order via first intent (MoMo) -> 200 OK
+    const payload1 = {
+      transactionId: intent1.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-DUP-001',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhook1 = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload1,
+        signature: signWebhookPayload(payload1),
+      }),
+    });
+    const resWebhook1 = await postPaymentWebhook(reqWebhook1);
+    assert.equal(resWebhook1.status, 200);
+
+    // 5. Idempotent webhook retry for same transaction (MoMo) -> 200 OK
+    const reqWebhook1Dup = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload1,
+        signature: signWebhookPayload(payload1),
+      }),
+    });
+    const resWebhook1Dup = await postPaymentWebhook(reqWebhook1Dup);
+    assert.equal(resWebhook1Dup.status, 200);
+
+    // 6. Second payment webhook arrives for VNPAY (customer paid via both channels)
+    // Must NOT return 200 silently, must NOT issue second ticket, must flag for reconciliation (409)
+    const payload2 = {
+      transactionId: intent2.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'VNPAY-DUP-002',
+      paymentMethod: 'vnpay' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhook2 = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload2,
+        signature: signWebhookPayload(payload2),
+      }),
+    });
+    const resWebhook2 = await postPaymentWebhook(reqWebhook2);
+    assert.equal(resWebhook2.status, 409);
+    const bodyWebhook2 = (await resWebhook2.json()) as any;
+    assert.equal(bodyWebhook2.error.code, 'DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED');
+  });
+
+  it('P2-9: Webhook FAILED cập nhật trạng thái attempt và retry sau đó tạo transactionId mới', async () => {
+    // 1. Create hold and order
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['G3'],
+        userEmail: 'fail.retry@example.com',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    const { data: hold } = (await resHold.json()) as any;
+
+    const reqOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'fail.retry@example.com',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrder = await postOrder(reqOrder);
+    const { data: order } = (await resOrder.json()) as any;
+
+    // 2. Create intent 1
+    const reqIntent1 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'fail.retry@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntent1 = await postPaymentIntent(reqIntent1);
+    const { data: intent1 } = (await resIntent1.json()) as any;
+
+    // 3. Webhook reports failure for intent 1
+    const payloadFail = {
+      transactionId: intent1.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-FAIL-001',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'failed' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhookFail = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payloadFail,
+        signature: signWebhookPayload(payloadFail),
+      }),
+    });
+    const resWebhookFail = await postPaymentWebhook(reqWebhookFail);
+    assert.equal(resWebhookFail.status, 200);
+
+    // 4. Customer retries with MoMo -> MUST generate a FRESH transactionId (not reuse failed one)
+    const reqIntentRetry = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'fail.retry@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntentRetry = await postPaymentIntent(reqIntentRetry);
+    assert.equal(resIntentRetry.status, 201);
+    const { data: intentRetry } = (await resIntentRetry.json()) as any;
+    assert.notEqual(intentRetry.transactionId, intent1.transactionId);
+
+    // 5. Webhook for fresh transaction succeeds -> 200 CONFIRMED
+    const payloadSuccess = {
+      transactionId: intentRetry.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-SUCCESS-002',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhookSuccess = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payloadSuccess,
+        signature: signWebhookPayload(payloadSuccess),
+      }),
+    });
+    const resWebhookSuccess = await postPaymentWebhook(reqWebhookSuccess);
+    assert.equal(resWebhookSuccess.status, 200);
+    const bodySuccess = (await resWebhookSuccess.json()) as any;
+    assert.equal(bodySuccess.data.bookingStatus, 'CONFIRMED');
   });
 });
