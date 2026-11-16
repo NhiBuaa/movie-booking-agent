@@ -1,71 +1,105 @@
 # Business Domain Context & Transaction Rules
 
-Tài liệu này xác định các quy tắc nghiệp vụ cốt lõi, vòng đời giao dịch và trạng thái dữ liệu chuẩn của nền tảng **Movie Booking Platform**.
+**Phạm vi:** yêu cầu nghiệp vụ mục tiêu đã được hòa giải với bộ UML ngày 2026-11-16;
+không phải mô tả mọi khả năng của code hiện tại. [Mô hình sản phẩm](../03-product/use-cases.md)
+sở hữu actor, mục tiêu, BR và OPEN; [mô tả use case](../03-product/use-case-descriptions.md)
+sở hữu các tình huống và [GLOSSARY](../../GLOSSARY.md) sở hữu thuật ngữ.
+Tài liệu này diễn giải ràng buộc giao dịch để đặc tả từng tính năng; dẫn BR/OPEN thay vì tạo chính sách song song.
 
----
+## 1. Ranh giới thẩm quyền
 
-## 1. Ranh giới thẩm quyền (Authoritative Boundaries)
+- Cinema Core là nguồn có thẩm quyền về tồn kho, giá, hold, thanh toán, vé và ghi nhận sử dụng.
+- AI diễn giải ý định và điều phối; chỉ trình bày mua vé thành công sau xác minh phản hồi/chữ ký Core.
+- Client không tự suy thành công/thất bại từ redirect hoặc kết quả chưa rõ. Thiết bị soát vé cần kết nối Core.
 
-- **Cinema Core API (`services/cinema-core`)**: Là **Nguồn chân lý duy nhất (Single Source of Truth)** về tồn kho suất chiếu, trạng thái ghế, giữ chỗ (hold), giá vé, giao dịch thanh toán và vé điện tử hợp lệ (theo [ADR-0001](../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md)).
-- **AI Agent (`services/agent-service`)**: Đóng vai trò trợ lý thông minh diễn giải ngôn ngữ tự nhiên, gợi ý và điều phối tác vụ. AI Agent **không bao giờ tự xác nhận** giao dịch thành công nếu không có phản hồi và chữ ký số từ Cinema Core.
-- **Frontend / Client (`apps/web`, `apps/mobile`)**: Chỉ hiển thị trạng thái giao dịch được Cinema Core xác thực. Tuyệt đối không tự suy diễn trạng thái thành công hoặc thất bại từ các phản hồi chưa rõ ràng (`UNKNOWN`).
+## 2. Phòng chiếu và giữ ghế
 
----
+Theo BR-03–BR-05 và B-01/B-02/B-08:
 
-## 2. Quy tắc phòng chiếu & Ma trận ghế (Seat Matrix)
+- Mỗi phòng có sơ đồ và số ghế riêng; giữ Standard, VIP, Sweetbox. Ma trận 64 ghế (8×8)
+  chỉ là mẫu cũ, không giới hạn phòng mục tiêu hoặc bắt buộc cố định loại ghế theo hàng.
+- Danh sách tối đa 6 ghế, Sweetbox chọn cả cặp. Giữ nguyên tử cả danh sách sau xác nhận của khách;
+  tranh chấp một ghế thì không tạo hold một phần. Một tài khoản chỉ có một hold còn hiệu lực.
+- TTL 300 giây; không tự gia hạn hoặc khởi động lại khi chuyển kênh. Quy định cũ về cấu hình
+  tối đa 10 phút không còn là yêu cầu mục tiêu. Ngưỡng cảnh báo UI không thay đổi TTL của Core.
+- Mua vé/giữ ghế yêu cầu đăng nhập và email đã xác minh (BR-02). Không chọn ghế đang bị người khác giữ/đã bán.
 
-- **Quy mô phòng chiếu chuẩn**: Ma trận 64 ghế (8 hàng A–H × 8 cột 1–8).
-  - **Hàng A – D**: Ghế Tiêu chuẩn (Standard).
-  - **Hàng E – G**: Ghế VIP (Vị trí trung tâm góc nhìn tối ưu).
-  - **Hàng H (hoặc J)**: Ghế Sweetbox (Ghế đôi Couple, ghép cặp cố định 2 ghế liền kề: H1-H2, H3-H4, H5-H6, H7-H8).
-- **Ràng buộc đặt ghế**:
-  - Tối đa **6 ghế** cho một lần đặt chỗ của khách hàng cá nhân.
-  - Ghế Sweetbox bắt buộc chọn theo cặp số chẵn đầy đủ.
-  - Không được chọn ghế đã có trạng thái `RESERVED` (đã bán) hoặc `HELD` bởi phiên khác.
+## 3. Thanh toán và phát hành vé
 
----
+Theo BR-05–BR-07 và B-05/B-06:
 
-## 3. Động cơ giữ chỗ (Seat Hold Engine & TTL)
+- Phạm vi cổng đã chốt là MoMo và VNPAY. Giá trị phương thức khác trong enum hiện tại không tự mở rộng phạm vi sản phẩm.
+- Chỉ phát hành khi có căn cứ thanh toán hợp lệ và quyền sở hữu ghế; xác minh nguồn, toàn vẹn, số tiền,
+  liên kết đơn và xử lý lặp. Hết hold không tự kết luận thanh toán thất bại khi cổng chưa rõ.
+- Đã thu tiền sau khi ghế được giải phóng: xử lý hoàn khoản thu qua R-03, không tự đặt ghế thay thế.
+- Email vé gửi sau xác nhận phát hành; lỗi email không đảo ngược kết quả mua. Cơ chế gửi lại/lỗi giữ ở OPEN-09.
 
-- **Bảo vệ All-or-Nothing**: Khi khách hàng xác nhận danh sách ghế đã chọn, hệ thống tạo một lệnh Hold nguyên tử (Atomic Hold) cho toàn bộ ghế. Nếu có bất kỳ 1 ghế bị tranh chấp hoặc đã bán, toàn bộ lệnh Hold bị từ chối.
-- **Thời hạn giữ ghế (Hold TTL)**:
-  - Thời gian giữ chỗ hiệu lực: **5 phút (300 giây)** (tối đa cấu hình 10 phút).
-  - Cảnh báo thời gian: Khi bộ đếm thời gian còn dưới 2 phút (120 giây), giao diện hiển thị cảnh báo sắp hết hạn giữ vé.
-- **Trạng thái Hold (Vòng đời giữ chỗ)**:
-  - `ACTIVE`: Lệnh giữ chỗ đang có hiệu lực trong thời hạn TTL (mặc định 300 giây).
-  - `CONSUMED`: Lệnh giữ chỗ đã được sử dụng hợp lệ để tạo đơn hàng (`POST /api/orders`). Khi đã `CONSUMED`, mã giữ chỗ này không được phép tái sử dụng để tạo đơn khác và không thể hủy chủ động tùy tiện; ghế trong đơn hàng tiếp tục được bảo vệ trong thời hạn `holdExpiresAt`.
-  - `EXPIRED`: Lệnh giữ chỗ hết hạn thời gian hiệu lực (quá 300 giây) mà chưa tạo đơn hàng; ghế lập tức được giải phóng lại kho tồn kho.
-  - `CANCELLED`: Khách hàng chủ động hủy lệnh giữ chỗ khi còn ở trạng thái `ACTIVE` (`DELETE /api/hold`); ghế được giải phóng ngay lập tức.
-- **Ràng buộc người dùng**: Một tài khoản người dùng (`userEmail`) chỉ được có duy nhất **1 lệnh Hold đang có hiệu lực (`ACTIVE` và chưa hết TTL)** tại một thời điểm trên toàn hệ thống.
+## 4. Đơn, quyền theo ghế và QR chung
 
----
+Theo BR-07–BR-09 và O-01–O-05:
 
-## 4. Vòng đời giao dịch (Transaction Lifecycle)
+- Một QR của lượt đặt tra cứu nhiều quyền sử dụng theo ghế. Soát ghế nào chỉ ghi nhận ghế đó;
+  người đến sau có thể dùng quyền còn lại, ghế đã dùng/hủy bị từ chối.
+- Core kiểm tra và ghi nhận mỗi ghế một lần, kể cả khi nhiều cửa thao tác đồng thời.
+  Lưu QR trên điện thoại không cho phép thiết bị nhân viên soát vé ngoại tuyến.
+- Sweetbox được đặt/hủy theo cặp nhưng ghi nhận người vào có thể theo từng ghế.
+- Thiếu QR dùng tra cứu và mã xác nhận qua email đã xác minh; không tự bỏ qua bằng chứng hoặc kiểm tra quyền từng ghế.
 
-### 4.1. Trạng thái Đặt vé (Booking)
-- `PENDING_PAYMENT`: Đã tạo đơn hàng gắn với Hold ghế hợp lệ (`CONSUMED`), đang chờ khách hàng thanh toán trong thời hạn `holdExpiresAt`.
-- `CONFIRMED`: Thanh toán thành công, ghế chính thức được ghi nhận mua (`reserved`/sold vĩnh viễn), vé điện tử E-Ticket có chữ ký số QR được cấp. Đơn hàng đã `CONFIRMED` tuyệt đối không bị chuyển thành `EXPIRED` bởi các sự kiện webhook đến muộn.
-- `CANCELLED`: Đơn đặt chỗ bị hủy do khách hàng chủ động hủy trước khi thanh toán.
-- `EXPIRED`: Đơn hàng ở trạng thái `PENDING_PAYMENT` nhưng quá thời hạn thanh toán mà chưa nhận được xác nhận thanh toán hợp lệ; ghế được giải phóng lại kho tồn kho (`available`).
+## 5. Yêu cầu hủy và giao dịch hoàn tiền
 
-### 4.2. Trạng thái Thanh toán (Payment)
-- `PENDING`: Đang chờ cổng thanh toán (MoMo, VNPAY, Thẻ) phản hồi.
-- `SUCCEEDED`: Giao dịch thanh toán được cổng xác nhận thành công và đối soát hợp lệ.
-- `FAILED`: Giao dịch thanh toán thất bại (tài khoản không đủ tiền, khách hàng hủy giao dịch, lỗi kỹ thuật cổng...).
-- `UNKNOWN`: Trạng thái chưa rõ ràng do mất kết nối hoặc timeout cổng thanh toán. Cần đưa vào luồng đối soát tự động, không được tự động hủy ngay lập tức.
+Theo BR-10–BR-12 và R-01–R-07:
 
-### 4.3. Vé điện tử (E-Ticket)
-- `ISSUED`: Vé đã phát hành kèm mã QR có chữ ký số HMAC-SHA256 xác thực từ Cinema Core secret.
-- `CHECKED_IN`: Vé đã được quét mã QR tại cửa phòng chiếu bởi nhân viên rạp qua ứng dụng di động.
-- `VOID`: Vé bị vô hiệu hóa do hoàn tiền hoặc hủy suất chiếu có thẩm quyền.
+- Phân biệt bỏ hold chưa thanh toán (B-08) với yêu cầu hủy vé đã mua (R-01). Gửi yêu cầu không làm vé hết hiệu lực.
+- Quản lý rạp xét theo phạm vi/chính sách, ngoại lệ chuyển quản trị viên. Khi duyệt phải kiểm tra lại
+  quyền ghế chưa dùng và suất chưa bắt đầu; soát và duyệt hủy không cùng thành công cho một ghế.
+- Duyệt chỉ vô hiệu đúng các quyền được hủy; phần còn lại vẫn hiệu lực. Thời điểm bán lại ghế giữ ở OPEN-05.
+- Quyết định duyệt và giao dịch hoàn tiền có kết quả riêng. Chỉ ghi tiền đã hoàn khi có xác nhận;
+  lỗi/chưa rõ/callback lặp không tạo hoàn trùng hoặc tự phục hồi vé đã hủy.
+- R-03 có cổng thanh toán phối hợp và quản lý/quản trị theo dõi; R-04 cho khách và vận hành theo quyền
+  xem tiến độ. Association không tự cấp quyền hoàn thủ công hay xử lý mọi sự cố.
+- Hủy suất đã bán vé cần quản trị chuỗi duyệt đề nghị của quản lý rạp, sau đó thực thi R-07.
+  Không mặc định mức hoàn/phí, người xử lý sự cố hoặc cách xử lý combo/voucher/điểm.
 
----
+## 6. Phân quyền và nghiệp vụ liên quan
 
-## 5. Các câu hỏi nghiệp vụ còn mở (Open Questions)
+[Danh mục actor](../03-product/use-cases.md#actor) định nghĩa vai trò nghiệp vụ mục tiêu và phạm vi rạp/dữ liệu.
+Các enum `CUSTOMER`, `CINEMA_STAFF`, `ORGANIZER_ADMIN` hiện tại chưa cung cấp ánh xạ đầy đủ;
+đặc tả triển khai phải xác định quyền cụ thể, không ngầm cấp quyền giữa soát vé, giao combo và quản lý.
 
-Các câu hỏi dưới đây được ghi nhận rõ và tiếp tục giữ ở trạng thái mở chờ quyết định chính thức từ phía Sản phẩm, Vận hành và Đối tác thanh toán:
+Điểm sau soát, đổi điểm lấy voucher, điều kiện đánh giá và kiểm duyệt theo BR-13–BR-16 và L-01–L-06.
+Không dùng tỷ lệ/giá fixture làm chính sách. Chi tiết còn thiếu tham chiếu
+[OPEN-01–OPEN-10](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.
 
-1. **Xử lý trạng thái UNKNOWN và PROCESSING kéo dài:**
-   - Khi cổng thanh toán gặp sự cố rớt mạng hoặc timeout khiến trạng thái giao dịch rơi vào `UNKNOWN` hoặc `PROCESSING` quá thời hạn giữ chỗ: Hiện tại hệ thống bảo lưu thông tin attempt và gắn cờ đối soát, không tự ý chuyển đơn thành công hoặc thất bại. Cần chốt quy chuẩn thời gian timeout tối đa (ví dụ sau 15 hay 30 phút) trước khi tự động đóng giao dịch và kích hoạt hoàn tiền cho khách hàng.
-2. **Sự kiện Webhook đến sai thứ tự (Out-of-order Events) & Thanh toán trùng (Duplicate Payments):**
-   - Trường hợp khách hàng thực hiện nhiều attempt (ví dụ tạo intent MoMo, sau đó đổi sang VNPAY thanh toán thành công và đơn đã `CONFIRMED`), nhưng sau đó webhook thành công từ attempt MoMo cũ lại đến trễ: Hệ thống hiện tại bảo vệ đơn `CONFIRMED`, giữ nguyên vé đã phát hành và đánh dấu attempt thứ hai là `reconciliationRequired = true` (HTTP 409 `DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED`). Quy trình hoàn tiền tự động (Auto-refund API) hay đối soát kế toán thủ công qua dashboard ngân hàng cần được thống nhất cùng Payment Ops.
+## 7. Hợp đồng hiện có và đặc tả tiếp theo
+
+[Enum hiện có](../../packages/contracts/src/common/enums.ts) và
+[DTO vé](../../packages/contracts/src/tickets/types.ts) phản ánh bản code đối chiếu
+`549d7b2f76e63aefe34e0c3799c3d28495cdf868`. Trạng thái vé hiện là tổng thể; DTO soát chưa chọn tập ghế,
+chưa biểu diễn đầy đủ việc soát/hủy một phần. Tên trạng thái trong code không thay thế các phân biệt nghiệp vụ trên.
+
+Các bảng trạng thái đơn/vé tổng thể trước đây không đủ làm hợp đồng cho sản phẩm mục tiêu.
+Tài liệu này không đổi enum, schema hoặc API; đặc tả feature tiếp theo phải xác định chuyển trạng thái,
+quyền và tình huống lỗi/cạnh tranh theo mô tả đã chốt, có kiểm thử trước khi tuyên bố đáp ứng.
+[Đối chiếu hiện trạng](../03-product/use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu)
+giữ nguồn code và các giới hạn đã quan sát; không sửa hồi tố tiêu chí chấp thuận của feature cũ.
+
+## 8. Trạng thái BFF mô phỏng đã được mô tả trên nhánh chính
+
+[Đặc tả BFF](002-web-bff-routes/spec.md) và [plan](002-web-bff-routes/plan.md) tại commit
+`2ce4893d66fa002f88a2208492f9aff19b4252f2` sở hữu chi tiết API/helper và mã lỗi của implementation.
+Các điểm sau mô tả hợp đồng hiện tại, không sửa định nghĩa mục tiêu ở các mục trên:
+
+- `HoldStatus.CONSUMED` hiện có nghĩa hold đã được dùng để tạo đơn, chưa phải đã thanh toán/phát vé.
+  Ghế của đơn chờ thanh toán tiếp tục được bảo vệ đến `holdExpiresAt`; hủy qua `DELETE /api/hold`
+  không được tùy tiện giải phóng hold đã consumed.
+- Đơn chưa thanh toán hết hạn được giải phóng ghế; đơn `CONFIRMED` và vé/ghế đã bán được bảo toàn
+  khi webhook `PROCESSING`, `UNKNOWN`, `FAILED` đến sau TTL. Đây là hai trường hợp khác nhau.
+- Success của attempt khác trên đơn đã xác nhận được đánh dấu `reconciliationRequired`, với mã
+  `DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED`; success trên đơn đã hết hạn dùng
+  `PAYMENT_EXPIRED_RECONCILIATION_REQUIRED`. Gắn cờ đối soát chưa phải tiền đã hoàn.
+- Webhook dùng HMAC và vé được ký trong adapter mô phỏng; secret thiếu ở production bị từ chối.
+  Process-memory store và header định danh mô phỏng chưa tạo thành backend Core/session thực.
+
+Mốc kết thúc xử lý UNKNOWN/PROCESSING kéo dài và cách hoàn khoản thu trùng, tự động hay vận hành,
+đều quy về OPEN-03 trong mô hình sản phẩm; không chọn thời hạn 15/30 phút hoặc quy trình thay thế.
+Các bảng trạng thái tổng thể và enum kỹ thuật không tự cung cấp hủy/soát từng phần hoặc quyền mới.

@@ -24,9 +24,9 @@
 
 ### 3. Vẽ Use Case Diagram
 
-- **Bạn làm:** **Vẽ sơ đồ Use Case** với actor (ai sử dụng), ranh giới hệ thống và các chức năng actor có thể thực hiện. Bao gồm chức năng cần cho giá trị cốt lõi và các chức năng dự kiến mở rộng; lưu sơ đồ trong `docs/03-product/` để review.
-- **Agent giúp:** Phát hiện actor hoặc use case bị thiếu; giữ sơ đồ dễ đọc.
-- **Xong khi:** Có **Use Case Diagram được bạn duyệt**, thể hiện rõ ai sử dụng chức năng nào.
+- **Bạn làm:** Theo [quy chuẩn UML use case](../04-standards/use-case-modeling.md), chốt phạm vi, ranh giới, actor và mục tiêu cụ thể. Phân biệt phần mở rộng đã xác nhận với đề xuất; lưu mô hình và mô tả tại `docs/03-product/`.
+- **Agent giúp:** Đọc nguồn trước, hỏi từng vòng ngắn cho phần chưa rõ; lập General → bảng ánh xạ → chi tiết, đối chiếu mã/tên/actor và kiểm tra bản render ở khung rộng/hẹp.
+- **Xong khi:** Bạn duyệt mô hình, mô tả và các quyết định được phép để mở; có bằng chứng ngữ nghĩa/độ bao phủ/render. Phê duyệt mô hình mục tiêu chưa phải bằng chứng phần mềm đã hoạt động.
 
 *Ví dụ:* Actor **Người dùng** liên kết với các use case **Upload PDF**, **Đặt câu hỏi**, **Xem trích dẫn**, **Quản lý hội thoại**. Việc chọn chức năng nào thuộc MVP sẽ chốt ở Bước 9.
 

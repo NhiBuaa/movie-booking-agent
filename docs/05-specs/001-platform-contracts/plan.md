@@ -1,5 +1,11 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
+> **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
+> không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
+> [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
+> phân biệt yêu cầu mới với code/fixture hiện có. Khi mở rộng sơ đồ ghế, role hoặc trạng thái vé,
+> cần đặc tả thay đổi và kiểm chứng riêng; ghi chú này không sửa tiêu chí hay bằng chứng của feature.
+
 **Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [docs/05-specs/001-platform-contracts/spec.md](spec.md)
 
 **Input**: Feature specification from `docs/05-specs/001-platform-contracts/spec.md`

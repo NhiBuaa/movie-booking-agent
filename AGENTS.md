@@ -30,13 +30,17 @@ For meaningful work:
 6. Read applicable `.agents/rules/` or `.agents/references/` when useful.
 7. Inspect implementation and tests.
 
+For use case analysis, diagrams or review, read [the modeling standard](docs/04-standards/use-case-modeling.md).
+Product actors, goals, BR/OPEN decisions belong to [the product model](docs/03-product/use-cases.md);
+use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation separately.
+
 ## Critical Invariants
 
 - **Authoritative Core:** Cinema Core (`services/cinema-core`) is the single source of truth for seat availability, pricing, hold TTL, payment confirmation, and ticket issuance. Client apps and AI Agent never assume authoritative status.
 - **Conversational Booking Safety:** The AI Agent interprets intent and coordinates tools. It must NEVER claim or present an order as confirmed or ticket as issued without cryptographic or explicit signature verification from Cinema Core.
 - **Visual Identity Discipline:** All user interfaces (`apps/web`, `apps/organizer`, `apps/mobile`) must adhere strictly to the Ferrari Dark Cinema design tokens in root `DESIGN.md` and `packages/design-tokens/tokens.css`.
-- **Preserve Security Boundaries:** Role separation between `CUSTOMER`, `CINEMA_STAFF`, and `ORGANIZER_ADMIN` must be strictly enforced. Never expose secrets or credentials in client bundles.
-- **Verification Before Completion:** Every code change in `apps/web` must run test suites (`npm test` or `npm run test:all`) and pass 100% before claiming task completion.
+- **Preserve Security Boundaries:** Enforce current contract roles and data boundaries. The target actor roles and cinema scope are defined in the product model; the three existing role values do not establish their full permission mapping. Never expose secrets or credentials in client bundles.
+- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` or `npm run test:all` and pass all current tests before claiming task completion. For documentation-only changes, validate the affected documents/diagrams; do not infer runtime behavior from them.
 
 ## Working Agreements
 

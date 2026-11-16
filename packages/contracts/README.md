@@ -7,6 +7,13 @@ Nguồn thẩm quyền duy nhất (Single Source of Truth) cho các kiểu dữ 
 - `services/cinema-core` (Transactional Backend)
 - `services/agent-service` (Conversational AI Agent)
 
+**Ranh giới hiện trạng/mục tiêu:** thư viện này sở hữu hợp đồng code hiện có, không sở hữu chính sách
+sản phẩm. [Mô hình use case](../../docs/03-product/use-cases.md) và
+[đặc tả nghiệp vụ](../../docs/05-specs/domain-context.md) định nghĩa yêu cầu mục tiêu.
+Ba role hiện có chưa ánh xạ đủ vai trò nghiệp vụ; `ETicketDto` còn trạng thái chung và yêu cầu soát
+chưa chọn tập ghế. Các phương thức thanh toán khác trong enum không mở rộng phạm vi MoMo/VNPAY đã chốt.
+Lần đồng bộ tài liệu này không sửa DTO/API; cần đặc tả/kiểm thử tương thích trước khi thay hợp đồng.
+
 ---
 
 ## 1. Cấu trúc Module
@@ -17,7 +24,7 @@ packages/contracts/src/
 ├── common/                       # Enums (as const), Generic API Response, Pagination
 ├── auth/                         # User Profiles, Roles (Customer, Staff, Admin), CineMember
 ├── movies/                       # Movie metadata, Cast, Formats, Organizer CRUD DTOs
-├── cinemas/                      # Cinemas, Auditoriums, Matrix 64-seat layout (8x8)
+├── cinemas/                      # Cinemas, Auditoriums, Seat layouts (64-seat sample in existing BFF)
 ├── showtimes/                    # Showtime slots, Schedules, Collision check DTOs
 ├── inventory/                    # Live SeatMap, Atomic Hold All-or-Nothing (TTL 5 mins)
 ├── orders/                       # Orders, Combos, Vouchers, Payment intents, Webhook verification

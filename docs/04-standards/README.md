@@ -1,10 +1,15 @@
 # 04 — Standards
 
-This directory contains normative implementation rules.
+## Project standards
+
+- [Quy chuẩn phân tích và trình bày UML use case](use-case-modeling.md).
+- [Chuẩn chất lượng UI/UX](ui-quality.md).
+
+This directory contains normative engineering and modeling rules shared by humans and agents.
 
 A Standard answers:
 
-> What rules must implementations obey?
+> What rules must implementations or engineering artifacts obey?
 
 Use precise MUST / MUST NOT / SHOULD language when useful.
 

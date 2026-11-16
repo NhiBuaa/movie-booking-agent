@@ -2,6 +2,10 @@
 
 **Trạng thái: Đã duyệt (Accepted), chuẩn hóa cho Movie Booking Platform Monorepo.**
 
+**Phạm vi đọc:** định hướng kiến trúc đã duyệt, không phải bằng chứng toàn bộ luồng đã tích hợp
+Core runtime. [CONTEXT](../../CONTEXT.md) ghi hiện trạng; [mô hình use case](../03-product/use-cases.md)
+sở hữu mục tiêu/BR/OPEN. Sơ đồ kiến trúc dưới đây không cấp quyền mới cho actor.
+
 ---
 
 ## 1. Quyết định kiến trúc (Architecture Decision)
@@ -23,6 +27,7 @@ flowchart LR
 > [!NOTE]
 > **Hiện trạng mô phỏng tầng BFF:**
 > Dịch vụ backend `services/cinema-core` là kiến trúc đích độc lập (theo [ADR-0001](../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md)), hiện tại chưa triển khai runtime thực tế. Biến môi trường `CINEMA_CORE_URL` là ranh giới kiến trúc tương lai, chưa được đấu nối. Tầng BFF Route Handlers (`src/app/api/...`) hiện vận hành thông qua các in-memory adapters (`src/server/`) có độ trung thực cao, tuân thủ đúng hợp đồng `@platform/contracts`.
+
 
 ---
 
@@ -50,18 +55,22 @@ apps/web/
 │   ├── features/               # Modules nghiệp vụ độc lập
 │   │   ├── agent/              # Logic trò chuyện, streaming, thẻ tương tác
 │   │   ├── auth/               # Validation định danh, độ mạnh mật khẩu, masking OTP
-│   │   ├── booking/            # Ma trận ghế 64 chỗ, Sweetbox coupling, hold timer
+│   │   ├── booking/            # Sơ đồ theo phòng mục tiêu, Sweetbox coupling, hold timer
 │   │   ├── payment/            # Tính giá, mã giảm giá, QR thanh toán
 │   │   └── ...
 │   └── styles/
 │       ├── globals.css         # Reset CSS và layout toàn cục
 │       └── tokens.css          # CSS Variables từ DESIGN.md
-└── tests/                      # Bộ kiểm thử tự động (100% tests pass)
+└── tests/                      # Bộ kiểm thử; bằng chứng chạy thuộc PR theo đúng bản code
 ```
 
 ---
 
 ## 3. Nguyên tắc phát triển và ranh giới phụ thuộc
+
+Ma trận 64 ghế từng dùng trong mẫu/BFF không ràng buộc sản phẩm mục tiêu. Chênh lệch fixture hiện có
+được ghi ở [mục 7 của mô hình](../03-product/use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu);
+cây thư mục minh họa trách nhiệm, không chứng minh màn hình/adapter đã phục vụ mọi use case.
 
 1. **Server Components vs Client Components**:
    - Mặc định sử dụng Server Components để fetch dữ liệu từ Cinema Core.
