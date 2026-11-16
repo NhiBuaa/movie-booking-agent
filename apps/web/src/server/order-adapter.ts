@@ -133,11 +133,19 @@ export function createOrder(req: CreateOrderRequest): CreateOrderResult {
   const combos: ComboItemDto[] = [];
   if (req.combos && req.combos.length > 0) {
     for (const c of req.combos) {
-      if (!c.id || typeof c.quantity !== 'number' || !Number.isInteger(c.quantity) || c.quantity < 0) {
+      if (
+        !c ||
+        !c.id ||
+        typeof c.quantity !== 'number' ||
+        !Number.isSafeInteger(c.quantity) ||
+        !Number.isFinite(c.quantity) ||
+        c.quantity < 0 ||
+        c.quantity > 10
+      ) {
         return {
           success: false,
           code: 'INVALID_COMBO_QUANTITY',
-          error: `Số lượng bắp nước của '${c.id}' không hợp lệ (phải là số nguyên không âm).`,
+          error: `Số lượng bắp nước của '${c?.id || 'combo'}' không hợp lệ (phải là số nguyên an toàn từ 0 đến 10).`,
           status: 400,
         };
       }
@@ -238,9 +246,25 @@ export function createOrder(req: CreateOrderRequest): CreateOrderResult {
   }
 
   const seatsAmount = hold.totalPrice;
-  const totalAmount = Math.max(0, seatsAmount + combosAmount - discountAmount);
+  const rawTotalAmount = seatsAmount + combosAmount - discountAmount;
+  const totalAmount = Math.max(0, rawTotalAmount);
 
-  // 7. Consume hold to prevent double-booking
+  if (
+    typeof totalAmount !== 'number' ||
+    !Number.isSafeInteger(totalAmount) ||
+    !Number.isFinite(totalAmount) ||
+    totalAmount < 0 ||
+    totalAmount > 100_000_000
+  ) {
+    return {
+      success: false,
+      code: 'INVALID_ORDER_AMOUNT',
+      error: 'Tổng tiền đơn hàng không hợp lệ hoặc vượt quá giới hạn an toàn tối đa.',
+      status: 400,
+    };
+  }
+
+  // 7. Consume hold to prevent double-booking only after all validations pass
   consumeSeatHold(hold.holdId);
 
   const order: InternalOrderSummaryDto = {
@@ -564,6 +588,18 @@ export function processPaymentWebhook(
         },
       };
     }
+
+    // Other statuses (PROCESSING, UNKNOWN, etc.) on an already confirmed order:
+    // Update attempt status without mutating order.status or touching seats/tickets
+    attempt.status = payload.status;
+    return {
+      success: true,
+      response: {
+        received: true,
+        bookingStatus: BookingStatus.CONFIRMED,
+        message: `Giao dịch '${payload.transactionId}' có trạng thái '${payload.status}' (đơn hàng đã được xác nhận trước đó bởi giao dịch '${order.transactionId}').`,
+      },
+    };
   }
 
   // 5. Check order lifecycle & late-arriving webhook
@@ -577,7 +613,9 @@ export function processPaymentWebhook(
     };
   }
 
-  if (order.holdExpiresAt <= Date.now() || order.status === BookingStatus.EXPIRED) {
+  // TTL expiration check ONLY applies to orders that are PENDING_PAYMENT or already EXPIRED.
+  // A CONFIRMED order must never be expired by late webhooks.
+  if (order.status === BookingStatus.EXPIRED || (order.status === BookingStatus.PENDING_PAYMENT && order.holdExpiresAt <= Date.now())) {
     order.status = BookingStatus.EXPIRED;
     attempt.status = payload.status;
     attempt.reconciliationRequired = true;
@@ -740,7 +778,9 @@ export function expireOrderForTesting(bookingId: string): void {
   const order = ordersStore.get(bookingId);
   if (order) {
     order.holdExpiresAt = Date.now() - 1000;
-    order.status = BookingStatus.EXPIRED;
+    if (order.status === BookingStatus.PENDING_PAYMENT) {
+      order.status = BookingStatus.EXPIRED;
+    }
   }
 }
 

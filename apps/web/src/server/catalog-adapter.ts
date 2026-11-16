@@ -14,6 +14,7 @@ import {
   CINEMA_DIRECTORY_FIXTURES,
   CINEMA_DETAIL_FIXTURES,
 } from '../features/cinemas/model/cinema-fixtures.ts';
+import type { CinemaDetail } from '../features/cinemas/model/types.ts';
 
 export interface ShowtimeSlotDetails {
   showtimeId: string; // Canonical unique inventory ID
@@ -80,6 +81,22 @@ export function resolveCanonicalCinemaId(rawCinemaId?: string | null): string | 
 }
 
 /**
+ * Normalizes user format string to authoritative MovieFormat string or null if invalid.
+ */
+export function normalizeFormatFilter(rawFormat?: string): string | null {
+  if (!rawFormat || typeof rawFormat !== 'string') return null;
+  const f = rawFormat.trim().toLowerCase();
+  if (f === '2d' || f === 'two_d') return '2D';
+  if (f === '3d' || f === 'three_d') return '3D';
+  if (f === '4dx' || f === 'four_dx') return '4DX';
+  if (f === 'imax') return 'IMAX';
+  if (f === 'imax laser' || f === 'imax_laser') return 'IMAX Laser';
+  if (f === 'screenx') return 'ScreenX';
+  if (f === 'dolby atmos' || f === 'dolby_atmos') return 'Dolby Atmos';
+  return null;
+}
+
+/**
  * Resolves any showtimeId or alias into the single canonical inventory record.
  * Returns null if the showtimeId does not exist in the catalog (no fake fallback).
  */
@@ -90,23 +107,35 @@ export function resolveCanonicalShowtime(showtimeId: string): ShowtimeSlotDetail
 
   const normId = showtimeId.trim().toLowerCase();
 
-  // Handle synthetic test alias BK-2026-CHUYENTAU -> maps to cgv-dong-khoi-slot-dk-04-2 (19:30)
-  const targetLookup = normId === 'bk-2026-chuyentau' ? 'slot-dk-04-2' : normId;
+  // Handle synthetic test alias BK-2026-CHUYENTAU -> maps to slot-dk-04-1 (review requirement)
+  const targetLookup = normId === 'bk-2026-chuyentau' ? 'slot-dk-04-1' : normId;
 
   for (const day of CHUYEN_TAU_CUOI_HE_FIXTURE.schedule) {
     for (const cinema of day.cinemas) {
-      for (const slot of cinema.slots) {
-        const canonicalId = `${cinema.cinemaId}-${slot.id}`.toLowerCase();
-        const slotId = slot.id.toLowerCase();
-        // Known aliases for cinema Dong Khoi
-        const dongKhoiFullId = `cgv-vincom-dong-khoi-${slot.id}`.toLowerCase();
+      const canonicalCinemaId = resolveCanonicalCinemaId(cinema.cinemaId) || cinema.cinemaId.toLowerCase();
 
-        if (
-          targetLookup === canonicalId ||
-          targetLookup === slotId ||
-          targetLookup === dongKhoiFullId ||
-          (cinema.cinemaSlug && targetLookup === `${cinema.cinemaSlug}-${slot.id}`.toLowerCase())
-        ) {
+      for (const slot of cinema.slots) {
+        const slotId = slot.id.toLowerCase();
+        const canonicalShowtimeId = `${cinema.cinemaId}-${slot.id}`.toLowerCase();
+
+        // 1. Direct match on slotId alone (e.g. "slot-dk-04-1")
+        let isMatch = targetLookup === slotId;
+
+        // 2. Direct match on canonical showtimeId (e.g. "cgv-dong-khoi-slot-dk-04-1")
+        if (!isMatch && targetLookup === canonicalShowtimeId) {
+          isMatch = true;
+        }
+
+        // 3. Match compound ID "<cinemaPrefix>-<slotId>" ONLY IF cinemaPrefix strictly resolves to this cinema
+        if (!isMatch && targetLookup.endsWith(`-${slotId}`)) {
+          const prefix = targetLookup.slice(0, -(slotId.length + 1));
+          const resolvedCinema = resolveCanonicalCinemaId(prefix);
+          if (resolvedCinema && resolvedCinema === canonicalCinemaId) {
+            isMatch = true;
+          }
+        }
+
+        if (isMatch) {
           const format = slot.format === 'IMAX' ? MovieFormat.IMAX_LASER : MovieFormat.TWO_D;
           return {
             showtimeId: `${cinema.cinemaId}-${slot.id}`,
@@ -195,10 +224,19 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
   }
 
   if (query?.format) {
-    const targetFormat = query.format.toLowerCase().trim();
-    items = items.filter((m) =>
-      m.formats.some((f) => f.toLowerCase().includes(targetFormat) || targetFormat.includes(f.toLowerCase()))
-    );
+    const normalizedFilter = normalizeFormatFilter(query.format);
+    if (!normalizedFilter) {
+      items = [];
+    } else {
+      items = items.filter((m) =>
+        m.formats.some((f) => {
+          if (normalizedFilter === 'IMAX') {
+            return f.toUpperCase().includes('IMAX');
+          }
+          return f.toUpperCase() === normalizedFilter.toUpperCase();
+        })
+      );
+    }
   }
 
   if (query?.status) {
@@ -226,13 +264,13 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
     }
   }
 
-  // Relational filter: Date showtime availability
+  // Relational filter: Date showtime availability (strict exact match, no substring matching)
   if (query?.date) {
     const targetDate = query.date.trim();
     items = items.filter((m) => {
       if (m.slug === 'chuyen-tau-cuoi-he') {
         return CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some(
-          (day) => day.date === targetDate || day.label.includes(targetDate)
+          (day) => day.date === targetDate
         );
       }
       return false;
@@ -316,17 +354,32 @@ export function listCinemas(): CinemaDto[] {
 }
 
 export function getCinemaByIdOrSlug(idOrSlug: string): CinemaDetailDto | null {
+  if (!idOrSlug || typeof idOrSlug !== 'string') {
+    return null;
+  }
   const norm = idOrSlug.toLowerCase().trim();
-  const detail =
-    CINEMA_DETAIL_FIXTURES[norm] ||
-    Object.values(CINEMA_DETAIL_FIXTURES).find(
-      (c) =>
-        c.slug.toLowerCase() === norm ||
-        c.id.toLowerCase() === norm ||
-        norm.includes(c.id.toLowerCase()) ||
-        c.id.toLowerCase().includes(norm) ||
-        (norm.includes('dong-khoi') && c.id.includes('dong-khoi'))
-    );
+
+  // 1. Resolve canonical cinema ID from known IDs and aliases
+  const canonicalId = resolveCanonicalCinemaId(norm);
+
+  // 2. Lookup in CINEMA_DETAIL_FIXTURES: exact key, exact canonical match, or exact id/slug
+  let detail: CinemaDetail | null = null;
+  if (CINEMA_DETAIL_FIXTURES[norm]) {
+    detail = CINEMA_DETAIL_FIXTURES[norm];
+  } else if (canonicalId && CINEMA_DETAIL_FIXTURES[canonicalId]) {
+    detail = CINEMA_DETAIL_FIXTURES[canonicalId];
+  } else if (canonicalId) {
+    detail =
+      Object.values(CINEMA_DETAIL_FIXTURES).find(
+        (c) => resolveCanonicalCinemaId(c.id) === canonicalId || resolveCanonicalCinemaId(c.slug) === canonicalId
+      ) || null;
+  }
+  if (!detail) {
+    detail =
+      Object.values(CINEMA_DETAIL_FIXTURES).find(
+        (c) => c.id.toLowerCase() === norm || c.slug.toLowerCase() === norm
+      ) || null;
+  }
 
   if (detail) {
     return {
@@ -353,12 +406,12 @@ export function getCinemaByIdOrSlug(idOrSlug: string): CinemaDetailDto | null {
     };
   }
 
+  // 3. Fallback to listCinemas() by exact canonical or exact id/slug match only (strictly no substring matching)
   const summary = listCinemas().find(
     (c) =>
       c.id.toLowerCase() === norm ||
       c.slug.toLowerCase() === norm ||
-      norm.includes(c.id.toLowerCase()) ||
-      c.id.toLowerCase().includes(norm)
+      (canonicalId !== null && (resolveCanonicalCinemaId(c.id) === canonicalId || resolveCanonicalCinemaId(c.slug) === canonicalId))
   );
 
   if (!summary) return null;
@@ -389,9 +442,8 @@ export function getShowtimes(query?: {
 
   if (query?.date) {
     const qDate = query.date.trim();
-    rawSchedule = rawSchedule.filter(
-      (d) => d.date === qDate || d.label.includes(qDate) || qDate.includes(d.date)
-    );
+    // Strict exact date match (e.g. "04/11", no substring matching like "2099-04/11")
+    rawSchedule = rawSchedule.filter((d) => d.date === qDate);
   }
 
   return rawSchedule
@@ -413,8 +465,17 @@ export function getShowtimes(query?: {
         .map((c) => {
           let slots = c.slots;
           if (query?.format) {
-            const fTarget = query.format.toLowerCase().trim();
-            slots = slots.filter((s) => s.format.toLowerCase().includes(fTarget) || fTarget.includes(s.format.toLowerCase()));
+            const normalizedFilter = normalizeFormatFilter(query.format);
+            if (!normalizedFilter) {
+              slots = [];
+            } else {
+              slots = slots.filter((s) => {
+                if (normalizedFilter === 'IMAX' || normalizedFilter === 'IMAX Laser') {
+                  return s.format.toUpperCase().includes('IMAX');
+                }
+                return s.format.toUpperCase() === normalizedFilter.toUpperCase();
+              });
+            }
           }
 
           if (query?.status) {

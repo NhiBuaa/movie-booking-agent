@@ -268,13 +268,33 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     };
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(req.userEmail.trim())) {
+  const normalizedUserEmail = req.userEmail.trim().toLowerCase();
+  if (!emailRegex.test(normalizedUserEmail)) {
     return {
       success: false,
       code: 'INVALID_EMAIL',
       error: 'Địa chỉ email người giữ chỗ không hợp lệ.',
       status: 400,
     };
+  }
+
+  // Enforce domain rule: 1 active hold per user at any time (domain-context.md Section 3)
+  const now = Date.now();
+  for (const [_existingHoldId, existingHold] of holdsStore.entries()) {
+    if (existingHold.userEmail && existingHold.userEmail.toLowerCase() === normalizedUserEmail) {
+      if (existingHold.status === HoldStatus.ACTIVE) {
+        if (existingHold.expiresAt <= now) {
+          existingHold.status = HoldStatus.EXPIRED;
+        } else {
+          return {
+            success: false,
+            code: 'USER_ALREADY_HAS_ACTIVE_HOLD',
+            error: 'Bạn hiện đã có một lệnh giữ chỗ đang có hiệu lực trên hệ thống. Vui lòng hoàn tất hoặc hủy lệnh giữ chỗ trước đó.',
+            status: 409,
+          };
+        }
+      }
+    }
   }
 
   // Cryptographically secure hold ID

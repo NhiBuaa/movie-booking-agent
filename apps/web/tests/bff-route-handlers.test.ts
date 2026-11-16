@@ -1434,4 +1434,385 @@ describe('BFF Route Handlers — Integration & Contract Validation', () => {
     const bodySuccess = (await resWebhookSuccess.json()) as any;
     assert.equal(bodySuccess.data.bookingStatus, 'CONFIRMED');
   });
+
+  it('P1: Đơn CONFIRMED không bị chuyển EXPIRED bởi webhook PROCESSING/UNKNOWN sau TTL và không bị bán trùng ghế', async () => {
+    // 1. Tạo hold và đơn hàng cho ghế E7
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['E7'],
+        userEmail: 'vip.customer@cinora.vn',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    assert.equal(resHold.status, 201);
+    const { data: hold } = (await resHold.json()) as any;
+
+    const reqOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'vip.customer@cinora.vn',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrder = await postOrder(reqOrder);
+    assert.equal(resOrder.status, 201);
+    const { data: order } = (await resOrder.json()) as any;
+
+    // 2. Tạo payment intent 1 (giao dịch đầu)
+    const reqIntent1 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'vip.customer@cinora.vn' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntent1 = await postPaymentIntent(reqIntent1);
+    const { data: intent1 } = (await resIntent1.json()) as any;
+
+    // 3. Khách hàng retry với cổng khác (VNPAY) -> intent 2
+    const reqIntent2 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'vip.customer@cinora.vn' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'vnpay',
+      }),
+    });
+    const resIntent2 = await postPaymentIntent(reqIntent2);
+    const { data: intent2 } = (await resIntent2.json()) as any;
+
+    // 4. Webhook VNPAY (intent 2) thành công -> Đơn hàng chuyển sang CONFIRMED và xuất vé
+    const payloadVnpay = {
+      transactionId: intent2.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'VNPAY-SUCCESS-888',
+      paymentMethod: 'vnpay' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhookVnpay = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payloadVnpay,
+        signature: signWebhookPayload(payloadVnpay),
+      }),
+    });
+    const resWebhookVnpay = await postPaymentWebhook(reqWebhookVnpay);
+    assert.equal(resWebhookVnpay.status, 200);
+
+    // Kiểm tra vé đã được cấp
+    const reqTicket = new Request(`http://localhost:3000/api/tickets/${order.bookingId}`, {
+      headers: { 'x-user-email': 'vip.customer@cinora.vn' },
+    });
+    const resTicket = await getTicketById(reqTicket, { params: Promise.resolve({ id: order.bookingId }) });
+    assert.equal(resTicket.status, 200);
+
+    // 5. Tua thời gian để TTL của hold / order hết hạn
+    expireOrderForTesting(order.bookingId);
+
+    // 6. Webhook MoMo (intent 1) đến sau TTL với trạng thái PROCESSING hoặc UNKNOWN
+    const payloadMomoLate = {
+      transactionId: intent1.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-LATE-001',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'processing' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhookMomoLate = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payloadMomoLate,
+        signature: signWebhookPayload(payloadMomoLate),
+      }),
+    });
+    const resWebhookMomoLate = await postPaymentWebhook(reqWebhookMomoLate);
+    assert.equal(resWebhookMomoLate.status, 200);
+    const bodyMomoLate = (await resWebhookMomoLate.json()) as any;
+    assert.equal(bodyMomoLate.data.bookingStatus, 'CONFIRMED');
+
+    // 7. Bảo toàn đơn, vé và ghế: Đơn hàng vẫn CONFIRMED, vé vẫn còn hiệu lực
+    const resTicketAfterLate = await getTicketById(reqTicket, { params: Promise.resolve({ id: order.bookingId }) });
+    assert.equal(resTicketAfterLate.status, 200);
+
+    // Ghế E7 vẫn thuộc trạng thái RESERVED (đã bán), không bị giải phóng
+    const reqSeats = new Request('http://localhost:3000/api/seats?showtimeId=slot-dk-04-1');
+    const resSeats = await getSeats(reqSeats);
+    const bodySeats = (await resSeats.json()) as any;
+    const seatE7 = bodySeats.data.seats.find((s: any) => s.id === 'E7');
+    assert.equal(seatE7.status, 'reserved');
+
+    // Người dùng khác không thể đặt ghế E7 (tránh hai vé ISSUED cho cùng ghế)
+    const reqHoldDuplicate = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['E7'],
+        userEmail: 'stranger@cinora.vn',
+      }),
+    });
+    const resHoldDuplicate = await postHold(reqHoldDuplicate);
+    assert.equal(resHoldDuplicate.status, 409);
+    const bodyHoldDup = (await resHoldDuplicate.json()) as any;
+    assert.equal(bodyHoldDup.error.code, 'SEATS_UNAVAILABLE');
+  });
+
+  it('P2: Chặn số lượng combo không an toàn và vượt quá giới hạn, không consume hold khi validation thất bại', async () => {
+    // 1. Tạo hold hợp lệ cho ghế D3
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['D3'],
+        userEmail: 'combo.tester@cinora.vn',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    assert.equal(resHold.status, 201);
+    const { data: hold } = (await resHold.json()) as any;
+
+    // 2. Thử đặt combo với quantity quá lớn (1e20) -> 400 INVALID_COMBO_QUANTITY
+    const reqBadCombo1 = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'combo.tester@cinora.vn',
+        paymentMethod: 'momo',
+        combos: [{ id: 'combo-single', quantity: 1e20 }],
+      }),
+    });
+    const resBadCombo1 = await postOrder(reqBadCombo1);
+    assert.equal(resBadCombo1.status, 400);
+    const bodyBad1 = (await resBadCombo1.json()) as any;
+    assert.equal(bodyBad1.error.code, 'INVALID_COMBO_QUANTITY');
+
+    // 3. Thử đặt combo với quantity > 10 (ví dụ 15) -> 400 INVALID_COMBO_QUANTITY
+    const reqBadCombo2 = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'combo.tester@cinora.vn',
+        paymentMethod: 'momo',
+        combos: [{ id: 'combo-single', quantity: 15 }],
+      }),
+    });
+    const resBadCombo2 = await postOrder(reqBadCombo2);
+    assert.equal(resBadCombo2.status, 400);
+
+    // 4. Thử đặt combo số lẻ (1.5) -> 400 INVALID_COMBO_QUANTITY
+    const reqBadCombo3 = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'combo.tester@cinora.vn',
+        paymentMethod: 'momo',
+        combos: [{ id: 'combo-single', quantity: 1.5 }],
+      }),
+    });
+    const resBadCombo3 = await postOrder(reqBadCombo3);
+    assert.equal(resBadCombo3.status, 400);
+
+    // 5. Xác nhận holdId KHÔNG bị consume khi validation thất bại: Có thể dùng tiếp để tạo đơn hợp lệ
+    const reqGoodOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'combo.tester@cinora.vn',
+        paymentMethod: 'momo',
+        combos: [{ id: 'combo-single', quantity: 2 }],
+      }),
+    });
+    const resGoodOrder = await postOrder(reqGoodOrder);
+    assert.equal(resGoodOrder.status, 201);
+    const bodyGood = (await resGoodOrder.json()) as any;
+    assert.ok(Number.isSafeInteger(bodyGood.data.totalAmount));
+  });
+
+  it('P2: Thực thi quy tắc 1 tài khoản chỉ có duy nhất 1 hold đang có hiệu lực trên toàn hệ thống', async () => {
+    // 1. User tạo hold đầu tiên cho ghế A5 -> 201 Created
+    const reqHold1 = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A5'],
+        userEmail: 'one.hold@cinora.vn',
+      }),
+    });
+    const resHold1 = await postHold(reqHold1);
+    assert.equal(resHold1.status, 201);
+    const { data: hold1 } = (await resHold1.json()) as any;
+
+    // 2. Cùng user cố tình tạo hold thứ hai cho ghế A6 trong khi hold 1 còn hiệu lực -> 409 USER_ALREADY_HAS_ACTIVE_HOLD
+    const reqHold2 = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A6'],
+        userEmail: 'one.hold@cinora.vn',
+      }),
+    });
+    const resHold2 = await postHold(reqHold2);
+    assert.equal(resHold2.status, 409);
+    const bodyHold2 = (await resHold2.json()) as any;
+    assert.equal(bodyHold2.error.code, 'USER_ALREADY_HAS_ACTIVE_HOLD');
+
+    // 3. User khác vẫn có thể tạo hold bình thường cho ghế A6
+    const reqOtherUser = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A6'],
+        userEmail: 'other.user@cinora.vn',
+      }),
+    });
+    const resOtherUser = await postHold(reqOtherUser);
+    assert.equal(resOtherUser.status, 201);
+
+    // 4. Sau khi hủy hold1, user ban đầu có thể tạo hold mới
+    const reqRelease = new Request('http://localhost:3000/api/hold', {
+      method: 'DELETE',
+      headers: { 'x-user-email': 'one.hold@cinora.vn' },
+      body: JSON.stringify({ holdId: hold1.holdId, userEmail: 'one.hold@cinora.vn' }),
+    });
+    const resRelease = await deleteHold(reqRelease);
+    assert.equal(resRelease.status, 200);
+
+    const reqHoldNew = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A7'],
+        userEmail: 'one.hold@cinora.vn',
+      }),
+    });
+    const resHoldNew = await postHold(reqHoldNew);
+    assert.equal(resHoldNew.status, 201);
+  });
+
+  it('P2: Chặn hoàn toàn alias rạp Đồng Khởi ghép với slot Landmark hoặc ID ghép sai (trả 404)', async () => {
+    // 1. Ghép alias Đồng Khởi với slot Landmark -> 404 SHOWTIME_NOT_FOUND
+    const reqCross1 = new Request('http://localhost:3000/api/seats?showtimeId=cgv-dong-khoi-slot-lm-04-1');
+    const resCross1 = await getSeats(reqCross1);
+    assert.equal(resCross1.status, 404);
+
+    const reqCross2 = new Request('http://localhost:3000/api/seats?showtimeId=cgv-vincom-dong-khoi-slot-lm-04-1');
+    const resCross2 = await getSeats(reqCross2);
+    assert.equal(resCross2.status, 404);
+
+    const reqCross3 = new Request('http://localhost:3000/api/seats?showtimeId=dong-khoi-slot-lm-04-1');
+    const resCross3 = await getSeats(reqCross3);
+    assert.equal(resCross3.status, 404);
+
+    // 2. Ghép alias Landmark với slot Đồng Khởi -> 404 SHOWTIME_NOT_FOUND
+    const reqCross4 = new Request('http://localhost:3000/api/seats?showtimeId=cgv-landmark-slot-dk-04-1');
+    const resCross4 = await getSeats(reqCross4);
+    assert.equal(resCross4.status, 404);
+
+    const reqCross5 = new Request('http://localhost:3000/api/seats?showtimeId=landmark-slot-dk-04-1');
+    const resCross5 = await getSeats(reqCross5);
+    assert.equal(resCross5.status, 404);
+
+    // 3. ID ghép tiền tố giả không tồn tại -> 404 SHOWTIME_NOT_FOUND
+    const reqFakePrefix = new Request('http://localhost:3000/api/seats?showtimeId=fake-cinema-slot-dk-04-1');
+    const resFakePrefix = await getSeats(reqFakePrefix);
+    assert.equal(resFakePrefix.status, 404);
+
+    // 4. Đúng rạp và đúng slot -> 200 OK
+    const reqValid1 = new Request('http://localhost:3000/api/seats?showtimeId=cgv-dong-khoi-slot-dk-04-1');
+    const resValid1 = await getSeats(reqValid1);
+    assert.equal(resValid1.status, 200);
+
+    const reqValid2 = new Request('http://localhost:3000/api/seats?showtimeId=cgv-landmark-slot-lm-04-1');
+    const resValid2 = await getSeats(reqValid2);
+    assert.equal(resValid2.status, 200);
+  });
+
+  it('P2: Loại bỏ substring matching trong getCinemaByIdOrSlug, ID giả phải trả 404', async () => {
+    // 1. ID giả chứa substring của tên rạp thật -> 404 CINEMA_NOT_FOUND
+    const reqFake1 = new Request('http://localhost:3000/api/cinemas/not-a-real-cgv-dong-khoi');
+    const resFake1 = await getCinemaById(reqFake1, { params: Promise.resolve({ id: 'not-a-real-cgv-dong-khoi' }) });
+    assert.equal(resFake1.status, 404);
+
+    const reqFake2 = new Request('http://localhost:3000/api/cinemas/fake-dong-khoi-cinema');
+    const resFake2 = await getCinemaById(reqFake2, { params: Promise.resolve({ id: 'fake-dong-khoi-cinema' }) });
+    assert.equal(resFake2.status, 404);
+
+    const reqFake3 = new Request('http://localhost:3000/api/cinemas/cgv-landmark-fake');
+    const resFake3 = await getCinemaById(reqFake3, { params: Promise.resolve({ id: 'cgv-landmark-fake' }) });
+    assert.equal(resFake3.status, 404);
+
+    // 2. ID và alias hợp lệ -> 200 OK
+    const reqValid1 = new Request('http://localhost:3000/api/cinemas/cgv-dong-khoi');
+    const resValid1 = await getCinemaById(reqValid1, { params: Promise.resolve({ id: 'cgv-dong-khoi' }) });
+    assert.equal(resValid1.status, 200);
+
+    const reqValid2 = new Request('http://localhost:3000/api/cinemas/cgv-vincom-dong-khoi');
+    const resValid2 = await getCinemaById(reqValid2, { params: Promise.resolve({ id: 'cgv-vincom-dong-khoi' }) });
+    assert.equal(resValid2.status, 200);
+
+    const reqValid3 = new Request('http://localhost:3000/api/cinemas/dong-khoi');
+    const resValid3 = await getCinemaById(reqValid3, { params: Promise.resolve({ id: 'dong-khoi' }) });
+    assert.equal(resValid3.status, 200);
+  });
+
+  it('P2: Lọc format và date chính xác sau chuẩn hóa, NOT-2D và 2099-04/11 không trả dữ liệu', async () => {
+    // 1. Format không hợp lệ hoặc format giả chứa chuỗi 2D -> mảng rỗng
+    const reqBadFormatMovies = new Request('http://localhost:3000/api/movies?format=NOT-2D');
+    const resBadFormatMovies = await getMovies(reqBadFormatMovies);
+    assert.equal(resBadFormatMovies.status, 200);
+    const bodyBadFormatMovies = (await resBadFormatMovies.json()) as any;
+    assert.equal(bodyBadFormatMovies.data.length, 0);
+
+    const reqBadFormatShowtimes = new Request('http://localhost:3000/api/showtimes?format=NOT-2D');
+    const resBadFormatShowtimes = await getShowtimes(reqBadFormatShowtimes);
+    assert.equal(resBadFormatShowtimes.status, 200);
+    const bodyBadFormatShowtimes = (await resBadFormatShowtimes.json()) as any;
+    assert.equal(bodyBadFormatShowtimes.data.length, 0);
+
+    // 2. Format 2D hợp lệ -> trả về dữ liệu đúng
+    const reqGoodFormat = new Request('http://localhost:3000/api/movies?format=2D');
+    const resGoodFormat = await getMovies(reqGoodFormat);
+    assert.equal(resGoodFormat.status, 200);
+    const bodyGoodFormat = (await resGoodFormat.json()) as any;
+    assert.ok(bodyGoodFormat.data.length >= 1);
+
+    // 3. Date giả chứa chuỗi 04/11 (2099-04/11) -> mảng rỗng
+    const reqBadDateShowtimes = new Request('http://localhost:3000/api/showtimes?date=2099-04/11');
+    const resBadDateShowtimes = await getShowtimes(reqBadDateShowtimes);
+    assert.equal(resBadDateShowtimes.status, 200);
+    const bodyBadDateShowtimes = (await resBadDateShowtimes.json()) as any;
+    assert.equal(bodyBadDateShowtimes.data.length, 0);
+
+    const reqBadDateMovies = new Request('http://localhost:3000/api/movies?date=2099-04/11');
+    const resBadDateMovies = await getMovies(reqBadDateMovies);
+    assert.equal(resBadDateMovies.status, 200);
+    const bodyBadDateMovies = (await resBadDateMovies.json()) as any;
+    assert.equal(bodyBadDateMovies.data.length, 0);
+
+    // 4. Date 04/11 hợp lệ -> trả về dữ liệu đúng
+    const reqGoodDate = new Request('http://localhost:3000/api/showtimes?date=04/11');
+    const resGoodDate = await getShowtimes(reqGoodDate);
+    assert.equal(resGoodDate.status, 200);
+    const bodyGoodDate = (await resGoodDate.json()) as any;
+    assert.ok(bodyGoodDate.data.length >= 1);
+  });
+
+  it('Đối chiếu alias BK-2026-CHUYENTAU ánh xạ về slot-dk-04-1 theo yêu cầu review', async () => {
+    const reqAlias = new Request('http://localhost:3000/api/seats?showtimeId=BK-2026-CHUYENTAU');
+    const resAlias = await getSeats(reqAlias);
+    assert.equal(resAlias.status, 200);
+    const bodyAlias = (await resAlias.json()) as any;
+    assert.equal(bodyAlias.data.showtimeId, 'cgv-dong-khoi-slot-dk-04-1');
+  });
 });
