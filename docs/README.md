@@ -20,15 +20,24 @@ How the current system works: components, boundaries, ownership, runtime structu
 
 Durable product and domain knowledge: users, domain concepts, user flows, terminology, and product rules that are broader than one specification. For repositories with a user interface, visual identity and design tokens are owned by root `DESIGN.md`.
 
+[Mô hình use case](03-product/use-cases.md) sở hữu actor, mục tiêu và BR/OPEN;
+[mô tả use case](03-product/use-case-descriptions.md) diễn giải tình huống và [GLOSSARY](../GLOSSARY.md)
+sở hữu thuật ngữ. Mô hình mục tiêu đã được duyệt không xác nhận code đã đáp ứng.
+
 ## `04-standards/`
 
-Normative implementation rules that human developers and coding agents must follow, including engineering conventions and UI quality standards (`ui-quality.md`).
+Normative engineering and modeling rules shared by humans and agents, including
+[use case modeling](04-standards/use-case-modeling.md) and UI quality (`ui-quality.md`).
 
 Agent-only working rules belong under `.agents/rules/`, not here.
 
 ## `05-specs/`
 
 Durable required behavior for capabilities whose contracts should survive individual tasks.
+
+[Domain context](05-specs/domain-context.md) và [đặc tả chat](05-specs/conversational-booking.md)
+diễn giải yêu cầu mục tiêu và dẫn tới BR/OPEN. Chúng không tự sửa hợp đồng code hiện có.
+Các đặc tả feature trong `specs/` giữ phạm vi/bằng chứng ban đầu; ghi quan hệ với yêu cầu mới khi đặc tả phần thay thế.
 
 ## `06-decisions/`
 

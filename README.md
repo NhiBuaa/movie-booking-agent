@@ -21,12 +21,15 @@ movie-booking-agent/
 │   ├── contracts/               # Hợp đồng dữ liệu, DTOs và TypeScript types
 │   └── shared-logic/            # Thuật toán ma trận ghế, tính giá, kiểm tra thời hạn giữ vé
 ├── docs/                        # Tài liệu kiến trúc, đặc tả nghiệp vụ và quy chuẩn
-│   ├── architecture/            # Kiến trúc hệ thống và ranh giới dịch vụ
-│   ├── specs/                   # Đặc tả đặt vé hội thoại, từ điển nghiệp vụ
-│   └── standards/               # Tiêu chuẩn chất lượng giao diện (UI Quality)
+│   ├── 02-architecture/         # Kiến trúc và ranh giới dịch vụ
+│   ├── 03-product/              # Mô hình UML use case, mô tả và BR/OPEN
+│   ├── 04-standards/            # Quy chuẩn UML và chất lượng UI
+│   └── 05-specs/                # Đặc tả nghiệp vụ và đặt vé hội thoại
 ├── .specify/                    # GitHub Spec Kit
 ├── DESIGN.md                    # Single Source of Truth về Brand Identity & Tokens
-├── PRODUCT.md                   # Tổng quan sản phẩm & tầm nhìn nền tảng
+├── PROJECT-OVERVIEW.md          # Nền tảng và phạm vi sản phẩm
+├── CONTEXT.md                   # Hiện trạng và giới hạn đã quan sát
+├── GLOSSARY.md                  # Thuật ngữ nghiệp vụ
 └── AGENTS.md                    # Hướng dẫn kỹ thuật dành cho AI Agents
 ```
 
@@ -40,7 +43,7 @@ movie-booking-agent/
 
 ### Chạy kiểm thử tự động
 ```bash
-# Chạy toàn bộ 83 unit/logic test của Web App
+# Chạy toàn bộ bộ kiểm thử hiện tại của Web App
 npm test
 ```
 
@@ -57,3 +60,13 @@ Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinem
 - Màu nền đen sâu (`#000000`, `#181818`), viền mảnh tinh tế (`#303030`).
 - Điểm nhấn tín hiệu màu đỏ Rosso Corsa (`#DA291C`).
 - Chi tiết quy định xem tại [`DESIGN.md`](DESIGN.md).
+
+## Tài liệu sản phẩm
+
+- [Phạm vi sản phẩm](PROJECT-OVERVIEW.md) và [hiện trạng bản làm việc](CONTEXT.md).
+- [UML use case: General → ánh xạ → chi tiết](docs/03-product/use-cases.md),
+  [mô tả use case](docs/03-product/use-case-descriptions.md) và [thuật ngữ](GLOSSARY.md).
+- [Quy chuẩn phân tích/vẽ UML](docs/04-standards/use-case-modeling.md) và [bản đồ docs](docs/README.md).
+
+Mô hình sản phẩm mục tiêu đã được xác nhận; không đồng nghĩa mọi chức năng đã được triển khai.
+Đối chiếu code và giới hạn mô phỏng theo CONTEXT trước khi dùng cho tích hợp hoặc vận hành.

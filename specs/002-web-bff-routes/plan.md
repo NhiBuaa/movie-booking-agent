@@ -1,5 +1,12 @@
 # Implementation Plan: Web BFF Route Handlers
 
+> **Phạm vi phiên bản:** nội dung bên dưới giữ đặc tả/kế hoạch feature ban đầu, không phải toàn bộ
+> sản phẩm mục tiêu đã xác nhận ngày 2026-11-16. Xem [mô hình use case](../../docs/03-product/use-cases.md),
+> [hiến pháp hiện hành](../../.specify/memory/constitution.md) và
+> [đặc tả nghiệp vụ](../../docs/05-specs/domain-context.md). Các chỗ về 64 ghế, role hoặc trạng thái vé
+> ở phiên bản này chưa thay hợp đồng code sang yêu cầu mới. Khi mở rộng, lập đặc tả thay đổi và kiểm chứng
+> phần chênh lệch; ghi chú này không sửa tiêu chí chấp thuận hay kết quả kiểm chứng cũ.
+
 **Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Spec**: [specs/002-web-bff-routes/spec.md](spec.md)
 
 **Input**: Feature specification from `specs/002-web-bff-routes/spec.md`

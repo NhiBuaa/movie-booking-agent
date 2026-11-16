@@ -22,7 +22,12 @@ Nếu bắt đầu với một ý tưởng chưa có dự án, xem [Playbook 1 �
 
 *Ví dụ — Archive Conversation:* Chủ sở hữu bấm Archive thì cuộc trò chuyện rời danh sách đang hoạt động nhưng vẫn xem được trong Archived; người dùng khác không được archive cuộc trò chuyện đó.
 
-Đây là **Requirements chi tiết của tính năng**. Ghi vào GitHub Issue đủ rõ để test, không bắt buộc spec riêng. Nếu phát sinh actor/chức năng mới, cập nhật **Use Case Diagram** của dự án khi cần.
+Đây là **Requirements chi tiết của tính năng**. Ghi vào GitHub Issue đủ rõ để test; với thay đổi lớn,
+thực hiện Spec Kit theo quy định dự án. Khi thay đổi actor, mục tiêu, quyền, quan hệ, điều kiện trước,
+luồng, kết quả hoặc ngoại lệ, cập nhật các phần bị ảnh hưởng của mô hình, ánh xạ, mô tả, bảng quan hệ
+và tham chiếu BR/OPEN. Giữ nguyên chính sách chưa chốt; không khởi động lại khám phá toàn dự án.
+
+Khi phân tích hoặc cập nhật use case, tuân theo [Quy chuẩn phân tích và trình bày UML use case](../04-standards/use-case-modeling.md): General → bảng ánh xạ → chi tiết, giữ đúng ngữ nghĩa UML và kiểm tra bản render.
 
 ### 3. Xem thay đổi ảnh hưởng những đâu
 
@@ -65,6 +70,9 @@ Làm **prototype để thử luồng khi tương tác chưa rõ**; không bắt 
 
 - **Bạn làm:** Chạy ứng dụng, thử đúng/lỗi; với dữ liệu được bảo vệ, **test khi chưa đăng nhập, sai quyền hoặc truy cập dữ liệu người khác**. Đọc diff, kiểm tra chức năng cũ và chỉ merge khi bạn hiểu thay đổi.
 - **Agent giúp:** Tổng hợp những gì đã sửa, kết quả test và điểm chưa kiểm chứng.
+  - **Nếu sửa mô hình use case:** Đối chiếu mã/tên/actor chính và phối hợp giữa General, ánh xạ,
+    chi tiết, danh mục và mô tả theo quy chuẩn. Render lại sơ đồ bị đổi association; ghi trình xem/phiên bản,
+    kích thước và giới hạn quan sát trong PR. Test ứng dụng không thay thế kiểm tra sơ đồ.
   - **Với tính năng UI:** Áp dụng vòng kiểm tra kết quả render: **Nhìn → Thao tác → Ghi lỗi → Sửa → Kiểm lại**. Thu thập bằng chứng theo 4 lớp của `docs/04-standards/ui-quality.md`:
     1. *Hình ảnh:* Chụp ảnh màn hình (screenshot) bản render ở kích thước mục tiêu;
     2. *Sử dụng:* Thử hoàn thành tác vụ, xử lý lỗi và quay lại;
