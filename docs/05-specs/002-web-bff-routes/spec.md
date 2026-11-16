@@ -12,13 +12,13 @@
 
 **Status**: Ready for Review
 
-**Input**: Thiết lập tầng Backend for Frontend (BFF Route Handlers) trong `apps/web` (Next.js 16 App Router) sử dụng hợp đồng dữ liệu chuẩn `@platform/contracts`.
+**Input**: Thiết lập tầng Backend for Frontend (BFF Route Handlers) trong `apps/customer-web` (Next.js 16 App Router) sử dụng hợp đồng dữ liệu chuẩn `@platform/contracts`.
 
 ---
 
 ## 1. Bối cảnh & Mục tiêu (Context & Objective)
 
-Ứng dụng Web (`apps/web`) cần một tầng **Backend for Frontend (BFF)** mỏng bằng Next.js App Router Route Handlers (`src/app/api/...`) để:
+Ứng dụng Web (`apps/customer-web`) cần một tầng **Backend for Frontend (BFF)** mỏng bằng Next.js App Router Route Handlers (`src/app/api/...`) để:
 1. Chuẩn hóa toàn bộ dữ liệu vào/ra theo hợp đồng dữ liệu `@platform/contracts` (`ApiResponse<T>`, `ApiErrorResponse`).
 2. Tách biệt hoàn toàn giao diện người dùng (React Server & Client Components, Chat AI Agent) khỏi chi tiết lưu trữ cục bộ.
 3. Cung cấp API nội bộ mô phỏng đầy đủ vòng đời giao dịch đặt vé (catalog, seat hold, order, payment intent, webhook đối soát, E-Ticket QR HMAC) với độ trung thực cao, làm bước đệm trước khi kết nối trực tiếp vào dịch vụ backend giao dịch có thẩm quyền `services/cinema-core`.
@@ -27,7 +27,7 @@
 > [!IMPORTANT]
 > **Ranh giới thẩm quyền & Trạng thái triển khai hiện tại:**
 > - Hệ thống backend `services/cinema-core` là **Nguồn chân lý duy nhất (Single Source of Truth)** theo [ADR-0001](../../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md), nhưng hiện tại **chưa được triển khai runtime thực tế**.
-> - Tầng BFF Route Handlers hiện đang vận hành dựa trên các adapter mô phỏng in-memory (`catalog-adapter.ts`, `hold-adapter.ts`, `order-adapter.ts`, `crypto-utils.ts`) nằm trong `apps/web/src/server/`.
+> - Tầng BFF Route Handlers hiện đang vận hành dựa trên các adapter mô phỏng in-memory (`catalog-adapter.ts`, `hold-adapter.ts`, `order-adapter.ts`, `crypto-utils.ts`) nằm trong `apps/customer-web/src/server/`.
 > - Biến môi trường `CINEMA_CORE_URL` là định hướng kiến trúc tương lai, **chưa được kích hoạt hay đấu nối trong mã nguồn hiện tại**. Không mô tả `CINEMA_CORE_URL` như một tính năng đã hoạt động.
 
 ---
@@ -123,7 +123,7 @@
 
 ## 3. Ràng buộc bất biến, Bảo mật & Giới hạn kỹ thuật
 
-1. **Bảo tồn kiểm thử hồi quy**: Mọi thay đổi trong `apps/web` phải bảo đảm 100% các bộ kiểm thử tự động của monorepo đều PASS trước khi bàn giao.
+1. **Bảo tồn kiểm thử hồi quy**: Mọi thay đổi trong `apps/customer-web` phải bảo đảm 100% các bộ kiểm thử tự động của monorepo đều PASS trước khi bàn giao.
 2. **Khung dữ liệu chuẩn**: 100% route handlers trả về kiểu `ApiResponse<T>` khi thành công và `ApiErrorResponse` khi thất bại, kèm header `Content-Type: application/json`.
 3. **Cấu hình Secret & Xử lý môi trường Production**:
    - `CINEMA_CORE_WEBHOOK_SECRET`: Khóa bí mật dùng để tạo và xác thực chữ ký HMAC-SHA256 trên webhook payload.

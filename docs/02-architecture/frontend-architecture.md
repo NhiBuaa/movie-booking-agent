@@ -6,17 +6,21 @@
 Core runtime. [CONTEXT](../../CONTEXT.md) ghi hiện trạng; [mô hình use case](../03-product/use-cases.md)
 sở hữu mục tiêu/BR/OPEN. Sơ đồ kiến trúc dưới đây không cấp quyền mới cho actor.
 
+Tài liệu này mô tả Customer Web; ba app còn lại có bối cảnh riêng theo
+[ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md), không kế thừa stack Next.js
+chỉ từ việc dùng chung monorepo.
+
 ---
 
 ## 1. Quyết định kiến trúc (Architecture Decision)
 
-Ứng dụng Web đặt vé (`apps/web`) được xây dựng trên nền tảng **Next.js 16 App Router + React 19 + TypeScript**, tổ chức theo mô hình **Feature-Driven Architecture** (chia theo nghiệp vụ) với lớp **Backend for Frontend (BFF)** mỏng.
+Ứng dụng Web đặt vé (`apps/customer-web`) được xây dựng trên nền tảng **Next.js 16 App Router + React 19 + TypeScript**, tổ chức theo mô hình **Feature-Driven Architecture** (chia theo nghiệp vụ) với lớp **Backend for Frontend (BFF)** mỏng.
 
 Khi hệ thống mở rộng và các dịch vụ backend (`services/cinema-core`, `services/agent-service`) phát triển thành các microservices độc lập, tầng Web Frontend tiếp tục sử dụng các hợp đồng dữ liệu (API Contracts) ổn định thông qua BFF.
 
 ```mermaid
 flowchart LR
-    Browser["Trình duyệt (apps/web)"] --> BFF["Next.js Route Handlers (BFF)"]
+    Browser["Trình duyệt (apps/customer-web)"] --> BFF["Next.js Route Handlers (BFF)"]
     RSC["Next.js Server Components"] --> CLIENT["Server API Clients"]
     BFF --> CLIENT
     CLIENT --> CORE["Cinema Core API (services/cinema-core)"]
@@ -31,10 +35,10 @@ flowchart LR
 
 ---
 
-## 2. Cấu trúc thư mục ứng dụng Web (`apps/web`)
+## 2. Cấu trúc thư mục ứng dụng Web (`apps/customer-web`)
 
 ```text
-apps/web/
+apps/customer-web/
 ├── public/                     # Tài nguyên tĩnh: fonts, icons, ảnh poster
 ├── src/
 │   ├── app/                    # Next.js App Router

@@ -34,6 +34,7 @@ Store each feature's `spec.md`, `plan.md`, and related Spec Kit artifacts togeth
 | --- | --- | --- |
 | Platform contracts | [Specification](001-platform-contracts/spec.md) | [Plan](001-platform-contracts/plan.md) |
 | Web BFF routes | [Specification](002-web-bff-routes/spec.md) | [Plan](002-web-bff-routes/plan.md) |
+| App boundaries | [Accepted design (ADR-0002)](../06-decisions/0002-customer-organizer-app-boundaries.md) | [Migration plan](003-app-boundaries/plan.md) |
 
 Before running Spec Kit for a feature, set its directory explicitly from the repository root. For example:
 

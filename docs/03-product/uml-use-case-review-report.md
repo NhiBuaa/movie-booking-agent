@@ -1,5 +1,9 @@
 # Báo cáo review độc lập bộ UML Use Case — Movie Booking Platform
 
+> Ghi chú tra cứu sau chuyển thư mục: đường dẫn/mốc code trong báo cáo giữ nguyên như lúc review.
+> Vị trí ứng dụng hiện tại theo [ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
+> Ghi chú này không sửa kết luận hoặc tái xác nhận bằng chứng của reviewer.
+
 **Ngày thực hiện:** 2026-11-16  
 **Người thực hiện:** Antigravity (Độc lập)  
 **Phạm vi bàn giao:** Handoff `C:/Users/NhiBuaa/AppData/Local/Temp/movie-booking-use-case-review-handoff-20261116.md`  

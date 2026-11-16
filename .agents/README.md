@@ -10,7 +10,9 @@ It is not a task tracker and must not duplicate Issue or Pull Request state.
 .agents/
 ├── README.md
 ├── rules/
-│   └── README.md
+│   ├── README.md
+│   ├── codegraph.md
+│   └── ui-skill-routing.md
 └── references/
     └── README.md
 ```
@@ -41,3 +43,9 @@ Do not use `.agents/` for:
 - project-local copies of global personal skills.
 
 Use Issues and Pull Requests for work state.
+
+## Điểm vào công cụ của dự án
+
+[Danh mục rules](rules/README.md) dẫn tới CodeGraph và quy trình UI theo ứng dụng.
+[Hướng dẫn công cụ](../docs/07-guides/development-tools.md) giải thích thao tác Impeccable/CodeGraph;
+công cụ không thay quyền sửa repo hoặc bằng chứng kiểm thử/chạy thực tế.

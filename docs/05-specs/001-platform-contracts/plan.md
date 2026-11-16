@@ -1,5 +1,10 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
+> **Đường dẫn lịch sử:** danh sách workspace, React Native/Expo và số test bên dưới thuộc kế hoạch
+> feature ban đầu. Cấu trúc và nền tảng hiện hành theo
+> [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md); framework Mobile chưa chốt.
+> Ghi chú này không sửa hoặc tái xác nhận bằng chứng kiểm thử trước đây.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)

@@ -16,7 +16,11 @@ last_verified: 2026-11-16
 
 - **Project Name:** movie-booking-agent
 - **Has UI Surface:** True
-- **Platform Architecture:** Monorepo gồm Web, Organizer, Mobile, Cinema Core, Agent Service và packages dùng chung.
+- **Platform Architecture:** Bốn app `customer-web`, `customer-mobile`, `organizer-web`, `organizer-mobile`,
+  Cinema Core, Agent Service và packages dùng chung; ranh giới theo
+  [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
+  Hai app Mobile nhắm iOS/Android; phần nhân viên soát vé thuộc Organizer Mobile. Chỉ Customer Web có mã nguồn;
+  ba app còn lại mới có tài liệu mục tiêu, chưa có build/runtime được xác nhận.
 - **Target Product:** Một đơn vị/chuỗi rạp; actor, phạm vi, BR và OPEN do mô hình use case sở hữu.
   Cấu trúc thư mục không chứng minh từng phân hệ đã vận hành.
 
@@ -77,4 +81,6 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   và [đặc tả nghiệp vụ](docs/05-specs/domain-context.md).
 - [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md)
   và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
+- [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live
+  và CodeGraph theo worktree. Cài công cụ/có index không xác nhận code hoặc giao dịch đã vận hành.
 - Quản lý công việc và bằng chứng kiểm chứng: GitHub Issues/PRs.

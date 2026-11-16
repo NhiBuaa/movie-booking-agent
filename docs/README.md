@@ -24,6 +24,11 @@ Durable product and domain knowledge: users, domain concepts, user flows, termin
 [mô tả use case](03-product/use-case-descriptions.md) diễn giải tình huống và [GLOSSARY](../GLOSSARY.md)
 sở hữu thuật ngữ. Mô hình mục tiêu đã được duyệt không xác nhận code đã đáp ứng.
 
+Bối cảnh theo ứng dụng nằm ở [Customer Web](../apps/customer-web/PRODUCT.md),
+[Customer Mobile](../apps/customer-mobile/PRODUCT.md), [Organizer Web](../apps/organizer-web/PRODUCT.md)
+và [Organizer Mobile](../apps/organizer-mobile/PRODUCT.md). PRODUCT không sao chép quyền/BR/OPEN
+hoặc thiết kế chung; ranh giới bốn app theo [ADR-0002](06-decisions/0002-customer-organizer-app-boundaries.md).
+
 ## `04-standards/`
 
 Normative engineering and modeling rules shared by humans and agents, including
@@ -46,6 +51,9 @@ Rationale and trade-offs for significant decisions. This is the ADR/decision-his
 ## `07-guides/`
 
 Normal development or operational procedures.
+
+[Công cụ phát triển](07-guides/development-tools.md) hướng dẫn chọn bối cảnh Impeccable,
+phân biệt cấu hình live với kiểm chứng và dùng CodeGraph theo worktree.
 
 ## `08-runbooks/`
 

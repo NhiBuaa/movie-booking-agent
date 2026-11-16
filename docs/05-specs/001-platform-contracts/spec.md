@@ -1,5 +1,10 @@
 # Feature Specification: Standard Platform Data Contracts (@platform/contracts)
 
+> **Đường dẫn lịch sử:** phần phạm vi, ví dụ và tiêu chí dưới đây giữ bối cảnh feature ban đầu.
+> Cấu trúc app hiện hành và việc chuyển nhân viên sang Organizer Mobile theo
+> [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md).
+> React Native/Expo hoặc Mobile gộp khách/nhân viên trong tài liệu cũ không chốt stack/phạm vi mới.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)

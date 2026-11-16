@@ -1,9 +1,10 @@
 # @platform/contracts
 
 Nguồn thẩm quyền duy nhất (Single Source of Truth) cho các kiểu dữ liệu, DTOs, Enums và Hợp đồng giao tiếp API dùng chung trong Monorepo Movie Booking Platform:
-- `apps/web` (Web Client Next.js 16)
-- `apps/mobile` (Mobile Client & On-ground Scanner)
-- `apps/organizer` (Cinema Organizer Web Portal)
+- `apps/customer-web` (Web Client Next.js 16)
+- `apps/customer-mobile` (Customer Mobile, iOS/Android)
+- `apps/organizer-web` (Cinema Organizer Web Portal)
+- `apps/organizer-mobile` (Organizer Mobile và soát vé theo vai trò, iOS/Android)
 - `services/cinema-core` (Transactional Backend)
 - `services/agent-service` (Conversational AI Agent)
 
@@ -48,6 +49,6 @@ packages/contracts/src/
 # Kiểm tra riêng thư viện contracts
 npm run test:contracts
 
-# Kiểm tra toàn bộ monorepo (contracts + apps/web)
+# Kiểm tra toàn bộ monorepo (contracts + apps/customer-web)
 npm run test:all
 ```

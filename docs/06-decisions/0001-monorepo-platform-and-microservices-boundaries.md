@@ -4,6 +4,10 @@
 
 Accepted
 
+Phần phân chia ứng dụng trong quyết định này được thay bởi
+[ADR-0002](0002-customer-organizer-app-boundaries.md) ngày 2026-11-16.
+Nội dung bên dưới giữ ngữ cảnh quyết định ban đầu; các ranh giới dịch vụ vẫn có hiệu lực.
+
 ## Context
 
 Dự án ban đầu được khởi tạo như một đồ án môn học UI/UX đơn lẻ. Khi mở rộng thành một **Nền tảng hoàn chỉnh (Full Platform)** phục vụ cả 3 đối tượng người dùng:

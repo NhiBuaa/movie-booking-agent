@@ -10,6 +10,9 @@ Nếu bắt đầu với một ý tưởng chưa có dự án, xem [Playbook 1 �
 
 - **Bạn làm:** Đọc System Architecture, **thiết kế dữ liệu tương ứng với database đang dùng** và code/test liên quan nếu đã có. Với tính năng đầu tiên, dựa trên thiết kế đã chốt ở Playbook 1.
 - **Agent giúp:** Chỉ ra thành phần nào xử lý tính năng và giải thích code hiện tại.
+- **Công cụ:** Với phần mã được hỗ trợ, agent dùng CodeGraph theo [quy tắc dự án](../../.agents/rules/codegraph.md)
+  để lần nơi gọi/phụ thuộc và tìm test; đối chiếu nguồn, không dùng graph thay kiểm thử.
+  Thao tác theo worktree nằm trong [hướng dẫn công cụ](development-tools.md#codegraph).
 - **Xong khi:** Bạn biết tính năng sẽ nằm ở đâu, dữ liệu liên quan là gì.
 
 *Ví dụ:* Trước khi thêm Archive Conversation, xem nơi lưu Conversation và API lấy danh sách.
@@ -45,7 +48,12 @@ Khi phân tích hoặc cập nhật use case, tuân theo [Quy chuẩn phân tíc
 
 *Ví dụ — Archive Conversation:* Frontend → API → kiểm tra quyền → Backend cập nhật trạng thái trong Database → API trả kết quả → Frontend cập nhật danh sách.
 
-**Nếu có UI:** Dựa trên User Flow tổng quan, [Chuẩn chất lượng UI/UX](../../docs/04-standards/README.md) (`docs/04-standards/ui-quality.md`) và luật điều phối skill (`.agents/rules/ui-skill-routing.md`), thiết kế **wireframe/màn hình cần sửa** (dùng `emil-design-eng` hoặc `animate` cho micro-interaction, dùng `chrome-devtools` và `a11y-debugging` để kiểm chứng render thực tế), tái sử dụng đúng design tokens/components đã có và bổ sung đầy đủ các **UI states**:
+**Nếu có UI:** Đọc PRODUCT đúng ứng dụng theo [hướng dẫn bối cảnh](development-tools.md#bối-cảnh-impeccable),
+User Flow tổng quan, [Chuẩn chất lượng UI/UX](../04-standards/ui-quality.md) và
+[quy tắc điều phối UI](../../.agents/rules/ui-skill-routing.md). Thiết kế mới/thiết kế lại theo quy trình
+Figma đã chốt tại quy tắc đó; sửa nhỏ giữ phạm vi thiết kế hiện hữu. Chọn skill có trong phiên theo
+giai đoạn và nền tảng; công cụ trình duyệt kiểm chứng Web, công cụ native kiểm chứng app Mobile.
+Tái sử dụng token/component tương thích và bổ sung đầy đủ các **UI states**:
 - `Loading`: Khung xương (skeleton) hoặc spinner giữ nguyên kích thước để tránh giật bố cục (layout shift).
 - `Empty`: Hướng dẫn ngắn kèm nút hành động tiếp theo.
 - `Error`: Giải thích dễ hiểu kèm đường khôi phục (thử lại, quay về).
@@ -75,6 +83,7 @@ Làm **prototype để thử luồng khi tương tác chưa rõ**; không bắt 
     kích thước và giới hạn quan sát trong PR. Test ứng dụng không thay thế kiểm tra sơ đồ.
   - **Với tính năng UI:** Áp dụng vòng kiểm tra kết quả render: **Nhìn → Thao tác → Ghi lỗi → Sửa → Kiểm lại**. Thu thập bằng chứng theo 4 lớp của `docs/04-standards/ui-quality.md`:
     1. *Hình ảnh:* Chụp ảnh màn hình (screenshot) bản render ở kích thước mục tiêu;
+       Web từ trình duyệt, Mobile từ simulator/emulator hoặc thiết bị, ghi rõ nguồn bằng chứng;
     2. *Sử dụng:* Thử hoàn thành tác vụ, xử lý lỗi và quay lại;
     3. *Chuyển động:* Kiểm tra tương tác trực tiếp, thao tác nhanh/bấm liên tục không bị gián đoạn, hỗ trợ reduced-motion;
     4. *Kỹ thuật:* Responsive, độ tương phản (contrast) và điều hướng bàn phím/focus.

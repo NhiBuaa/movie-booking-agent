@@ -14,3 +14,8 @@ Examples:
 Do not place durable product or engineering standards here. If a rule applies to human implementations as well as agents, it usually belongs in `docs/04-standards/`.
 
 The root `AGENTS.md` should remain the entrypoint and route agents to relevant scoped rules when needed.
+
+## Quy tắc của dự án
+
+- [CodeGraph](codegraph.md): dùng graph cho phần mã được hỗ trợ, đúng worktree và có đối chiếu nguồn.
+- [Điều phối UI](ui-skill-routing.md): chọn PRODUCT, quy trình Figma và skill theo giai đoạn thiết kế/kiểm chứng.
