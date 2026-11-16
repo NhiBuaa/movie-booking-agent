@@ -15,6 +15,7 @@ import { expireOrderForTesting } from '../src/server/order-adapter.ts';
 import {
   signWebhookPayload,
   verifyTicketQrSignature,
+  getCinemaCoreWebhookSecret,
 } from '../src/server/crypto-utils.ts';
 import type { TicketQrPayload } from '@platform/contracts';
 
@@ -772,5 +773,345 @@ describe('BFF Route Handlers — Integration & Contract Validation', () => {
     assert.equal(resLateWebhook.status, 409);
     const bodyLate = (await resLateWebhook.json()) as any;
     assert.equal(bodyLate.error.code, 'PAYMENT_EXPIRED_RECONCILIATION_REQUIRED');
+  });
+
+  it('P1-1: Hủy hold sau tạo đơn bị từ chối 409 và không gây bán trùng ghế', async () => {
+    // 1. User Alice holds seat A2 and creates order
+    const reqHoldAlice = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A2'],
+        userEmail: 'alice.double@example.com',
+      }),
+    });
+    const resHoldAlice = await postHold(reqHoldAlice);
+    assert.equal(resHoldAlice.status, 201);
+    const { data: holdAlice } = (await resHoldAlice.json()) as any;
+
+    const reqOrderAlice = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: holdAlice.holdId,
+        showtimeId: holdAlice.showtimeId,
+        userEmail: 'alice.double@example.com',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrderAlice = await postOrder(reqOrderAlice);
+    assert.equal(resOrderAlice.status, 201);
+
+    // 2. Alice attempts to release the consumed hold -> rejected with 409 HOLD_ALREADY_CONSUMED
+    const reqReleaseAlice = new Request('http://localhost:3000/api/hold', {
+      method: 'DELETE',
+      headers: { 'x-user-email': 'alice.double@example.com' },
+      body: JSON.stringify({
+        holdId: holdAlice.holdId,
+        userEmail: 'alice.double@example.com',
+      }),
+    });
+    const resReleaseAlice = await deleteHold(reqReleaseAlice);
+    assert.equal(resReleaseAlice.status, 409);
+    const bodyRelease = (await resReleaseAlice.json()) as any;
+    assert.equal(bodyRelease.error.code, 'HOLD_ALREADY_CONSUMED');
+
+    // 3. User Bob tries to hold seat A2 -> rejected with 409 SEATS_UNAVAILABLE (A2 is still held by Alice's order)
+    const reqHoldBob = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['A2'],
+        userEmail: 'bob.double@example.com',
+      }),
+    });
+    const resHoldBob = await postHold(reqHoldBob);
+    assert.equal(resHoldBob.status, 409);
+    const bodyHoldBob = (await resHoldBob.json()) as any;
+    assert.equal(bodyHoldBob.error.code, 'SEATS_UNAVAILABLE');
+  });
+
+  it('P1-2: Thiếu secret từ chối trong production và chỉ cho phép fallback trong simulation', async () => {
+    const origNodeEnv = process.env.NODE_ENV;
+    const origSecret = process.env.CINEMA_CORE_WEBHOOK_SECRET;
+
+    try {
+      // Simulate production without secret configured
+      (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
+      delete process.env.CINEMA_CORE_WEBHOOK_SECRET;
+
+      assert.throws(
+        () => getCinemaCoreWebhookSecret(),
+        /SECURITY_ERROR/
+      );
+
+      // Webhook in production with unconfigured secret returns 500 configuration error
+      const fakePayload = {
+        transactionId: 'TXN-PROD-TEST',
+        bookingId: 'BK-PROD-TEST',
+        partnerTxnId: 'PTXN-123',
+        paymentMethod: 'momo' as const,
+        amount: 100000,
+        status: 'succeeded' as const,
+        payloadTimestamp: new Date().toISOString(),
+        signature: 'deadbeef',
+      };
+      const reqWebhook = new Request('http://localhost:3000/api/payment/webhook', {
+        method: 'POST',
+        body: JSON.stringify(fakePayload),
+      });
+      const resWebhook = await postPaymentWebhook(reqWebhook);
+      assert.equal(resWebhook.status, 500);
+      const bodyWebhook = (await resWebhook.json()) as any;
+      assert.equal(bodyWebhook.error.code, 'SERVER_CONFIGURATION_ERROR');
+    } finally {
+      (process.env as Record<string, string | undefined>).NODE_ENV = origNodeEnv;
+      if (origSecret !== undefined) {
+        process.env.CINEMA_CORE_WEBHOOK_SECRET = origSecret;
+      } else {
+        delete process.env.CINEMA_CORE_WEBHOOK_SECRET;
+      }
+    }
+  });
+
+  it('P1-3: Webhook từ chối xác nhận đơn chưa từng tạo intent (400 TRANSACTION_NOT_INITIALIZED)', async () => {
+    // 1. Create hold and order
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['F2'],
+        userEmail: 'nointent@example.com',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    const { data: hold } = (await resHold.json()) as any;
+
+    const reqOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'nointent@example.com',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrder = await postOrder(reqOrder);
+    assert.equal(resOrder.status, 201);
+    const { data: order } = (await resOrder.json()) as any;
+
+    // 2. Send webhook directly without creating payment intent first
+    const payload = {
+      transactionId: 'TXN-NEVER-CREATED-INTENT',
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-BYPASS-001',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhook = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload,
+        signature: signWebhookPayload(payload),
+      }),
+    });
+    const resWebhook = await postPaymentWebhook(reqWebhook);
+    assert.equal(resWebhook.status, 400);
+    const bodyWebhook = (await resWebhook.json()) as any;
+    assert.equal(bodyWebhook.error.code, 'TRANSACTION_NOT_INITIALIZED');
+  });
+
+  it('P1-4: Retry payment intent tái sử dụng transactionId active và giữ dấu khi đổi phương thức', async () => {
+    // 1. Create hold and order
+    const reqHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['F3'],
+        userEmail: 'retry@example.com',
+      }),
+    });
+    const resHold = await postHold(reqHold);
+    const { data: hold } = (await resHold.json()) as any;
+
+    const reqOrder = new Request('http://localhost:3000/api/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        holdId: hold.holdId,
+        showtimeId: hold.showtimeId,
+        userEmail: 'retry@example.com',
+        paymentMethod: 'momo',
+      }),
+    });
+    const resOrder = await postOrder(reqOrder);
+    const { data: order } = (await resOrder.json()) as any;
+
+    // 2. First intent creation (MoMo)
+    const reqIntent1 = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'retry@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntent1 = await postPaymentIntent(reqIntent1);
+    assert.equal(resIntent1.status, 201);
+    const { data: intent1 } = (await resIntent1.json()) as any;
+
+    // 3. Retry same intent with MoMo -> must return IDENTICAL transactionId
+    const reqIntentRetry = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'retry@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'momo',
+      }),
+    });
+    const resIntentRetry = await postPaymentIntent(reqIntentRetry);
+    assert.equal(resIntentRetry.status, 201);
+    const { data: intentRetry } = (await resIntentRetry.json()) as any;
+    assert.equal(intentRetry.transactionId, intent1.transactionId);
+
+    // 4. Switch payment method to zalopay
+    const reqIntentZalo = new Request('http://localhost:3000/api/payment/intent', {
+      method: 'POST',
+      headers: { 'x-user-email': 'retry@example.com' },
+      body: JSON.stringify({
+        bookingId: order.bookingId,
+        paymentMethod: 'zalopay',
+      }),
+    });
+    const resIntentZalo = await postPaymentIntent(reqIntentZalo);
+    assert.equal(resIntentZalo.status, 201);
+    const { data: intentZalo } = (await resIntentZalo.json()) as any;
+    assert.notEqual(intentZalo.transactionId, intent1.transactionId);
+
+    // 5. If webhook for the FIRST intent (MoMo) arrives, it still reconciles and confirms
+    const payloadMoMo = {
+      transactionId: intent1.transactionId,
+      bookingId: order.bookingId,
+      partnerTxnId: 'MOMO-RETRY-001',
+      paymentMethod: 'momo' as const,
+      amount: order.totalAmount,
+      status: 'succeeded' as const,
+      payloadTimestamp: new Date().toISOString(),
+    };
+    const reqWebhookMoMo = new Request('http://localhost:3000/api/payment/webhook', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payloadMoMo,
+        signature: signWebhookPayload(payloadMoMo),
+      }),
+    });
+    const resWebhookMoMo = await postPaymentWebhook(reqWebhookMoMo);
+    assert.equal(resWebhookMoMo.status, 200);
+    const bodyConfirmed = (await resWebhookMoMo.json()) as any;
+    assert.equal(bodyConfirmed.success, true);
+    assert.equal(bodyConfirmed.data.bookingStatus, 'CONFIRMED');
+  });
+
+  it('P2-5: Bắt buộc userEmail khi tạo hold và chặn hoàn toàn việc hủy ẩn danh', async () => {
+    // 1. Hold without userEmail -> 400 MISSING_USER_EMAIL
+    const reqNoEmail = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['F7'],
+      }),
+    });
+    const resNoEmail = await postHold(reqNoEmail);
+    assert.equal(resNoEmail.status, 400);
+    const bodyNoEmail = (await resNoEmail.json()) as any;
+    assert.equal(bodyNoEmail.error.code, 'MISSING_USER_EMAIL');
+
+    // 2. Hold with invalid format email -> 400 INVALID_EMAIL
+    const reqBadEmail = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['F7'],
+        userEmail: 'not-an-email',
+      }),
+    });
+    const resBadEmail = await postHold(reqBadEmail);
+    assert.equal(resBadEmail.status, 400);
+    const bodyBadEmail = (await resBadEmail.json()) as any;
+    assert.equal(bodyBadEmail.error.code, 'INVALID_EMAIL');
+
+    // 3. Valid hold creation
+    const reqValidHold = new Request('http://localhost:3000/api/hold', {
+      method: 'POST',
+      body: JSON.stringify({
+        showtimeId: 'slot-dk-04-1',
+        seatIds: ['F7'],
+        userEmail: 'owner@example.com',
+      }),
+    });
+    const resValidHold = await postHold(reqValidHold);
+    assert.equal(resValidHold.status, 201);
+    const { data: validHold } = (await resValidHold.json()) as any;
+
+    // 4. Anonymous release attempt (no caller email) -> 403 FORBIDDEN
+    const reqAnonRelease = new Request('http://localhost:3000/api/hold', {
+      method: 'DELETE',
+      body: JSON.stringify({ holdId: validHold.holdId }),
+    });
+    const resAnonRelease = await deleteHold(reqAnonRelease);
+    assert.equal(resAnonRelease.status, 403);
+
+    // 5. Wrong owner email release attempt -> 403 FORBIDDEN
+    const reqWrongRelease = new Request('http://localhost:3000/api/hold', {
+      method: 'DELETE',
+      headers: { 'x-user-email': 'stranger@example.com' },
+      body: JSON.stringify({ holdId: validHold.holdId, userEmail: 'stranger@example.com' }),
+    });
+    const resWrongRelease = await deleteHold(reqWrongRelease);
+    assert.equal(resWrongRelease.status, 403);
+
+    // 6. Legitimate owner release -> 200 OK
+    const reqGoodRelease = new Request('http://localhost:3000/api/hold', {
+      method: 'DELETE',
+      headers: { 'x-user-email': 'owner@example.com' },
+      body: JSON.stringify({ holdId: validHold.holdId }),
+    });
+    const resGoodRelease = await deleteHold(reqGoodRelease);
+    assert.equal(resGoodRelease.status, 200);
+  });
+
+  it('P2-6: Lọc cinemaId chuẩn hóa alias chính xác, loại trừ substring của ID hợp lệ', async () => {
+    // 1. Fake ID containing substring of valid cinema -> 0 movies, 0 showtimes
+    const reqFakeCinemaMovies = new Request('http://localhost:3000/api/movies?cinemaId=not-a-real-cgv-dong-khoi');
+    const resFakeCinemaMovies = await getMovies(reqFakeCinemaMovies);
+    assert.equal(resFakeCinemaMovies.status, 200);
+    const bodyFakeMovies = (await resFakeCinemaMovies.json()) as any;
+    assert.equal(bodyFakeMovies.data.length, 0);
+
+    const reqPartialMovies = new Request('http://localhost:3000/api/movies?cinemaId=cgv-dong');
+    const resPartialMovies = await getMovies(reqPartialMovies);
+    assert.equal(resPartialMovies.status, 200);
+    const bodyPartialMovies = (await resPartialMovies.json()) as any;
+    assert.equal(bodyPartialMovies.data.length, 0);
+
+    const reqFakeShowtimes = new Request('http://localhost:3000/api/showtimes?movieId=chuyen-tau-cuoi-he&cinemaId=not-a-real-cgv-dong-khoi');
+    const resFakeShowtimes = await getShowtimes(reqFakeShowtimes);
+    assert.equal(resFakeShowtimes.status, 200);
+    const bodyFakeShowtimes = (await resFakeShowtimes.json()) as any;
+    assert.equal(bodyFakeShowtimes.data.length, 0);
+
+    // 2. Known alias cgv-vincom-dong-khoi resolves to cgv-dong-khoi -> returns movie & showtimes
+    const reqValidAliasMovies = new Request('http://localhost:3000/api/movies?cinemaId=cgv-vincom-dong-khoi');
+    const resValidAliasMovies = await getMovies(reqValidAliasMovies);
+    assert.equal(resValidAliasMovies.status, 200);
+    const bodyValidAliasMovies = (await resValidAliasMovies.json()) as any;
+    assert.equal(bodyValidAliasMovies.data.length, 1);
+    assert.equal(bodyValidAliasMovies.data[0].slug, 'chuyen-tau-cuoi-he');
+
+    const reqValidAliasShowtimes = new Request('http://localhost:3000/api/showtimes?movieId=chuyen-tau-cuoi-he&cinemaId=cgv-vincom-dong-khoi');
+    const resValidAliasShowtimes = await getShowtimes(reqValidAliasShowtimes);
+    assert.equal(resValidAliasShowtimes.status, 200);
+    const bodyValidAliasShowtimes = (await resValidAliasShowtimes.json()) as any;
+    assert.ok(bodyValidAliasShowtimes.data.length > 0);
   });
 });

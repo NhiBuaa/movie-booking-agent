@@ -37,6 +37,49 @@ export interface ShowtimeSlotDetails {
 }
 
 /**
+ * Normalizes known cinema IDs and aliases to canonical cinema ID.
+ * Returns null if the cinemaId is not recognized (strictly avoids substring false positives).
+ */
+export function resolveCanonicalCinemaId(rawCinemaId?: string | null): string | null {
+  if (!rawCinemaId || typeof rawCinemaId !== 'string') {
+    return null;
+  }
+  const norm = rawCinemaId.trim().toLowerCase();
+
+  // CGV Vincom Dong Khoi aliases
+  if (
+    norm === 'cgv-dong-khoi' ||
+    norm === 'cgv-vincom-dong-khoi' ||
+    norm === 'dong-khoi' ||
+    norm === 'vincom-dong-khoi'
+  ) {
+    return 'cgv-dong-khoi';
+  }
+
+  // CGV Landmark 81 aliases
+  if (
+    norm === 'cgv-landmark' ||
+    norm === 'cgv-vincom-landmark-81' ||
+    norm === 'landmark' ||
+    norm === 'landmark-81'
+  ) {
+    return 'cgv-landmark';
+  }
+
+  // BHD Star Bitexco aliases
+  if (norm === 'bhd-star-bitexco' || norm === 'bhd-bitexco') {
+    return 'bhd-star-bitexco';
+  }
+
+  // Galaxy Cinema Nguyen Du aliases
+  if (norm === 'galaxy-nguyen-du') {
+    return 'galaxy-nguyen-du';
+  }
+
+  return null;
+}
+
+/**
  * Resolves any showtimeId or alias into the single canonical inventory record.
  * Returns null if the showtimeId does not exist in the catalog (no fake fallback).
  */
@@ -164,22 +207,23 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
 
   // Relational filter: Cinema showtime availability
   if (query?.cinemaId) {
-    const cId = query.cinemaId.toLowerCase().trim();
-    items = items.filter((m) => {
-      // In current fixtures, only chuyen-tau-cuoi-he has scheduled showtimes at known cinemas
-      if (m.slug === 'chuyen-tau-cuoi-he') {
-        return CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some((day) =>
-          day.cinemas.some(
-            (c) =>
-              c.cinemaId.toLowerCase() === cId ||
-              c.cinemaId.toLowerCase().includes(cId) ||
-              cId.includes(c.cinemaId.toLowerCase()) ||
-              (c.cinemaSlug && (c.cinemaSlug.toLowerCase() === cId || cId.includes(c.cinemaSlug.toLowerCase())))
-          )
-        );
-      }
-      return false;
-    });
+    const canonicalFilterCinema = resolveCanonicalCinemaId(query.cinemaId);
+    if (!canonicalFilterCinema) {
+      items = [];
+    } else {
+      items = items.filter((m) => {
+        // In current fixtures, only chuyen-tau-cuoi-he has scheduled showtimes at known cinemas
+        if (m.slug === 'chuyen-tau-cuoi-he') {
+          return CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some((day) =>
+            day.cinemas.some((c) => {
+              const cCanonical = resolveCanonicalCinemaId(c.cinemaId);
+              return cCanonical === canonicalFilterCinema;
+            })
+          );
+        }
+        return false;
+      });
+    }
   }
 
   // Relational filter: Date showtime availability
@@ -354,14 +398,15 @@ export function getShowtimes(query?: {
     .map((day) => {
       let cinemas = day.cinemas;
       if (query?.cinemaId) {
-        const cId = query.cinemaId.toLowerCase().trim();
-        cinemas = cinemas.filter(
-          (c) =>
-            c.cinemaId.toLowerCase() === cId ||
-            c.cinemaId.toLowerCase().includes(cId) ||
-            cId.includes(c.cinemaId.toLowerCase()) ||
-            (c.cinemaSlug && (c.cinemaSlug.toLowerCase() === cId || cId.includes(c.cinemaSlug.toLowerCase())))
-        );
+        const canonicalFilterCinema = resolveCanonicalCinemaId(query.cinemaId);
+        if (!canonicalFilterCinema) {
+          cinemas = [];
+        } else {
+          cinemas = cinemas.filter((c) => {
+            const cCanonical = resolveCanonicalCinemaId(c.cinemaId);
+            return cCanonical === canonicalFilterCinema;
+          });
+        }
       }
 
       const formattedCinemas = cinemas

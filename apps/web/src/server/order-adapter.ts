@@ -25,9 +25,17 @@ import {
 } from './crypto-utils.ts';
 
 // Internal extended Order type with transactionId link
+export interface PaymentAttempt {
+  transactionId: string;
+  paymentMethod: PaymentMethod;
+  amount: number;
+  createdAt: number;
+}
+
 export interface InternalOrderSummaryDto extends OrderSummaryDto {
   transactionId?: string;
   userEmail: string;
+  paymentAttempts?: Map<string, PaymentAttempt>;
 }
 
 const ordersStore = new Map<string, InternalOrderSummaryDto>();
@@ -259,6 +267,7 @@ export function createOrder(req: CreateOrderRequest): CreateOrderResult {
     holdExpiresAt: hold.expiresAt,
     holdDurationSeconds: Math.max(0, Math.floor((hold.expiresAt - Date.now()) / 1000)),
     userEmail: req.userEmail.trim(),
+    paymentAttempts: new Map<string, PaymentAttempt>(),
   };
 
   ordersStore.set(bookingId, order);
@@ -345,12 +354,24 @@ export function createPaymentIntent(
     };
   }
 
-  // Cryptographically secure transaction ID
-  const transactionId = `TXN-${crypto.randomUUID().replace(/-/g, '').slice(0, 16).toUpperCase()}`;
+  if (!order.paymentAttempts) {
+    order.paymentAttempts = new Map<string, PaymentAttempt>();
+  }
 
-  // Link transaction details to order for cross-reconciliation on webhook
-  order.transactionId = transactionId;
-  order.paymentMethod = req.paymentMethod;
+  // Idempotent retry: Reuse active transactionId if method is identical and within TTL
+  let transactionId = order.transactionId;
+  if (!transactionId || order.paymentMethod !== req.paymentMethod || !order.paymentAttempts.has(transactionId)) {
+    // Cryptographically secure transaction ID
+    transactionId = `TXN-${crypto.randomUUID().replace(/-/g, '').slice(0, 16).toUpperCase()}`;
+    order.transactionId = transactionId;
+    order.paymentMethod = req.paymentMethod;
+    order.paymentAttempts.set(transactionId, {
+      transactionId,
+      paymentMethod: req.paymentMethod,
+      amount: order.totalAmount,
+      createdAt: Date.now(),
+    });
+  }
 
   return {
     success: true,
@@ -416,12 +437,21 @@ export function processPaymentWebhook(
   }
 
   // 1. Strict Cryptographic HMAC-SHA256 Verification
-  if (!verifyWebhookSignature(payload)) {
+  try {
+    if (!verifyWebhookSignature(payload)) {
+      return {
+        success: false,
+        code: 'INVALID_SIGNATURE',
+        error: 'Chữ ký số xác thực từ Cinema Core không hợp lệ hoặc bị thiếu.',
+        status: 400,
+      };
+    }
+  } catch (_err) {
     return {
       success: false,
-      code: 'INVALID_SIGNATURE',
-      error: 'Chữ ký số xác thực từ Cinema Core không hợp lệ hoặc bị thiếu.',
-      status: 400,
+      code: 'SERVER_CONFIGURATION_ERROR',
+      error: 'Hệ thống chưa được cấu hình khóa bảo mật Cinema Core cho môi trường hiện tại.',
+      status: 500,
     };
   }
 
@@ -451,12 +481,23 @@ export function processPaymentWebhook(
   }
 
   // 4. Cross-Reconciliation Checks (Đối soát giao dịch)
-  // Reconcile transactionId link
-  if (order.transactionId && payload.transactionId !== order.transactionId) {
+  // Ensure order has initialized at least one payment transaction attempt (Finding 3)
+  if (!order.paymentAttempts || order.paymentAttempts.size === 0) {
+    return {
+      success: false,
+      code: 'TRANSACTION_NOT_INITIALIZED',
+      error: 'Đơn hàng chưa từng khởi tạo giao dịch thanh toán (thiếu payment intent).',
+      status: 400,
+    };
+  }
+
+  // Reconcile transactionId against registered payment attempts (Finding 3 & 4)
+  const attempt = order.paymentAttempts.get(payload.transactionId);
+  if (!attempt) {
     return {
       success: false,
       code: 'TRANSACTION_ID_MISMATCH',
-      error: `Mã giao dịch webhook '${payload.transactionId}' không khớp với giao dịch đã khởi tạo '${order.transactionId}'.`,
+      error: `Mã giao dịch webhook '${payload.transactionId}' không tồn tại hoặc không khớp với các giao dịch đã khởi tạo của đơn hàng.`,
       status: 400,
     };
   }
@@ -471,12 +512,12 @@ export function processPaymentWebhook(
     };
   }
 
-  // Reconcile payment method
-  if (payload.paymentMethod !== order.paymentMethod) {
+  // Reconcile payment method with the specific payment attempt
+  if (payload.paymentMethod !== attempt.paymentMethod) {
     return {
       success: false,
       code: 'PAYMENT_METHOD_MISMATCH',
-      error: `Phương thức thanh toán '${payload.paymentMethod}' không khớp với đơn hàng '${order.paymentMethod}'.`,
+      error: `Phương thức thanh toán '${payload.paymentMethod}' không khớp với phương thức đã đăng ký '${attempt.paymentMethod}'.`,
       status: 400,
     };
   }
@@ -505,6 +546,8 @@ export function processPaymentWebhook(
   if (payload.status === PaymentStatus.SUCCEEDED) {
     order.status = BookingStatus.CONFIRMED;
     order.paymentStatus = PaymentStatus.SUCCEEDED;
+    order.transactionId = attempt.transactionId;
+    order.paymentMethod = attempt.paymentMethod;
 
     // Issue authoritative ticket with collision-proof ticketCode
     let ticketCode: string;
@@ -518,14 +561,24 @@ export function processPaymentWebhook(
     const expiresAt = new Date(Date.now() + 24 * 3600 * 1000).toISOString();
 
     // Authentically sign Ticket QR payload using Cinema Core ticket secret
-    const qrSignature = signTicketQrPayload({
-      ticketCode,
-      bookingId: order.bookingId,
-      showtimeId: order.showtimeId,
-      seats: order.seats.map((s) => s.id),
-      issuedAt,
-      expiresAt,
-    });
+    let qrSignature: string;
+    try {
+      qrSignature = signTicketQrPayload({
+        ticketCode,
+        bookingId: order.bookingId,
+        showtimeId: order.showtimeId,
+        seats: order.seats.map((s) => s.id),
+        issuedAt,
+        expiresAt,
+      });
+    } catch (_err) {
+      return {
+        success: false,
+        code: 'SERVER_CONFIGURATION_ERROR',
+        error: 'Hệ thống chưa được cấu hình khóa ký vé Cinema Core.',
+        status: 500,
+      };
+    }
 
     const qrData: TicketQrPayload = {
       ticketCode,

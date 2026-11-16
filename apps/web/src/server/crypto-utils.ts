@@ -8,11 +8,25 @@ import type { PaymentWebhookPayload, TicketQrPayload } from '@platform/contracts
  */
 
 export function getCinemaCoreWebhookSecret(): string {
-  return process.env.CINEMA_CORE_WEBHOOK_SECRET || 'dev-cinema-core-webhook-secret-do-not-use-in-production';
+  const secret = process.env.CINEMA_CORE_WEBHOOK_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SECURITY_ERROR: CINEMA_CORE_WEBHOOK_SECRET is not configured in production environment.');
+    }
+    return 'simulation-dev-cinema-core-webhook-secret';
+  }
+  return secret;
 }
 
 export function getCinemaCoreTicketSecret(): string {
-  return process.env.CINEMA_CORE_TICKET_SECRET || 'dev-cinema-core-ticket-signing-secret-do-not-use-in-production';
+  const secret = process.env.CINEMA_CORE_TICKET_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('SECURITY_ERROR: CINEMA_CORE_TICKET_SECRET is not configured in production environment.');
+    }
+    return 'simulation-dev-cinema-core-ticket-signing-secret';
+  }
+  return secret;
 }
 
 /**

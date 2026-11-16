@@ -191,7 +191,7 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     };
   }
 
-  // Validate userEmail format if provided
+  // Validate userEmail format if provided early
   if (req.userEmail) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(req.userEmail.trim())) {
@@ -258,6 +258,25 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     };
   }
 
+  // Strictly enforce customer email identity on hold creation
+  if (!req.userEmail || !req.userEmail.trim()) {
+    return {
+      success: false,
+      code: 'MISSING_USER_EMAIL',
+      error: 'Vui lòng cung cấp email định danh người giữ chỗ (userEmail).',
+      status: 400,
+    };
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(req.userEmail.trim())) {
+    return {
+      success: false,
+      code: 'INVALID_EMAIL',
+      error: 'Địa chỉ email người giữ chỗ không hợp lệ.',
+      status: 400,
+    };
+  }
+
   // Cryptographically secure hold ID
   const holdId = `HOLD-${crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`;
   const holdExpiresAt = Date.now() + 300 * 1000;
@@ -282,7 +301,7 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     totalPrice,
     seats: heldSeats,
     status: HoldStatus.ACTIVE,
-    userEmail: req.userEmail?.trim(),
+    userEmail: req.userEmail.trim().toLowerCase(),
     userId: req.userId?.trim(),
   };
 
@@ -317,28 +336,51 @@ export function releaseSeatHold(holdId: string, callerEmail?: string): ReleaseHo
     };
   }
 
-  // Strictly enforce ownership if hold has an owner email
-  if (hold.userEmail) {
-    if (!callerEmail || hold.userEmail.toLowerCase() !== callerEmail.toLowerCase().trim()) {
-      return {
-        success: false,
-        code: 'FORBIDDEN',
-        error: 'Yêu cầu cung cấp email chủ sở hữu hợp lệ để hủy giữ chỗ.',
-        status: 403,
-      };
-    }
+  // Strictly enforce ownership: caller email is mandatory and must match hold owner
+  if (!callerEmail || !callerEmail.trim()) {
+    return {
+      success: false,
+      code: 'FORBIDDEN',
+      error: 'Yêu cầu cung cấp email chủ sở hữu để hủy giữ chỗ.',
+      status: 403,
+    };
+  }
+
+  if (!hold.userEmail || hold.userEmail.toLowerCase() !== callerEmail.toLowerCase().trim()) {
+    return {
+      success: false,
+      code: 'FORBIDDEN',
+      error: 'Bạn không có quyền hủy giữ chỗ của người dùng khác.',
+      status: 403,
+    };
   }
 
   if (hold.status === HoldStatus.CONSUMED) {
-    const order = getOrderByHoldId(hold.holdId);
-    if (order?.status === BookingStatus.CONFIRMED) {
-      return {
-        success: false,
-        code: 'HOLD_ALREADY_CONSUMED',
-        error: 'Giữ chỗ đã được tạo đơn và thanh toán thành công, không thể hủy.',
-        status: 409,
-      };
-    }
+    return {
+      success: false,
+      code: 'HOLD_ALREADY_CONSUMED',
+      error: 'Giữ chỗ đã được tạo đơn hàng, không thể hủy độc lập.',
+      status: 409,
+    };
+  }
+
+  if (hold.status === HoldStatus.CANCELLED) {
+    return {
+      success: false,
+      code: 'HOLD_ALREADY_CANCELLED',
+      error: 'Mã giữ chỗ này đã bị hủy trước đó.',
+      status: 409,
+    };
+  }
+
+  if (hold.status === HoldStatus.EXPIRED || hold.expiresAt <= Date.now()) {
+    hold.status = HoldStatus.EXPIRED;
+    return {
+      success: false,
+      code: 'HOLD_EXPIRED',
+      error: 'Thời gian giữ chỗ đã hết hạn.',
+      status: 409,
+    };
   }
 
   hold.status = HoldStatus.CANCELLED;
