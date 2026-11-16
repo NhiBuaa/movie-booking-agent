@@ -1,8 +1,11 @@
 # Feature Specification: Web BFF Route Handlers
 
-**Feature Branch**: `feat/web-bff-routes`  
-**Created**: 2026-11-15 | **Last Updated**: 2026-11-16  
-**Status**: Ready for Review  
+**Feature Branch**: `feat/web-bff-routes`
+
+**Created**: 2026-11-15 | **Last Updated**: 2026-11-16
+
+**Status**: Ready for Review
+
 **Input**: Thiết lập tầng Backend for Frontend (BFF Route Handlers) trong `apps/web` (Next.js 16 App Router) sử dụng hợp đồng dữ liệu chuẩn `@platform/contracts`.
 
 ---
@@ -28,7 +31,7 @@
 ### User Story 1 - Khám phá và lọc phim, rạp chiếu (Priority: P1)
 - **Mục tiêu**: Người dùng hoặc trợ lý AI tìm kiếm danh sách phim, thông tin rạp hoặc xem chi tiết qua API nội bộ `/api/movies` và `/api/cinemas`.
 - **Kịch bản chấp thuận**:
-  1. **Given** yêu cầu `GET /api/movies?q=chuyen-tau&genre=tam-ly`.
+  1. **Given** yêu cầu `GET /api/movies?q=chuyen-tau&genre=T%C3%A2m%20l%C3%BD` (thể loại `Tâm lý`).
   2. **When** Route Handler xử lý.
   3. **Then** trả về HTTP 200 kèm `ApiResponse<MovieSummaryDto[]>` chứa danh sách phim thỏa mãn.
   4. **When** gọi `GET /api/movies/non-existent-id`.
@@ -77,7 +80,7 @@
      - **Kiểm tra an toàn số lượng Combo**: Mỗi combo phải tồn tại trong danh mục; số lượng `c.quantity` bắt buộc là số nguyên an toàn (`Number.isSafeInteger`), không âm và tối đa 10 phần (`0 <= quantity <= 10`). Vi phạm trả về HTTP 400 `INVALID_COMBO_QUANTITY`.
      - **Kiểm tra an toàn tổng tiền đơn hàng**: `totalAmount` bắt buộc là số nguyên an toàn (`Number.isSafeInteger`), hữu hạn, không âm và không vượt hạn mức thanh toán tối đa (100.000.000 đ). Vi phạm trả về HTTP 400 `INVALID_ORDER_AMOUNT`.
   3. **When** bất kỳ bước xác thực nào thất bại.
-  4. **Then** hệ thống trả về lỗi ngay lập tức, **tuyệt đối không tiêu thụ hold** (hold vẫn giữ nguyên trạng thái `ACTIVE` để khách hàng sửa lại thông tin).
+  4. **Then** hệ thống trả về lỗi ngay lập tức, **không chuyển hold sang `CONSUMED`**. Nếu hold đang `ACTIVE` và còn hạn, khách hàng có thể sửa dữ liệu rồi gửi lại; hold đã hết hạn, bị hủy hoặc đã tiêu thụ không trở lại `ACTIVE`.
   5. **When** toàn bộ dữ liệu hợp lệ.
   6. **Then** hệ thống mới thực hiện chuyển trạng thái hold thành `CONSUMED` (`consumeSeatHold`), tạo đơn hàng với mã `bookingId` động (`BK-XXXX`), trạng thái `PENDING_PAYMENT`, ghi nhận `holdExpiresAt` và trả về HTTP 201 kèm `ApiResponse<OrderSummaryDto>`.
   7. **Ràng buộc hold CONSUMED**: Hold đã tiêu thụ không thể bị hủy tùy tiện qua `DELETE /api/hold` (trả về 409 `HOLD_ALREADY_CONSUMED`). Ghế gắn với đơn hàng tiếp tục được giữ tạm thời cho đến khi thanh toán thành công hoặc đơn hết hạn TTL.
@@ -86,27 +89,29 @@
 - **Mục tiêu**: Khởi tạo phiên thanh toán (`POST /api/payment/intent`), xử lý webhook bất đồng bộ từ cổng thanh toán/Cinema Core (`POST /api/payment/webhook`), phát hành vé điện tử E-Ticket có chữ ký số HMAC và bảo toàn đơn hàng.
 - **Kịch bản chấp thuận**:
   1. **Khởi tạo Intent (`POST /api/payment/intent`)**:
-     - Yêu cầu quyền sở hữu đơn hàng qua header hoặc body (`x-user-email`).
+     - Yêu cầu header `x-user-email` khớp email chủ sở hữu đơn hàng; thiếu hoặc sai email trả về HTTP 403 `FORBIDDEN`.
      - Quản lý phiên thanh toán theo `paymentAttempts`: Mỗi lần tạo intent với phương thức thanh toán mới hoặc retry sau thất bại sẽ sinh một `transactionId` duy nhất. Nếu cùng phương thức đang chờ xử lý (`PENDING`), hệ thống tái sử dụng `transactionId` hiện có.
-     - Trả về HTTP 201 kèm `paymentUrl`, `qrCodeUrl`, và `transactionId`.
+     - Trả về HTTP 201 kèm `ApiResponse<PaymentIntentResponse>`; `data` gồm `transactionId`, `bookingId`, `paymentMethod`, `amount`, `qrCodeUrl`, `deepLinkUrl` và `expiresAt`.
   2. **Xác thực chữ ký số Webhook (`POST /api/payment/webhook`)**:
-     - Webhook payload gửi kèm chữ ký số HMAC-SHA256 trong trường `signature` hoặc header `x-cinema-core-signature`.
-     - Chữ ký được đối soát bằng khóa bí mật `CINEMA_CORE_WEBHOOK_SECRET`. Nếu chữ ký không hợp lệ, lập tức trả về HTTP 401 `INVALID_SIGNATURE`.
+     - Webhook gửi chữ ký số HMAC-SHA256 trong trường `signature` của JSON body (`PaymentWebhookPayload`).
+     - Chữ ký được đối soát bằng khóa bí mật `CINEMA_CORE_WEBHOOK_SECRET`. Nếu chữ ký thiếu hoặc không hợp lệ, trả về HTTP 400 `INVALID_SIGNATURE`.
   3. **Đối soát giao dịch Webhook**:
      - Đơn hàng chưa từng tạo payment intent bị từ chối với HTTP 400 `TRANSACTION_NOT_INITIALIZED`.
+     - `transactionId` phải thuộc một payment attempt đã đăng ký của đơn hàng (`TRANSACTION_ID_MISMATCH` 400).
      - Số tiền thanh toán trong webhook phải khớp chính xác với `order.totalAmount` (`AMOUNT_MISMATCH` 400).
      - Phương thức thanh toán phải khớp với phương thức đã đăng ký trong `paymentAttempt` tương ứng (`PAYMENT_METHOD_MISMATCH` 400).
   4. **Thanh toán thành công (`PaymentStatus.SUCCEEDED`)**:
-     - **Lần đầu**: Đơn hàng chuyển sang trạng thái `CONFIRMED`. Ghế trong sơ đồ được đánh dấu chính thức là `reserved` (đã bán vĩnh viễn). Hệ thống phát hành vé điện tử `ETicketDto` với `ticketCode` động dạng `TKT-XXXX-XXXXX-VN` và tạo chữ ký số HMAC-SHA256 cho `qrPayload` dựa trên khóa `CINEMA_CORE_TICKET_SECRET`.
-     - **Idempotent Retry**: Nhận lại webhook thành công của cùng `transactionId` đã xác nhận đơn trước đó, hệ thống trả về HTTP 200 kèm vé đã phát hành, không tạo vé trùng.
+     - **Lần đầu**: Sau khi ký QR thành công, adapter tạo và lưu vé, chuyển đơn hàng sang `CONFIRMED`; ghế trong sơ đồ được đánh dấu `reserved`. Vé `ETicketDto` có `ticketCode` động dạng `TKT-<8 ký tự hex>-<5 chữ số>-VN` và chữ ký HMAC-SHA256 trong `qrPayload` dựa trên `CINEMA_CORE_TICKET_SECRET`. Nếu ký thất bại, trả HTTP 500 `SERVER_CONFIGURATION_ERROR`, giữ nguyên đơn `PENDING_PAYMENT` để retry.
+     - **Phản hồi HTTP**: Route trả `ApiResponse<PaymentWebhookResponse>` với `data.received`, `data.bookingStatus` và `data.message`. Vé được tra cứu riêng qua `GET /api/tickets/:id` với header chủ sở hữu.
+     - **Idempotent Retry**: Nhận lại webhook thành công của cùng `transactionId` đã xác nhận đơn trước đó, hệ thống giữ nguyên vé đã phát hành và trả HTTP 200 với phản hồi webhook trên, không tạo vé trùng.
      - **Duplicate Payment (Khoản thu trùng từ attempt khác)**: Nếu nhận webhook thành công từ một `transactionId` khác khi đơn hàng đã `CONFIRMED` trước đó, attempt đó được đánh dấu `reconciliationRequired = true`, lý do `DUPLICATE_PAYMENT_ON_CONFIRMED_ORDER`, và trả về HTTP 409 `DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED` để đưa vào luồng đối soát hoàn tiền bổ sung.
   5. **Bảo toàn đơn hàng CONFIRMED trước webhook đến muộn (Late-arriving Webhook)**:
-     - Khi đơn hàng đã `CONFIRMED`, nếu webhook của attempt khác (hoặc attempt cũ) đến sau thời hạn TTL với trạng thái `PROCESSING`, `UNKNOWN` hoặc `FAILED`, hệ thống cập nhật trạng thái attempt tương ứng và trả về HTTP 200, **tuyệt đối không chuyển trạng thái đơn hàng thành `EXPIRED` và không giải phóng ghế đã bán**. Điều này loại bỏ hoàn toàn nguy cơ bán trùng ghế.
+     - Khi đơn hàng đã `CONFIRMED`, webhook có trạng thái `PROCESSING`, `UNKNOWN` hoặc `FAILED` đến sau TTL vẫn nhận HTTP 200; đơn giữ `CONFIRMED`, vé và ghế `reserved` được bảo toàn. Với giao dịch đã xác nhận đơn, adapter trả kết quả hiện có; với attempt khác, adapter cập nhật trạng thái attempt đó. Nhánh này không chuyển đơn thành `EXPIRED` hoặc giải phóng ghế đã bán.
   6. **Đơn hàng chưa thanh toán quá hạn (Expired Unpaid Order)**:
      - Nếu đơn hàng đang ở `PENDING_PAYMENT` và thời gian giữ chỗ `order.holdExpiresAt` đã trôi qua, ghế được tự động giải phóng lại kho tồn kho (`available`). Webhook thành công đến sau khi đơn đã `EXPIRED` sẽ được chuyển vào luồng đối soát hoàn tiền (HTTP 409 `PAYMENT_EXPIRED_RECONCILIATION_REQUIRED`).
   7. **Tra cứu vé điện tử (`GET /api/tickets/:id`)**:
      - Tra cứu vé bằng `bookingId` hoặc `ticketCode`.
-     - Yêu cầu xác minh quyền sở hữu người mua qua header `x-user-email`. Người lạ tra cứu bị từ chối với HTTP 403 `TICKET_ACCESS_DENIED`.
+     - Với vé đã tồn tại, yêu cầu header `x-user-email` khớp email chủ sở hữu; thiếu hoặc sai email trả HTTP 403 `FORBIDDEN`. Vé chưa phát hành hoặc ID vé không tồn tại trả HTTP 404 `TICKET_NOT_FOUND`.
 
 ---
 
@@ -117,7 +122,7 @@
 3. **Cấu hình Secret & Xử lý môi trường Production**:
    - `CINEMA_CORE_WEBHOOK_SECRET`: Khóa bí mật dùng để tạo và xác thực chữ ký HMAC-SHA256 trên webhook payload.
    - `CINEMA_CORE_TICKET_SECRET`: Khóa bí mật dùng để ký và xác thực chữ ký số HMAC-SHA256 trên E-Ticket QR payload.
-   - Trong môi trường `NODE_ENV === 'production'`, nếu thiếu một trong hai secret trên, hệ thống **bắt buộc từ chối xử lý và trả về HTTP 500 `SERVER_CONFIGURATION_ERROR`**, tuyệt đối không fallback sang khóa phát triển công khai.
+   - Trong môi trường `NODE_ENV === 'production'`, hàm đọc secret ném lỗi `SECURITY_ERROR` khi khóa tương ứng bị thiếu. Khi xác thực webhook hoặc ký vé, adapter chuyển lỗi này thành HTTP 500 `SERVER_CONFIGURATION_ERROR`, không fallback sang khóa phát triển công khai.
    - Trong môi trường phát triển cục bộ và kiểm thử giả lập (`NODE_ENV !== 'production'`), hệ thống cho phép fallback sang secret giả lập để phục vụ kiểm thử tích hợp tự động.
    - Tuyệt đối không lưu trữ hoặc công bố giá trị secret thật trong tài liệu, mã nguồn commit hoặc client bundles.
 4. **Giới hạn lưu trữ bộ nhớ (In-Memory Limitations)**:

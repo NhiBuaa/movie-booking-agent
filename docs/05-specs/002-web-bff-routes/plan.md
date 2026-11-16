@@ -1,6 +1,7 @@
 # Implementation Plan: Web BFF Route Handlers
 
-**Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Last Updated**: 2026-11-16  
+**Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Last Updated**: 2026-11-16
+
 **Spec Reference**: [docs/05-specs/002-web-bff-routes/spec.md](spec.md)
 
 ---
@@ -26,7 +27,7 @@ Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/w
 - **Biến môi trường bảo mật**:
   - `CINEMA_CORE_WEBHOOK_SECRET`: Dùng để ký và xác thực chữ ký HMAC-SHA256 trên webhook payload.
   - `CINEMA_CORE_TICKET_SECRET`: Dùng để ký và xác thực chữ ký HMAC-SHA256 trên E-Ticket QR payload.
-  - Khi `NODE_ENV === 'production'`, nếu thiếu secret thì hệ thống từ chối xử lý với HTTP 500 `SERVER_CONFIGURATION_ERROR` và không fallback sang khóa phát triển công khai.
+  - Khi `NODE_ENV === 'production'`, hàm đọc khóa tương ứng ném `SECURITY_ERROR` nếu thiếu secret. Adapter xác thực webhook/ký vé chuyển lỗi đó thành HTTP 500 `SERVER_CONFIGURATION_ERROR`; không fallback sang khóa phát triển công khai.
 
 ---
 
@@ -93,13 +94,15 @@ apps/web/
 ### Module 2: Tiện ích mật mã học (`src/server/crypto-utils.ts`)
 - **Chức năng:** Tạo và kiểm tra chữ ký số HMAC-SHA256 cho giao dịch thanh toán và vé điện tử.
 - **Hàm cung cấp:**
-  - `signWebhookPayload(payload: Record<string, unknown>): string`
-  - `verifyWebhookSignature(payload: Record<string, unknown>, signature: string): boolean`
-  - `signTicketQrPayload(payload: TicketQrPayload): string`
-  - `verifyTicketQrSignature(payload: TicketQrPayload): boolean`
+  - `buildWebhookCanonicalData(payload: Omit<PaymentWebhookPayload, 'signature'>): string`
+  - `signWebhookPayload(payload: Omit<PaymentWebhookPayload, 'signature'>, secret?: string): string`
+  - `verifyWebhookSignature(payload: PaymentWebhookPayload, secret?: string): boolean`
+  - `buildTicketQrCanonicalData(ticket: Omit<TicketQrPayload, 'signature'>): string`
+  - `signTicketQrPayload(ticket: Omit<TicketQrPayload, 'signature'>, secret?: string): string`
+  - `verifyTicketQrSignature(qr: TicketQrPayload, secret?: string): boolean`
   - `getCinemaCoreWebhookSecret(): string`
   - `getCinemaCoreTicketSecret(): string`
-- **Nguyên tắc bảo mật:** Trong môi trường `production`, nếu thiếu secret cấu hình thì ném lỗi `SERVER_CONFIGURATION_ERROR` (500), không dùng secret mặc định.
+- **Nguyên tắc bảo mật:** Khi bỏ qua tham số `secret`, hàm dùng khóa môi trường tương ứng. Trong `production`, getter ném `SECURITY_ERROR` nếu thiếu khóa; adapter bắt lỗi và trả HTTP 500 `SERVER_CONFIGURATION_ERROR`.
 
 ### Module 3: Catalog & Canonical Showtime Adapter (`src/server/catalog-adapter.ts`)
 - **Chức năng:** Cung cấp dữ liệu danh mục phim, cụm rạp, lịch chiếu và ánh xạ suất chiếu chuẩn xác.
@@ -122,12 +125,12 @@ apps/web/
     - Quy tắc tối đa 6 ghế (`MAX_SEATS_EXCEEDED` 400), Sweetbox cặp đôi (`SWEETBOX_PAIR_REQUIRED` 400), không trùng ghế (`DUPLICATE_SEATS` 400).
     - Nguyên tắc All-or-Nothing (`SEATS_UNAVAILABLE` 409).
     - Thiết lập thời hạn TTL 300 giây (5 phút).
-  - `releaseSeatHold(holdId: string, userEmail?: string): ReleaseHoldResult`:
+  - `releaseSeatHold(holdId: string, callerEmail?: string): ReleaseHoldResult`:
     - Hủy hold chủ động khi còn `ACTIVE`, giải phóng ghế ngay lập tức.
     - Từ chối hủy khi hold đã chuyển `CONSUMED` (`HOLD_ALREADY_CONSUMED` 409) hoặc sai email sở hữu.
   - `generateStandardSeatMap(showtimeId: string): SeatMapDto | null`:
     - Xuất sơ đồ 64 ghế chuẩn, tính toán ghế `available`, `held`, `reserved` dựa trên thời gian thực.
-  - `getHoldById(holdId: string): StoredHold | undefined`
+  - `getHoldById(holdId: string): StoredHold | null`
   - `consumeSeatHold(holdId: string): boolean`: Chuyển trạng thái hold sang `CONSUMED`.
 
 ### Module 5: Order, Payment & Webhook Adapter (`src/server/order-adapter.ts`)
@@ -140,25 +143,29 @@ apps/web/
     - Kiểm tra an toàn tổng tiền `totalAmount`: `Number.isSafeInteger`, hữu hạn, tối đa 100.000.000 đ (`INVALID_ORDER_AMOUNT` 400).
     - Chỉ gọi `consumeSeatHold` khi toàn bộ dữ liệu hợp lệ.
   - `createPaymentIntent(req: CreatePaymentIntentRequest, callerEmail?: string): CreatePaymentIntentResult`:
+    - Route truyền `callerEmail` từ header `x-user-email`; thiếu hoặc sai email chủ sở hữu trả 403 `FORBIDDEN`.
     - Quản lý các lần thử thanh toán (`paymentAttempts`).
     - Tái sử dụng `transactionId` nếu cùng phương thức đang chờ; sinh `transactionId` mới khi đổi phương thức hoặc retry sau thất bại.
-  - `processPaymentWebhook(payload: PaymentWebhookPayload, signatureHeader?: string): ProcessWebhookResult`:
-    - Xác thực chữ ký số HMAC-SHA256 (`INVALID_SIGNATURE` 401).
+    - Route trả HTTP 201 với `ApiResponse<PaymentIntentResponse>`: `transactionId`, `bookingId`, `paymentMethod`, `amount`, `qrCodeUrl`, `deepLinkUrl`, `expiresAt` trong `data`.
+  - `processPaymentWebhook(payload: PaymentWebhookPayload): ProcessPaymentWebhookResult`:
+    - Nhận chữ ký HMAC-SHA256 từ `payload.signature`; thiếu hoặc sai chữ ký trả 400 `INVALID_SIGNATURE`.
     - Từ chối đơn chưa từng khởi tạo intent (`TRANSACTION_NOT_INITIALIZED` 400).
+    - Đối chiếu `transactionId` với payment attempt đã đăng ký (`TRANSACTION_ID_MISMATCH` 400).
     - Đối soát số tiền (`AMOUNT_MISMATCH` 400) và phương thức (`PAYMENT_METHOD_MISMATCH` 400).
-    - Xử lý `SUCCEEDED`: Đơn chuyển `CONFIRMED`, xuất vé E-Ticket có chữ ký số QR, ghế chuyển `sold` vĩnh viễn.
-    - Xử lý Idempotent Retry: Cùng `transactionId` trả lại vé đã cấp (200).
+    - Xử lý `SUCCEEDED`: Ký QR thành công trước khi xác nhận đơn và lưu vé; ghế được biểu diễn bằng trạng thái `reserved`.
+    - Xử lý Idempotent Retry: Cùng `transactionId` tái sử dụng vé đã cấp trong kết quả nội bộ của adapter.
+    - Route chỉ trả `result.response` trong `ApiResponse<PaymentWebhookResponse>` (HTTP 200), gồm `received`, `bookingStatus`, `message`. Client lấy vé bằng API tickets với header chủ sở hữu.
     - Xử lý Duplicate Payment: Giao dịch khác thành công trên đơn đã `CONFIRMED` chuyển cờ `reconciliationRequired = true` và trả về 409.
     - **Bảo toàn đơn CONFIRMED**: Webhook đến sau TTL tuyệt đối không đổi đơn thành `EXPIRED` hay giải phóng ghế đã bán.
     - Lỗi cấu hình secret: Trả 500 `SERVER_CONFIGURATION_ERROR` và bảo toàn đơn ở `PENDING_PAYMENT`.
   - `getTicketResult(ticketCodeOrBookingId: string, callerEmail?: string): GetTicketResult`:
-    - Tra cứu vé có kiểm tra quyền sở hữu qua email người mua (`TICKET_ACCESS_DENIED` 403).
+    - Vé đã tồn tại nhưng thiếu hoặc sai email người mua: 403 `FORBIDDEN`; vé chưa phát hành hoặc không tìm thấy: 404 `TICKET_NOT_FOUND`.
   - `getTicketById(ticketCodeOrBookingId: string, callerEmail?: string): ETicketDto | null`
-  - `getOrderByHoldId(holdId: string): InternalOrderSummaryDto | undefined`
+  - `getOrderByHoldId(holdId: string): InternalOrderSummaryDto | null`
   - `expireOrderForTesting(bookingId: string): void`: Helper kiểm thử, chỉ chuyển `EXPIRED` đối với đơn `PENDING_PAYMENT`.
 
 ### Module 6: API Route Handlers (`src/app/api/...`)
-- Triển khai 10 Route Handlers xử lý request/response REST, kiểm tra query params, validate body và xử lý mã lỗi HTTP chuẩn mực.
+- Triển khai 11 tệp `route.ts`, cung cấp 12 handlers HTTP (route hold có cả `POST` và `DELETE`), kiểm tra query params, validate body và xử lý mã lỗi HTTP.
 
 ---
 
