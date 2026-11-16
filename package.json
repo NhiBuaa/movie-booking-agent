@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "test": "npm test --workspace=apps/web",
-    "test:all": "npm run test --workspaces --if-present"
+    "test:contracts": "npm test --workspace=@platform/contracts",
+    "test:all": "npm run test:contracts && npm run test"
   }
 }

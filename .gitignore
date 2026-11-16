@@ -34,3 +34,4 @@ Thumbs.db
 .agents/**/credentials*
 .agents/**/secrets*
 .agents/**/auth*
+.codegraph/
