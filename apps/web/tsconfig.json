@@ -28,6 +28,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@platform/contracts": [
+        "../../packages/contracts/src/index.ts"
+      ],
+      "@platform/contracts/*": [
+        "../../packages/contracts/src/*"
       ]
     }
   },

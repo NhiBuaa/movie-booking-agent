@@ -1,0 +1,12 @@
+import { getShowtimes } from '../../../server/catalog-adapter.ts';
+import { jsonSuccess } from '../../../server/response.ts';
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const movieId = searchParams.get('movieId') || undefined;
+  const cinemaId = searchParams.get('cinemaId') || undefined;
+  const date = searchParams.get('date') || undefined;
+
+  const schedules = getShowtimes({ movieId, cinemaId, date });
+  return jsonSuccess(schedules);
+}
