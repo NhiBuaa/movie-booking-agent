@@ -38,8 +38,25 @@ không dùng trạng thái checkout khác làm bằng chứng của bản này.
 ## Active Direction
 
 Dùng mô hình mục tiêu làm đầu vào cho đặc tả và kiểm chứng từng tính năng trước khi sửa code.
-Các đặc tả feature cũ giữ phạm vi ban đầu; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
+Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
 phải được thiết kế/kiểm thử theo workflow Spec Kit, không suy ra là đã thực hiện từ lần đồng bộ docs.
+
+## BFF hiện tại và nguồn đối chiếu mới hơn
+
+[Tài liệu BFF](docs/05-specs/002-web-bff-routes/spec.md) và
+[kế hoạch kỹ thuật](docs/05-specs/002-web-bff-routes/plan.md) đã được đồng bộ với implementation tại
+`2ce4893d66fa002f88a2208492f9aff19b4252f2`, sau mốc đọc mã ban đầu của mô hình use case.
+Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử lý xung đột tài liệu này không chạy lại runtime.
+
+- Core độc lập chưa có runtime; `CINEMA_CORE_URL` chưa được đấu nối. BFF dùng process-memory Maps,
+  dữ liệu mất khi khởi động lại, chưa có DB/khóa phân tán.
+- Header `x-user-email` là định danh mô phỏng, chưa phải session/JWT có xác minh.
+- BFF đã mô tả xác thực HMAC webhook và ký vé bằng `CINEMA_CORE_WEBHOOK_SECRET`/
+  `CINEMA_CORE_TICKET_SECRET`. Production thiếu secret trả `SERVER_CONFIGURATION_ERROR`,
+  không fallback khóa phát triển. Không mang nhận xét webhook cũ tại mốc `549d7b2` sang code mới.
+- Vé chỉ tạo sau kết quả hợp lệ; đơn `CONFIRMED` được bảo toàn trước webhook muộn. Khoản thu thêm
+  từ attempt khác và thu sau hết hạn được đưa vào đối soát, chưa chứng minh hoàn tiền thực đã tích hợp.
+- Các kết quả test của phiên code nằm trong PR tương ứng, không được tái xác nhận từ việc merge docs.
 
 ## Known Limitations
 

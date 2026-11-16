@@ -40,7 +40,7 @@ use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation 
 - **Conversational Booking Safety:** The AI Agent interprets intent and coordinates tools. It must NEVER claim or present an order as confirmed or ticket as issued without cryptographic or explicit signature verification from Cinema Core.
 - **Visual Identity Discipline:** All user interfaces (`apps/web`, `apps/organizer`, `apps/mobile`) must adhere strictly to the Ferrari Dark Cinema design tokens in root `DESIGN.md` and `packages/design-tokens/tokens.css`.
 - **Preserve Security Boundaries:** Enforce current contract roles and data boundaries. The target actor roles and cinema scope are defined in the product model; the three existing role values do not establish their full permission mapping. Never expose secrets or credentials in client bundles.
-- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` and pass all current tests before claiming task completion. For documentation-only changes, validate the affected documents/diagrams; do not infer runtime behavior from them.
+- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` or `npm run test:all` and pass all current tests before claiming task completion. For documentation-only changes, validate the affected documents/diagrams; do not infer runtime behavior from them.
 
 ## Working Agreements
 
@@ -50,6 +50,7 @@ use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation 
 - Preserve unresolved questions instead of guessing.
 - Promote durable findings into the correct `docs/` category when needed.
 - Follow the GitHub Spec Kit workflow (`.specify/`) for major feature development (`constitution -> specify -> plan -> tasks -> implement -> converge`).
+- Before creating or moving Spec Kit artifacts, follow the feature-directory guidance in [docs/05-specs/README.md](docs/05-specs/README.md).
 
 ## Agent Configuration Rules
 

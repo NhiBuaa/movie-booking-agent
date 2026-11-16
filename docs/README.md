@@ -37,7 +37,7 @@ Durable required behavior for capabilities whose contracts should survive indivi
 
 [Domain context](05-specs/domain-context.md) và [đặc tả chat](05-specs/conversational-booking.md)
 diễn giải yêu cầu mục tiêu và dẫn tới BR/OPEN. Chúng không tự sửa hợp đồng code hiện có.
-Các đặc tả feature trong `specs/` giữ phạm vi/bằng chứng ban đầu; ghi quan hệ với yêu cầu mới khi đặc tả phần thay thế.
+Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi/bằng chứng ban đầu; ghi quan hệ với yêu cầu mới khi đặc tả phần thay thế.
 
 ## `06-decisions/`
 

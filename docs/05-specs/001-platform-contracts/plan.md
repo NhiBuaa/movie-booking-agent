@@ -1,15 +1,14 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
-> **Phạm vi phiên bản:** nội dung bên dưới giữ đặc tả/kế hoạch feature ban đầu, không phải toàn bộ
-> sản phẩm mục tiêu đã xác nhận ngày 2026-11-16. Xem [mô hình use case](../../docs/03-product/use-cases.md),
-> [hiến pháp hiện hành](../../.specify/memory/constitution.md) và
-> [đặc tả nghiệp vụ](../../docs/05-specs/domain-context.md). Các chỗ về 64 ghế, role hoặc trạng thái vé
-> ở phiên bản này chưa thay hợp đồng code sang yêu cầu mới. Khi mở rộng, lập đặc tả thay đổi và kiểm chứng
-> phần chênh lệch; ghi chú này không sửa tiêu chí chấp thuận hay kết quả kiểm chứng cũ.
+> **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
+> không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
+> [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
+> phân biệt yêu cầu mới với code/fixture hiện có. Khi mở rộng sơ đồ ghế, role hoặc trạng thái vé,
+> cần đặc tả thay đổi và kiểm chứng riêng; ghi chú này không sửa tiêu chí hay bằng chứng của feature.
 
-**Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [specs/001-platform-contracts/spec.md](spec.md)
+**Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [docs/05-specs/001-platform-contracts/spec.md](spec.md)
 
-**Input**: Feature specification from `specs/001-platform-contracts/spec.md`
+**Input**: Feature specification from `docs/05-specs/001-platform-contracts/spec.md`
 
 ## Summary
 

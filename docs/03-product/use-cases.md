@@ -606,6 +606,15 @@ Actor/mục tiêu/BR/OPEN vẫn do tài liệu này sở hữu; mô tả use cas
 còn contracts sở hữu hợp đồng code hiện có. Đợt đặc tả/triển khai tiếp theo phải xử lý các chênh lệch
 code được ghi ở trên, không dùng mô hình hoặc việc đồng bộ docs để khẳng định đã đáp ứng chúng.
 
+### Nguồn kỹ thuật mới hơn mốc đối chiếu ban đầu
+[Đặc tả BFF](../05-specs/002-web-bff-routes/spec.md) và
+[plan BFF](../05-specs/002-web-bff-routes/plan.md) trên nhánh chính đã được đồng bộ tại
+`2ce4893d66fa002f88a2208492f9aff19b4252f2`. Nguồn này mô tả HMAC webhook/ký vé trong BFF mô phỏng,
+kiểm tra sở hữu, bảo toàn đơn đã xác nhận và đối soát attempt thanh toán khác/muộn.
+Bảng mục 7 vẫn là bằng chứng đọc mã tại `549d7b2`, không phải đánh giá các sửa sau đó.
+Xem CONTEXT và nguồn BFF khi chuẩn bị triển khai tiếp; không dùng nhận xét webhook tại mốc cũ
+để kết luận implementation hiện tại chỉ kiểm tra chiều dài chữ ký.
+
 ## 8. Truy vết quyết định
 
 | Vòng đã xác nhận | Nội dung được chốt | Nơi thể hiện |

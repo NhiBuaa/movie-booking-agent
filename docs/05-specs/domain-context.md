@@ -82,3 +82,24 @@ Tài liệu này không đổi enum, schema hoặc API; đặc tả feature ti�
 quyền và tình huống lỗi/cạnh tranh theo mô tả đã chốt, có kiểm thử trước khi tuyên bố đáp ứng.
 [Đối chiếu hiện trạng](../03-product/use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu)
 giữ nguồn code và các giới hạn đã quan sát; không sửa hồi tố tiêu chí chấp thuận của feature cũ.
+
+## 8. Trạng thái BFF mô phỏng đã được mô tả trên nhánh chính
+
+[Đặc tả BFF](002-web-bff-routes/spec.md) và [plan](002-web-bff-routes/plan.md) tại commit
+`2ce4893d66fa002f88a2208492f9aff19b4252f2` sở hữu chi tiết API/helper và mã lỗi của implementation.
+Các điểm sau mô tả hợp đồng hiện tại, không sửa định nghĩa mục tiêu ở các mục trên:
+
+- `HoldStatus.CONSUMED` hiện có nghĩa hold đã được dùng để tạo đơn, chưa phải đã thanh toán/phát vé.
+  Ghế của đơn chờ thanh toán tiếp tục được bảo vệ đến `holdExpiresAt`; hủy qua `DELETE /api/hold`
+  không được tùy tiện giải phóng hold đã consumed.
+- Đơn chưa thanh toán hết hạn được giải phóng ghế; đơn `CONFIRMED` và vé/ghế đã bán được bảo toàn
+  khi webhook `PROCESSING`, `UNKNOWN`, `FAILED` đến sau TTL. Đây là hai trường hợp khác nhau.
+- Success của attempt khác trên đơn đã xác nhận được đánh dấu `reconciliationRequired`, với mã
+  `DUPLICATE_PAYMENT_RECONCILIATION_REQUIRED`; success trên đơn đã hết hạn dùng
+  `PAYMENT_EXPIRED_RECONCILIATION_REQUIRED`. Gắn cờ đối soát chưa phải tiền đã hoàn.
+- Webhook dùng HMAC và vé được ký trong adapter mô phỏng; secret thiếu ở production bị từ chối.
+  Process-memory store và header định danh mô phỏng chưa tạo thành backend Core/session thực.
+
+Mốc kết thúc xử lý UNKNOWN/PROCESSING kéo dài và cách hoàn khoản thu trùng, tự động hay vận hành,
+đều quy về OPEN-03 trong mô hình sản phẩm; không chọn thời hạn 15/30 phút hoặc quy trình thay thế.
+Các bảng trạng thái tổng thể và enum kỹ thuật không tự cung cấp hủy/soát từng phần hoặc quyền mới.
