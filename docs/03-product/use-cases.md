@@ -18,6 +18,9 @@ use case. Phê duyệt này không phải bằng chứng triển khai, kiểm th
 
 Subject của mọi sơ đồ là **Movie Booking Platform**, phục vụ **một đơn vị/chuỗi rạp**.
 Web khách hàng, Mobile, Organizer Portal, AI Agent và Cinema Core đều nằm bên trong ranh giới.
+Các kênh được tổ chức thành bốn app theo
+[ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md); việc chuyển trải nghiệm
+nhân viên sang Organizer Mobile không đổi actor, mục tiêu hoặc BR/OPEN của mô hình.
 Web/Mobile là kênh tương tác, không phải actor. AI và Core không được vẽ thành actor của toàn nền tảng.
 
 Phạm vi gồm khám phá phim/rạp/suất chiếu; tài khoản; đặt vé trực tiếp và trong chat;
@@ -582,6 +585,10 @@ thanh toán) vẫn bắt buộc; “còn mở” không cho phép bỏ qua chún
 khi chính sách liên quan chưa được chốt và kiểm chứng.
 
 ## 7. Hiện trạng và chênh lệch so với mục tiêu
+
+Đường dẫn trong bảng đối chiếu dưới đây thuộc mốc code đã nêu. Tra vị trí sau khi chuyển app theo
+[ánh xạ ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md#consequences);
+không thay đường dẫn hoặc kết quả lịch sử bằng một lần kiểm chứng mới.
 
 Đối chiếu đọc mã tại **549d7b2f76e63aefe34e0c3799c3d28495cdf868**; không chạy ứng dụng,
 không dùng kết quả test cũ làm bằng chứng của bộ tài liệu này. Các ghi nhận code dưới đây giữ nguyên

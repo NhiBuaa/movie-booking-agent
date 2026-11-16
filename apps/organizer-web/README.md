@@ -1,7 +1,17 @@
-# Cinema Organizer Portal (`apps/organizer`)
+# Cinema Organizer Portal (`apps/organizer-web`)
 
 Portal mục tiêu phục vụ quản trị viên toàn chuỗi và quản lý rạp của một đơn vị/chuỗi rạp.
 Đây là mô tả trách nhiệm, không xác nhận scaffold đã triển khai đầy đủ; xem [CONTEXT](../../CONTEXT.md).
+
+## Kênh sử dụng mục tiêu
+
+[Phạm vi dự án](../../PROJECT-OVERVIEW.md#in-scope) xác định Organizer có cả bản Web và ứng dụng
+Mobile riêng tại [Organizer Mobile](../organizer-mobile/PRODUCT.md).
+`apps/organizer-web` là vị trí bản Web; [PRODUCT](PRODUCT.md) ghi bối cảnh của ứng dụng này.
+Organizer phục vụ quản trị viên/quản lý rạp và có bối cảnh riêng với ứng dụng khách hàng.
+Thêm kênh Mobile không mở rộng quyền theo vai trò hoặc rạp được giao.
+
+Hiện chỉ có tài liệu phạm vi; framework Web chưa chốt, chưa có build/runtime Organizer.
 
 ## Responsibilities
 

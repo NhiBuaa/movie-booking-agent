@@ -14,7 +14,7 @@
 
 ## 1. Tóm tắt kế hoạch (Summary)
 
-Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/web` (Next.js 16 App Router) đóng vai trò làm trạm trung gian chuẩn hóa, điều phối dữ liệu giữa trình duyệt web và hệ thống giao dịch cốt lõi `services/cinema-core`, sử dụng 100% hợp đồng dữ liệu chuẩn từ `@platform/contracts`.
+Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/customer-web` (Next.js 16 App Router) đóng vai trò làm trạm trung gian chuẩn hóa, điều phối dữ liệu giữa trình duyệt web và hệ thống giao dịch cốt lõi `services/cinema-core`, sử dụng 100% hợp đồng dữ liệu chuẩn từ `@platform/contracts`.
 
 > [!NOTE]
 > **Hiện trạng kiến trúc:** Dịch vụ backend `services/cinema-core` chưa được triển khai runtime thực tế; biến môi trường `CINEMA_CORE_URL` chưa được đấu nối. Tầng BFF hiện vận hành bằng các adapter in-memory mô phỏng có độ trung thực cao (`catalog-adapter.ts`, `hold-adapter.ts`, `order-adapter.ts`, `crypto-utils.ts`), tuân thủ chặt chẽ ranh giới thẩm quyền được định nghĩa trong [ADR-0001](../../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md).
@@ -49,7 +49,7 @@ Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/w
 ## 4. Cấu trúc tệp hoàn chỉnh (File Structure)
 
 ```text
-apps/web/
+apps/customer-web/
 ├── package.json                                   # Dependency: "@platform/contracts": "*"
 ├── tsconfig.json                                  # Path mapping: "@platform/contracts"
 ├── tests/
@@ -177,7 +177,7 @@ apps/web/
 
 ## 6. Chiến lược kiểm chứng tự động (Verification Strategy)
 
-- **Test Suite chính:** `apps/web/tests/bff-route-handlers.test.ts`.
+- **Test Suite chính:** `apps/customer-web/tests/bff-route-handlers.test.ts`.
 - **Phạm vi kiểm thử:**
   1. Tra cứu danh mục phim, rạp chiếu, lịch chiếu và sơ đồ ma trận 64 ghế.
   2. Xử lý ID rạp prototype (`constructor`, `__proto__`, `toString`) trả về 404 không ném lỗi.
@@ -193,6 +193,6 @@ apps/web/
 - **Lệnh thực thi:**
   ```bash
   npm run test:all
-  npm run typecheck --workspace=apps/web
+  npm run typecheck --workspace=apps/customer-web
   powershell -ExecutionPolicy Bypass -File "C:\Developer\Projects\agentic-repo-kit-reference\scripts\check-kit.ps1" -TargetPath .
   ```

@@ -22,9 +22,16 @@ Các nhóm phục vụ tổng quát:
 
 ### In Scope
 
-- **User-facing Web Client (`apps/web`)**: Next.js 16 App Router, React 19, TypeScript, khám phá phim, sơ đồ ghế theo phòng, AI Agent chat workspace, thanh toán MoMo/VNPAY và vé điện tử.
-- **Cinema Organizer Portal (`apps/organizer`)**: Web portal quản trị danh mục phim, trailer, cấu hình phòng chiếu, xếp lịch chiếu theo timeline và báo cáo doanh thu.
-- **Mobile Application (`apps/mobile`)**: Khách hàng đặt vé, lưu vé offline; nhân viên rạp quét mã QR soát vé tại cửa phòng chiếu.
+- **User-facing Web Client (`apps/customer-web`)**: Next.js 16 App Router, React 19, TypeScript, khám phá phim, sơ đồ ghế theo phòng, AI Agent chat workspace, thanh toán MoMo/VNPAY và vé điện tử.
+- **Cinema Organizer — Web và Mobile**: Khu vực riêng cho quản trị viên toàn chuỗi và quản lý rạp,
+  gồm bản Web (`apps/organizer-web`) và app `apps/organizer-mobile`; cả hai đều thuộc phạm vi bắt buộc,
+  theo xác nhận của chủ sản phẩm ngày 2026-11-16 trong hội thoại thiết kế bối cảnh sản phẩm.
+  Phạm vi nghiệp vụ gồm danh mục phim, trailer, phòng chiếu, lịch chiếu, báo cáo và các quyền theo
+  mô hình use case. Trải nghiệm nhân viên soát vé thuộc Organizer Mobile, giữ quyền riêng với quản lý.
+  Phạm vi màn hình quản trị trên Mobile chưa chốt; không mặc định mọi màn hình Web có bản tương đương.
+- **Customer Mobile (`apps/customer-mobile`)**: App khách hàng đặt vé, lưu QR để xuất trình khi điện thoại
+  không có mạng; thiết bị soát vé vẫn phải online. Cả Customer Mobile và Organizer Mobile hỗ trợ iOS/Android,
+  giao diện phù hợp từng hệ; framework Mobile và Organizer Web chưa chốt.
 - **Cinema Core Backend (`services/cinema-core`)**: Quản lý tồn kho ghế, cơ chế khóa giữ vé (Atomic Hold TTL 5 phút), thanh toán và phát hành vé có chữ ký số.
 - **AI Agent Service (`services/agent-service`)**: Xử lý ngôn ngữ tự nhiên, trích xuất điều kiện lọc và điều phối gọi công cụ tới Cinema Core.
 - **Packages dùng chung (`packages/*`)**: `design-tokens`, `contracts`, `ui`, `shared-logic`.
@@ -43,9 +50,14 @@ Các nhóm phục vụ tổng quát:
 ## Architecture Direction
 
 - **Mô hình Monorepo Platform**: Sử dụng npm workspaces quản lý tập trung các ứng dụng (`apps/`), dịch vụ nghiệp vụ (`services/`) và thư viện dùng chung (`packages/`).
-- **Frontend Architecture**: Next.js App Router với lớp Backend for Frontend (BFF) mỏng; Server Components đọc dữ liệu backend trực tiếp; Client Components xử lý tương tác UI.
+- **Frontend Architecture**: Customer Web dùng Next.js App Router với lớp Backend for Frontend (BFF) mỏng;
+  Server Components đọc dữ liệu backend, Client Components xử lý tương tác UI. Định hướng này không
+  tự chọn framework cho Organizer Web hoặc hai app Mobile.
 - **Backend Architecture**: Cinema Core đóng vai trò Single Source of Truth cho các giao dịch; Agent Service đóng vai trò Orchestrator.
 - **Design System Authority**: `DESIGN.md` và `packages/design-tokens` là nguồn thẩm quyền duy nhất về màu sắc (Rosso Corsa, Carbone Nero, Notte Profonda), kiểu chữ và quy chuẩn bố cục.
+- **Application Boundaries**: Bốn app Customer/Organizer × Web/Mobile theo
+  [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md). PRODUCT trong mỗi app ghi bối cảnh
+  riêng và dẫn về mô hình nghiệp vụ chung; tên thư mục không cấp quyền mới.
 
 ## Core Concepts
 

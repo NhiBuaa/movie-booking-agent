@@ -9,7 +9,7 @@
     "services/*"
   ],
   "scripts": {
-    "test": "npm test --workspace=apps/web",
+    "test": "npm test --workspace=apps/customer-web",
     "test:contracts": "npm test --workspace=@platform/contracts",
     "test:all": "npm run test:contracts && npm run test"
   }

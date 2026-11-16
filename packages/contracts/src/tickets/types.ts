@@ -39,7 +39,7 @@ export interface TicketQrPayload {
 }
 
 /**
- * Mobile Scanner Request used by on-ground cinema staff (`apps/mobile`).
+ * Mobile Scanner Request used by on-ground cinema staff (`apps/organizer-mobile`).
  */
 export interface VerifyTicketRequest {
   qrPayload: string;
