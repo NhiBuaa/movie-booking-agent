@@ -4,9 +4,10 @@ import type {
   DayScheduleDto,
   MovieDetailDto,
   MovieFilterQuery,
+  MovieStatus,
   MovieSummaryDto,
-} from '../../../../packages/contracts/src/index.ts';
-import { MovieAgeRating, MovieFormat } from '../../../../packages/contracts/src/index.ts';
+} from '@platform/contracts';
+import { MovieAgeRating, MovieFormat } from '@platform/contracts';
 import { MOVIES_FIXTURE } from '../features/discovery/model/discovery-fixtures.ts';
 import { CHUYEN_TAU_CUOI_HE_FIXTURE } from '../features/movie-details/model/movie-fixtures.ts';
 import {
@@ -15,7 +16,8 @@ import {
 } from '../features/cinemas/model/cinema-fixtures.ts';
 
 export interface ShowtimeSlotDetails {
-  showtimeId: string;
+  showtimeId: string; // Canonical unique inventory ID
+  canonicalShowtimeId: string;
   movieId: string;
   movieTitle: string;
   movieSlug: string;
@@ -34,6 +36,70 @@ export interface ShowtimeSlotDetails {
   };
 }
 
+/**
+ * Resolves any showtimeId or alias into the single canonical inventory record.
+ * Returns null if the showtimeId does not exist in the catalog (no fake fallback).
+ */
+export function resolveCanonicalShowtime(showtimeId: string): ShowtimeSlotDetails | null {
+  if (!showtimeId || typeof showtimeId !== 'string') {
+    return null;
+  }
+
+  const normId = showtimeId.trim().toLowerCase();
+
+  // Handle synthetic test alias BK-2026-CHUYENTAU -> maps to cgv-dong-khoi-slot-dk-04-2 (19:30)
+  const targetLookup = normId === 'bk-2026-chuyentau' ? 'slot-dk-04-2' : normId;
+
+  for (const day of CHUYEN_TAU_CUOI_HE_FIXTURE.schedule) {
+    for (const cinema of day.cinemas) {
+      for (const slot of cinema.slots) {
+        const canonicalId = `${cinema.cinemaId}-${slot.id}`.toLowerCase();
+        const slotId = slot.id.toLowerCase();
+        // Known aliases for cinema Dong Khoi
+        const dongKhoiFullId = `cgv-vincom-dong-khoi-${slot.id}`.toLowerCase();
+
+        if (
+          targetLookup === canonicalId ||
+          targetLookup === slotId ||
+          targetLookup === dongKhoiFullId ||
+          (cinema.cinemaSlug && targetLookup === `${cinema.cinemaSlug}-${slot.id}`.toLowerCase())
+        ) {
+          const format = slot.format === 'IMAX' ? MovieFormat.IMAX_LASER : MovieFormat.TWO_D;
+          return {
+            showtimeId: `${cinema.cinemaId}-${slot.id}`,
+            canonicalShowtimeId: `${cinema.cinemaId}-${slot.id}`,
+            movieId: 'chuyen-tau-cuoi-he',
+            movieTitle: CHUYEN_TAU_CUOI_HE_FIXTURE.title,
+            movieSlug: CHUYEN_TAU_CUOI_HE_FIXTURE.slug,
+            posterUrl: CHUYEN_TAU_CUOI_HE_FIXTURE.posterUrl,
+            durationMinutes: CHUYEN_TAU_CUOI_HE_FIXTURE.durationMinutes,
+            format,
+            cinemaId: cinema.cinemaId,
+            cinemaName: cinema.cinemaName,
+            auditoriumName: slot.screen,
+            showDate: day.date,
+            showTime: slot.time,
+            pricing: {
+              standardPrice: slot.price,
+              vipPrice: slot.price + 30000,
+              sweetboxPrice: (slot.price + 30000) * 2,
+            },
+          };
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Returns showtime slot details or null if nonexistent.
+ */
+export function getShowtimeSlotDetails(showtimeId: string): ShowtimeSlotDetails | null {
+  return resolveCanonicalShowtime(showtimeId);
+}
+
 export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
   let items = MOVIES_FIXTURE.map((m) => {
     const ageRating = (
@@ -42,9 +108,16 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
         : MovieAgeRating.T16
     ) as MovieAgeRating;
 
-    const formats = m.format.includes('IMAX')
-      ? [MovieFormat.IMAX_LASER, MovieFormat.IMAX, MovieFormat.TWO_D]
-      : [MovieFormat.TWO_D];
+    let formats: MovieFormat[];
+    if (m.format.includes('IMAX')) {
+      formats = [MovieFormat.IMAX_LASER, MovieFormat.IMAX, MovieFormat.TWO_D];
+    } else if (m.format.includes('3D')) {
+      formats = [MovieFormat.THREE_D, MovieFormat.TWO_D];
+    } else {
+      formats = [MovieFormat.TWO_D];
+    }
+
+    const status: MovieStatus = m.status === 'upcoming' ? 'COMING_SOON' : 'NOW_SHOWING';
 
     const dto: MovieSummaryDto = {
       id: m.id,
@@ -57,7 +130,7 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
       formats,
       cineScore: 4.8,
       releaseDate: '2026-11-04',
-      status: 'NOW_SHOWING',
+      status,
     };
     return dto;
   });
@@ -89,24 +162,37 @@ export function listMovies(query?: MovieFilterQuery): MovieSummaryDto[] {
     items = items.filter((m) => m.status === query.status);
   }
 
+  // Relational filter: Cinema showtime availability
   if (query?.cinemaId) {
     const cId = query.cinemaId.toLowerCase().trim();
-    const hasShowtimeAtCinema = CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some((day) =>
-      day.cinemas.some((c) => c.cinemaId.toLowerCase().includes(cId) || cId.includes(c.cinemaId.toLowerCase()))
-    );
-    if (!hasShowtimeAtCinema) {
-      items = items.filter((m) => m.slug !== 'chuyen-tau-cuoi-he');
-    }
+    items = items.filter((m) => {
+      // In current fixtures, only chuyen-tau-cuoi-he has scheduled showtimes at known cinemas
+      if (m.slug === 'chuyen-tau-cuoi-he') {
+        return CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some((day) =>
+          day.cinemas.some(
+            (c) =>
+              c.cinemaId.toLowerCase() === cId ||
+              c.cinemaId.toLowerCase().includes(cId) ||
+              cId.includes(c.cinemaId.toLowerCase()) ||
+              (c.cinemaSlug && (c.cinemaSlug.toLowerCase() === cId || cId.includes(c.cinemaSlug.toLowerCase())))
+          )
+        );
+      }
+      return false;
+    });
   }
 
+  // Relational filter: Date showtime availability
   if (query?.date) {
     const targetDate = query.date.trim();
-    const hasDate = CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some(
-      (day) => day.date === targetDate || day.label.includes(targetDate)
-    );
-    if (!hasDate) {
-      items = items.filter((m) => m.slug !== 'chuyen-tau-cuoi-he');
-    }
+    items = items.filter((m) => {
+      if (m.slug === 'chuyen-tau-cuoi-he') {
+        return CHUYEN_TAU_CUOI_HE_FIXTURE.schedule.some(
+          (day) => day.date === targetDate || day.label.includes(targetDate)
+        );
+      }
+      return false;
+    });
   }
 
   if (query?.page && query?.limit) {
@@ -245,7 +331,16 @@ export function getShowtimes(query?: {
   cinemaId?: string;
   date?: string;
   format?: MovieFormat;
+  status?: string;
 }): DayScheduleDto[] {
+  // If movieId specified and doesn't match chuyen-tau-cuoi-he, return empty array
+  if (query?.movieId) {
+    const mId = query.movieId.trim().toLowerCase();
+    if (mId !== 'chuyen-tau-cuoi-he' && mId !== 'movie-1') {
+      return [];
+    }
+  }
+
   let rawSchedule = CHUYEN_TAU_CUOI_HE_FIXTURE.schedule;
 
   if (query?.date) {
@@ -259,9 +354,13 @@ export function getShowtimes(query?: {
     .map((day) => {
       let cinemas = day.cinemas;
       if (query?.cinemaId) {
-        const cId = query.cinemaId.toLowerCase();
+        const cId = query.cinemaId.toLowerCase().trim();
         cinemas = cinemas.filter(
-          (c) => c.cinemaId.toLowerCase() === cId || c.cinemaId.toLowerCase().includes(cId)
+          (c) =>
+            c.cinemaId.toLowerCase() === cId ||
+            c.cinemaId.toLowerCase().includes(cId) ||
+            cId.includes(c.cinemaId.toLowerCase()) ||
+            (c.cinemaSlug && (c.cinemaSlug.toLowerCase() === cId || cId.includes(c.cinemaSlug.toLowerCase())))
         );
       }
 
@@ -269,8 +368,13 @@ export function getShowtimes(query?: {
         .map((c) => {
           let slots = c.slots;
           if (query?.format) {
-            const fTarget = query.format.toLowerCase();
+            const fTarget = query.format.toLowerCase().trim();
             slots = slots.filter((s) => s.format.toLowerCase().includes(fTarget) || fTarget.includes(s.format.toLowerCase()));
+          }
+
+          if (query?.status) {
+            const sTarget = query.status.toLowerCase().trim();
+            slots = slots.filter((s) => s.status.toLowerCase() === sTarget);
           }
 
           return {
@@ -306,66 +410,4 @@ export function getShowtimes(query?: {
       };
     })
     .filter((day) => day.cinemas.length > 0);
-}
-
-export function getShowtimeSlotDetails(showtimeId: string): ShowtimeSlotDetails {
-  const normId = showtimeId.trim().toLowerCase();
-
-  for (const day of CHUYEN_TAU_CUOI_HE_FIXTURE.schedule) {
-    for (const cinema of day.cinemas) {
-      for (const slot of cinema.slots) {
-        const compoundId = `${cinema.cinemaId}-${slot.id}`.toLowerCase();
-        const slotId = slot.id.toLowerCase();
-        if (
-          normId === compoundId ||
-          normId === slotId ||
-          normId.endsWith(slotId) ||
-          compoundId.includes(normId) ||
-          normId.includes(slotId)
-        ) {
-          const format = slot.format === 'IMAX' ? MovieFormat.IMAX_LASER : MovieFormat.TWO_D;
-          return {
-            showtimeId,
-            movieId: 'chuyen-tau-cuoi-he',
-            movieTitle: CHUYEN_TAU_CUOI_HE_FIXTURE.title,
-            movieSlug: CHUYEN_TAU_CUOI_HE_FIXTURE.slug,
-            posterUrl: CHUYEN_TAU_CUOI_HE_FIXTURE.posterUrl,
-            durationMinutes: CHUYEN_TAU_CUOI_HE_FIXTURE.durationMinutes,
-            format,
-            cinemaId: cinema.cinemaId,
-            cinemaName: cinema.cinemaName,
-            auditoriumName: slot.screen,
-            showDate: day.date,
-            showTime: slot.time,
-            pricing: {
-              standardPrice: slot.price,
-              vipPrice: slot.price + 30000,
-              sweetboxPrice: (slot.price + 30000) * 2,
-            },
-          };
-        }
-      }
-    }
-  }
-
-  // Fallback defaults for synthetic / fixture showtimeIds (e.g. BK-2026-CHUYENTAU)
-  return {
-    showtimeId,
-    movieId: 'chuyen-tau-cuoi-he',
-    movieTitle: 'Chuyến tàu cuối hè',
-    movieSlug: 'chuyen-tau-cuoi-he',
-    posterUrl: '/images/artworks/train-chuyen-tau-cuoi-he.png',
-    durationMinutes: 115,
-    format: MovieFormat.IMAX_LASER,
-    cinemaId: 'cgv-vincom-dong-khoi',
-    cinemaName: 'CGV Vincom Đồng Khởi',
-    auditoriumName: 'Phòng chiếu 01 (IMAX)',
-    showDate: '07/11/2026',
-    showTime: '19:30',
-    pricing: {
-      standardPrice: 100000,
-      vipPrice: 130000,
-      sweetboxPrice: 260000,
-    },
-  };
 }

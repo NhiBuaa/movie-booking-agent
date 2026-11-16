@@ -10,6 +10,7 @@ import type {
   ETicketDto,
   MovieDetailDto,
   MovieFilterQuery,
+  MovieFormat,
   MovieSummaryDto,
   OrderSummaryDto,
   PaymentIntentResponse,
@@ -50,8 +51,8 @@ async function requestJson<T>(
   if (!res.ok || !body.success) {
     const err = (body as any)?.error;
     throw new ApiClientError(
-      err?.code || 'HTTP_ERROR',
-      err?.message || `Request failed with status ${res.status}`,
+      err?.code || 'UNKNOWN_ERROR',
+      err?.message || 'Có lỗi xảy ra khi gọi máy chủ.',
       res.status,
       err?.details
     );
@@ -67,6 +68,11 @@ export const apiClient = {
       if (query?.q) sp.set('q', query.q);
       if (query?.genre) sp.set('genre', query.genre);
       if (query?.cinemaId) sp.set('cinemaId', query.cinemaId);
+      if (query?.format) sp.set('format', query.format);
+      if (query?.date) sp.set('date', query.date);
+      if (query?.status) sp.set('status', query.status);
+      if (query?.page) sp.set('page', String(query.page));
+      if (query?.limit) sp.set('limit', String(query.limit));
       const qs = sp.toString();
       return requestJson<MovieSummaryDto[]>(`/api/movies${qs ? `?${qs}` : ''}`);
     },
@@ -81,11 +87,19 @@ export const apiClient = {
   },
 
   showtimes: {
-    get: (query?: { movieId?: string; cinemaId?: string; date?: string }) => {
+    get: (query?: {
+      movieId?: string;
+      cinemaId?: string;
+      date?: string;
+      format?: MovieFormat;
+      status?: string;
+    }) => {
       const sp = new URLSearchParams();
       if (query?.movieId) sp.set('movieId', query.movieId);
       if (query?.cinemaId) sp.set('cinemaId', query.cinemaId);
       if (query?.date) sp.set('date', query.date);
+      if (query?.format) sp.set('format', query.format);
+      if (query?.status) sp.set('status', query.status);
       const qs = sp.toString();
       return requestJson<DayScheduleDto[]>(`/api/showtimes${qs ? `?${qs}` : ''}`);
     },
@@ -102,10 +116,11 @@ export const apiClient = {
         method: 'POST',
         body: JSON.stringify(req),
       }),
-    release: (holdId: string) =>
+    release: (holdId: string, userEmail?: string) =>
       requestJson<{ released: boolean }>('/api/hold', {
         method: 'DELETE',
-        body: JSON.stringify({ holdId }),
+        headers: userEmail ? { 'x-user-email': userEmail } : undefined,
+        body: JSON.stringify({ holdId, userEmail }),
       }),
   },
 
@@ -118,9 +133,10 @@ export const apiClient = {
   },
 
   payment: {
-    createIntent: (req: CreatePaymentIntentRequest) =>
+    createIntent: (req: CreatePaymentIntentRequest, userEmail?: string) =>
       requestJson<PaymentIntentResponse>('/api/payment/intent', {
         method: 'POST',
+        headers: userEmail ? { 'x-user-email': userEmail } : undefined,
         body: JSON.stringify(req),
       }),
     processWebhook: (payload: PaymentWebhookPayload) =>
@@ -131,9 +147,12 @@ export const apiClient = {
   },
 
   tickets: {
-    get: (ticketCodeOrBookingId: string) =>
+    get: (ticketCodeOrBookingId: string, userEmail?: string) =>
       requestJson<ETicketDto>(
-        `/api/tickets/${encodeURIComponent(ticketCodeOrBookingId)}`
+        `/api/tickets/${encodeURIComponent(ticketCodeOrBookingId)}`,
+        {
+          headers: userEmail ? { 'x-user-email': userEmail } : undefined,
+        }
       ),
   },
 };

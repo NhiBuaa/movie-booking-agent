@@ -5,17 +5,19 @@ import type {
   HeldSeatItemDto,
   SeatMapDto,
   SeatStateDto,
-} from '../../../../packages/contracts/src/index.ts';
+} from '@platform/contracts';
 import {
+  BookingStatus,
   HoldStatus,
   SeatStatus,
   SeatType,
-} from '../../../../packages/contracts/src/index.ts';
-import { getShowtimeSlotDetails } from './catalog-adapter.ts';
+} from '@platform/contracts';
+import { resolveCanonicalShowtime } from './catalog-adapter.ts';
+import { getOrderByHoldId } from './order-adapter.ts';
 
 export interface StoredHold {
   holdId: string;
-  showtimeId: string;
+  showtimeId: string; // Canonical showtime ID
   seatIds: string[];
   expiresAt: number;
   totalPrice: number;
@@ -29,26 +31,49 @@ const holdsStore = new Map<string, StoredHold>();
 
 const DEFAULT_RESERVED_SEATS = new Set<string>(['B3', 'B4', 'C6', 'F4', 'G5']);
 
-export function generateStandardSeatMap(showtimeId: string): SeatMapDto {
-  const slotDetails = getShowtimeSlotDetails(showtimeId);
+export function generateStandardSeatMap(showtimeId: string): SeatMapDto | null {
+  const slotDetails = resolveCanonicalShowtime(showtimeId);
+  if (!slotDetails) {
+    return null;
+  }
+
+  const canonicalId = slotDetails.canonicalShowtimeId;
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const seats: SeatStateDto[] = [];
   let availableCount = 0;
 
   const currentlyHeld = new Set<string>();
+  const soldSeats = new Set<string>();
   const now = Date.now();
-  for (const [holdId, hold] of holdsStore.entries()) {
+
+  for (const [_holdId, hold] of holdsStore.entries()) {
     if (hold.status === HoldStatus.ACTIVE) {
       if (hold.expiresAt <= now) {
         hold.status = HoldStatus.EXPIRED;
-      } else if (hold.showtimeId === showtimeId) {
+      } else if (hold.showtimeId === canonicalId) {
         for (const s of hold.seatIds) {
           currentlyHeld.add(s);
         }
       }
-    } else if (hold.status === HoldStatus.CONSUMED && hold.showtimeId === showtimeId) {
-      for (const s of hold.seatIds) {
-        currentlyHeld.add(s);
+    } else if (hold.status === HoldStatus.CONSUMED) {
+      const order = getOrderByHoldId(hold.holdId);
+      if (order && order.showtimeId === canonicalId) {
+        if (order.status === BookingStatus.CONFIRMED) {
+          // Officially confirmed & paid -> permanently reserved / sold
+          for (const s of hold.seatIds) {
+            soldSeats.add(s);
+          }
+        } else if (order.status === BookingStatus.PENDING_PAYMENT) {
+          if (now < order.holdExpiresAt) {
+            // Still within hold TTL window
+            for (const s of hold.seatIds) {
+              currentlyHeld.add(s);
+            }
+          } else {
+            // Expired unpaid order: release seats back to inventory!
+            order.status = BookingStatus.EXPIRED;
+          }
+        }
       }
     }
   }
@@ -75,7 +100,7 @@ export function generateStandardSeatMap(showtimeId: string): SeatMapDto {
       }
 
       let status: (typeof SeatStatus)[keyof typeof SeatStatus] = SeatStatus.AVAILABLE;
-      if (DEFAULT_RESERVED_SEATS.has(id)) {
+      if (DEFAULT_RESERVED_SEATS.has(id) || soldSeats.has(id)) {
         status = SeatStatus.RESERVED;
       } else if (currentlyHeld.has(id)) {
         status = SeatStatus.HELD;
@@ -97,7 +122,7 @@ export function generateStandardSeatMap(showtimeId: string): SeatMapDto {
   }
 
   return {
-    showtimeId,
+    showtimeId: canonicalId,
     auditoriumId: 'aud-01',
     auditoriumName: slotDetails.auditoriumName,
     movieId: slotDetails.movieId,
@@ -123,6 +148,19 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
       status: 400,
     };
   }
+
+  // Resolve to canonical showtime
+  const slotDetails = resolveCanonicalShowtime(req.showtimeId);
+  if (!slotDetails) {
+    return {
+      success: false,
+      code: 'SHOWTIME_NOT_FOUND',
+      error: `Không tìm thấy suất chiếu '${req.showtimeId}'.`,
+      status: 404,
+    };
+  }
+
+  const canonicalShowtimeId = slotDetails.canonicalShowtimeId;
 
   if (!req.seatIds || !Array.isArray(req.seatIds) || req.seatIds.length === 0) {
     return {
@@ -166,7 +204,16 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     }
   }
 
-  const seatMap = generateStandardSeatMap(req.showtimeId);
+  const seatMap = generateStandardSeatMap(canonicalShowtimeId);
+  if (!seatMap) {
+    return {
+      success: false,
+      code: 'SHOWTIME_NOT_FOUND',
+      error: `Không tìm thấy suất chiếu '${req.showtimeId}'.`,
+      status: 404,
+    };
+  }
+
   const seatMapLookup = new Map(seatMap.seats.map((s) => [s.id, s]));
 
   for (const seatId of req.seatIds) {
@@ -229,7 +276,7 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
 
   const storedHold: StoredHold = {
     holdId,
-    showtimeId: req.showtimeId,
+    showtimeId: canonicalShowtimeId,
     seatIds: req.seatIds,
     expiresAt: holdExpiresAt,
     totalPrice,
@@ -245,7 +292,7 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     success: true,
     hold: {
       holdId,
-      showtimeId: req.showtimeId,
+      showtimeId: canonicalShowtimeId,
       status: HoldStatus.ACTIVE,
       holdExpiresAt,
       holdDurationSeconds: 300,
@@ -270,22 +317,26 @@ export function releaseSeatHold(holdId: string, callerEmail?: string): ReleaseHo
     };
   }
 
-  if (hold.status === HoldStatus.CONSUMED) {
-    return {
-      success: false,
-      code: 'HOLD_ALREADY_CONSUMED',
-      error: 'Giữ chỗ này đã được sử dụng tạo đơn hàng thành công, không thể hủy giữ.',
-      status: 409,
-    };
-  }
-
-  if (hold.userEmail && callerEmail) {
-    if (hold.userEmail.toLowerCase() !== callerEmail.toLowerCase().trim()) {
+  // Strictly enforce ownership if hold has an owner email
+  if (hold.userEmail) {
+    if (!callerEmail || hold.userEmail.toLowerCase() !== callerEmail.toLowerCase().trim()) {
       return {
         success: false,
         code: 'FORBIDDEN',
-        error: 'Bạn không có quyền hủy giữ chỗ của người dùng khác.',
+        error: 'Yêu cầu cung cấp email chủ sở hữu hợp lệ để hủy giữ chỗ.',
         status: 403,
+      };
+    }
+  }
+
+  if (hold.status === HoldStatus.CONSUMED) {
+    const order = getOrderByHoldId(hold.holdId);
+    if (order?.status === BookingStatus.CONFIRMED) {
+      return {
+        success: false,
+        code: 'HOLD_ALREADY_CONSUMED',
+        error: 'Giữ chỗ đã được tạo đơn và thanh toán thành công, không thể hủy.',
+        status: 409,
       };
     }
   }

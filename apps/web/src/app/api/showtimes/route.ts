@@ -8,7 +8,8 @@ export async function GET(request: Request) {
   const cinemaId = searchParams.get('cinemaId') || undefined;
   const date = searchParams.get('date') || undefined;
   const format = (searchParams.get('format') as MovieFormat) || undefined;
+  const status = searchParams.get('status') || undefined;
 
-  const schedules = getShowtimes({ movieId, cinemaId, date, format });
+  const schedules = getShowtimes({ movieId, cinemaId, date, format, status });
   return jsonSuccess(schedules);
 }

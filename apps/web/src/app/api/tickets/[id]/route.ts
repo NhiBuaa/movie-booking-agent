@@ -1,4 +1,4 @@
-import { getTicketById } from '../../../../server/order-adapter.ts';
+import { getTicketResult } from '../../../../server/order-adapter.ts';
 import { jsonError, jsonSuccess } from '../../../../server/response.ts';
 
 export async function GET(
@@ -7,11 +7,11 @@ export async function GET(
 ) {
   const { id } = await context.params;
   const callerEmail = request.headers.get('x-user-email') || undefined;
-  const ticket = getTicketById(id, callerEmail);
+  const result = getTicketResult(id, callerEmail);
 
-  if (!ticket) {
-    return jsonError('TICKET_NOT_FOUND', `Không tìm thấy vé xem phim với mã '${id}' hoặc chưa phát hành.`, 404);
+  if (!result.success) {
+    return jsonError(result.code, result.error, result.status);
   }
 
-  return jsonSuccess(ticket);
+  return jsonSuccess(result.ticket);
 }

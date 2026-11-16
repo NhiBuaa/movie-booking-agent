@@ -1,7 +1,7 @@
 import type {
   ApiResponse,
   ApiErrorResponse,
-} from '../../../../packages/contracts/src/index.ts';
+} from '@platform/contracts';
 
 /**
  * Standard server response helper returning standardized ApiResponse<T>.
