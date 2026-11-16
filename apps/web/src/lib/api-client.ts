@@ -13,8 +13,10 @@ import type {
   MovieSummaryDto,
   OrderSummaryDto,
   PaymentIntentResponse,
+  PaymentWebhookPayload,
+  PaymentWebhookResponse,
   SeatMapDto,
-} from '../../../../packages/contracts/src/index.ts';
+} from '@platform/contracts';
 
 class ApiClientError extends Error {
   code: string;
@@ -120,6 +122,11 @@ export const apiClient = {
       requestJson<PaymentIntentResponse>('/api/payment/intent', {
         method: 'POST',
         body: JSON.stringify(req),
+      }),
+    processWebhook: (payload: PaymentWebhookPayload) =>
+      requestJson<PaymentWebhookResponse>('/api/payment/webhook', {
+        method: 'POST',
+        body: JSON.stringify(payload),
       }),
   },
 

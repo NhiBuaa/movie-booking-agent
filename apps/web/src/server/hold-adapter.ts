@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import type {
   CreateHoldRequest,
   CreateHoldResponse,
@@ -7,54 +8,68 @@ import type {
 } from '../../../../packages/contracts/src/index.ts';
 import {
   HoldStatus,
-  MovieFormat,
   SeatStatus,
   SeatType,
 } from '../../../../packages/contracts/src/index.ts';
+import { getShowtimeSlotDetails } from './catalog-adapter.ts';
 
-interface StoredHold {
+export interface StoredHold {
   holdId: string;
   showtimeId: string;
   seatIds: string[];
   expiresAt: number;
   totalPrice: number;
   seats: HeldSeatItemDto[];
+  status: HoldStatus;
+  userEmail?: string;
+  userId?: string;
 }
 
-const activeHolds = new Map<string, StoredHold>();
+const holdsStore = new Map<string, StoredHold>();
 
 const DEFAULT_RESERVED_SEATS = new Set<string>(['B3', 'B4', 'C6', 'F4', 'G5']);
 
 export function generateStandardSeatMap(showtimeId: string): SeatMapDto {
+  const slotDetails = getShowtimeSlotDetails(showtimeId);
   const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   const seats: SeatStateDto[] = [];
   let availableCount = 0;
 
   const currentlyHeld = new Set<string>();
   const now = Date.now();
-  for (const [holdId, hold] of activeHolds.entries()) {
-    if (hold.expiresAt <= now) {
-      activeHolds.delete(holdId);
-    } else if (hold.showtimeId === showtimeId) {
+  for (const [holdId, hold] of holdsStore.entries()) {
+    if (hold.status === HoldStatus.ACTIVE) {
+      if (hold.expiresAt <= now) {
+        hold.status = HoldStatus.EXPIRED;
+      } else if (hold.showtimeId === showtimeId) {
+        for (const s of hold.seatIds) {
+          currentlyHeld.add(s);
+        }
+      }
+    } else if (hold.status === HoldStatus.CONSUMED && hold.showtimeId === showtimeId) {
       for (const s of hold.seatIds) {
         currentlyHeld.add(s);
       }
     }
   }
 
+  const standardPrice = slotDetails.pricing.standardPrice;
+  const vipPrice = slotDetails.pricing.vipPrice;
+  const sweetboxPrice = Math.round(slotDetails.pricing.sweetboxPrice / 2);
+
   for (const row of rows) {
     for (let col = 1; col <= 8; col++) {
       const id = `${row}${col}`;
       let type: (typeof SeatType)[keyof typeof SeatType] = SeatType.STANDARD;
-      let price = 100000;
+      let price = standardPrice;
       let pairId: string | undefined = undefined;
 
       if (['E', 'F', 'G'].includes(row)) {
         type = SeatType.VIP;
-        price = 130000;
+        price = vipPrice;
       } else if (row === 'H') {
         type = SeatType.SWEETBOX;
-        price = 130000;
+        price = sweetboxPrice;
         const pairNum = col % 2 === 1 ? col + 1 : col - 1;
         pairId = col % 2 === 1 ? `H${col}-H${pairNum}` : `H${pairNum}-H${col}`;
       }
@@ -84,11 +99,11 @@ export function generateStandardSeatMap(showtimeId: string): SeatMapDto {
   return {
     showtimeId,
     auditoriumId: 'aud-01',
-    auditoriumName: 'Phòng chiếu 01 (IMAX)',
-    movieId: 'chuyen-tau-cuoi-he',
-    movieTitle: 'Chuyến tàu cuối hè',
-    cinemaName: 'CGV Vincom Đồng Khởi',
-    format: MovieFormat.IMAX_LASER,
+    auditoriumName: slotDetails.auditoriumName,
+    movieId: slotDetails.movieId,
+    movieTitle: slotDetails.movieTitle,
+    cinemaName: slotDetails.cinemaName,
+    format: slotDetails.format,
     totalSeats: 64,
     availableCount,
     seats,
@@ -100,11 +115,31 @@ export type CreateHoldResult =
   | { success: false; error: string; code: string; status: number };
 
 export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
-  if (!req.seatIds || req.seatIds.length === 0) {
+  if (!req || !req.showtimeId) {
+    return {
+      success: false,
+      code: 'MISSING_FIELD',
+      error: 'Vui lòng cung cấp mã suất chiếu (showtimeId).',
+      status: 400,
+    };
+  }
+
+  if (!req.seatIds || !Array.isArray(req.seatIds) || req.seatIds.length === 0) {
     return {
       success: false,
       code: 'EMPTY_SEATS',
       error: 'Vui lòng chọn ít nhất 1 ghế.',
+      status: 400,
+    };
+  }
+
+  // Check duplicate seats in request
+  const uniqueSeats = new Set(req.seatIds);
+  if (uniqueSeats.size !== req.seatIds.length) {
+    return {
+      success: false,
+      code: 'DUPLICATE_SEATS',
+      error: 'Danh sách ghế chứa ghế bị trùng lặp.',
       status: 400,
     };
   }
@@ -116,6 +151,19 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
       error: 'Mỗi lần đặt chỉ được chọn tối đa 6 ghế.',
       status: 400,
     };
+  }
+
+  // Validate userEmail format if provided
+  if (req.userEmail) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(req.userEmail.trim())) {
+      return {
+        success: false,
+        code: 'INVALID_EMAIL',
+        error: 'Địa chỉ email người giữ chỗ không hợp lệ.',
+        status: 400,
+      };
+    }
   }
 
   const seatMap = generateStandardSeatMap(req.showtimeId);
@@ -163,9 +211,8 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
     };
   }
 
-  const holdId = `HOLD-${Date.now().toString(36).toUpperCase()}-${Math.floor(
-    Math.random() * 1000
-  )}`;
+  // Cryptographically secure hold ID
+  const holdId = `HOLD-${crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()}`;
   const holdExpiresAt = Date.now() + 300 * 1000;
 
   const heldSeats: HeldSeatItemDto[] = req.seatIds.map((id) => {
@@ -180,14 +227,19 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
 
   const totalPrice = heldSeats.reduce((sum, s) => sum + s.price, 0);
 
-  activeHolds.set(holdId, {
+  const storedHold: StoredHold = {
     holdId,
     showtimeId: req.showtimeId,
     seatIds: req.seatIds,
     expiresAt: holdExpiresAt,
     totalPrice,
     seats: heldSeats,
-  });
+    status: HoldStatus.ACTIVE,
+    userEmail: req.userEmail?.trim(),
+    userId: req.userId?.trim(),
+  };
+
+  holdsStore.set(holdId, storedHold);
 
   return {
     success: true,
@@ -203,15 +255,64 @@ export function createSeatHold(req: CreateHoldRequest): CreateHoldResult {
   };
 }
 
-export function releaseSeatHold(holdId: string): boolean {
-  return activeHolds.delete(holdId);
+export type ReleaseHoldResult =
+  | { success: true; released: boolean }
+  | { success: false; error: string; code: string; status: number };
+
+export function releaseSeatHold(holdId: string, callerEmail?: string): ReleaseHoldResult {
+  const hold = holdsStore.get(holdId);
+  if (!hold) {
+    return {
+      success: false,
+      code: 'HOLD_NOT_FOUND',
+      error: `Không tìm thấy mã giữ chỗ '${holdId}'.`,
+      status: 404,
+    };
+  }
+
+  if (hold.status === HoldStatus.CONSUMED) {
+    return {
+      success: false,
+      code: 'HOLD_ALREADY_CONSUMED',
+      error: 'Giữ chỗ này đã được sử dụng tạo đơn hàng thành công, không thể hủy giữ.',
+      status: 409,
+    };
+  }
+
+  if (hold.userEmail && callerEmail) {
+    if (hold.userEmail.toLowerCase() !== callerEmail.toLowerCase().trim()) {
+      return {
+        success: false,
+        code: 'FORBIDDEN',
+        error: 'Bạn không có quyền hủy giữ chỗ của người dùng khác.',
+        status: 403,
+      };
+    }
+  }
+
+  hold.status = HoldStatus.CANCELLED;
+  return { success: true, released: true };
+}
+
+export function consumeSeatHold(holdId: string): boolean {
+  const hold = holdsStore.get(holdId);
+  if (!hold || hold.status !== HoldStatus.ACTIVE || hold.expiresAt <= Date.now()) {
+    return false;
+  }
+  hold.status = HoldStatus.CONSUMED;
+  return true;
+}
+
+export function getHoldById(holdId: string): StoredHold | null {
+  return holdsStore.get(holdId) || null;
 }
 
 export function getActiveHold(holdId: string): StoredHold | null {
-  const hold = activeHolds.get(holdId);
+  const hold = holdsStore.get(holdId);
   if (!hold) return null;
+  if (hold.status !== HoldStatus.ACTIVE) return null;
   if (hold.expiresAt <= Date.now()) {
-    activeHolds.delete(holdId);
+    hold.status = HoldStatus.EXPIRED;
     return null;
   }
   return hold;

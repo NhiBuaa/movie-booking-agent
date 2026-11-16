@@ -64,6 +64,7 @@ export interface CreateHoldResponse {
 export interface ReleaseHoldRequest {
   holdId: string;
   reason?: 'USER_CANCELLED' | 'SESSION_TIMEOUT' | 'PAYMENT_EXPIRED';
+  userEmail?: string;
 }
 
 export interface HoldDetailsDto {

@@ -28,7 +28,7 @@ last_verified: 2026-11-15
 ## Current State
 
 - Ứng dụng Web `apps/web` hoạt động trên Next.js 16 App Router + React 19 + TypeScript với tầng BFF Route Handlers (`src/app/api/...`) hoàn chỉnh.
-- Bộ kiểm thử tự động của `apps/web` gồm 19 suites (90 unit/logic/API tests) đạt 100% PASS; gói hợp đồng `@platform/contracts` đạt 6/6 tests PASS.
+- Bộ kiểm thử tự động của `apps/web` gồm 19 suites (93 unit/logic/API tests) đạt 100% PASS; gói hợp đồng `@platform/contracts` đạt 6/6 tests PASS.
 - Single Source of Truth về thiết kế đặt tại `DESIGN.md` và `packages/design-tokens/tokens.css`.
 - Hệ thống GitHub Spec Kit (`.specify/`) đã khởi tạo và thiết lập hiến pháp dự án (`constitution.md`).
 
