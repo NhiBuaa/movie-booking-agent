@@ -362,11 +362,11 @@ export function getCinemaByIdOrSlug(idOrSlug: string): CinemaDetailDto | null {
   // 1. Resolve canonical cinema ID from known IDs and aliases
   const canonicalId = resolveCanonicalCinemaId(norm);
 
-  // 2. Lookup in CINEMA_DETAIL_FIXTURES: exact key, exact canonical match, or exact id/slug
+  // 2. Lookup in CINEMA_DETAIL_FIXTURES: exact own key, exact canonical match, or exact id/slug
   let detail: CinemaDetail | null = null;
-  if (CINEMA_DETAIL_FIXTURES[norm]) {
+  if (Object.hasOwn(CINEMA_DETAIL_FIXTURES, norm)) {
     detail = CINEMA_DETAIL_FIXTURES[norm];
-  } else if (canonicalId && CINEMA_DETAIL_FIXTURES[canonicalId]) {
+  } else if (canonicalId && Object.hasOwn(CINEMA_DETAIL_FIXTURES, canonicalId)) {
     detail = CINEMA_DETAIL_FIXTURES[canonicalId];
   } else if (canonicalId) {
     detail =

@@ -128,5 +128,5 @@ export const CINEMA_DETAIL_FIXTURES: Record<string, CinemaDetail> = {
 };
 
 export const getCinemaById = (id: string): CinemaDetail | undefined => {
-  return CINEMA_DETAIL_FIXTURES[id];
+  return Object.hasOwn(CINEMA_DETAIL_FIXTURES, id) ? CINEMA_DETAIL_FIXTURES[id] : undefined;
 };

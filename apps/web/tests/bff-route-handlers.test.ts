@@ -1766,6 +1766,34 @@ describe('BFF Route Handlers — Integration & Contract Validation', () => {
     assert.equal(resValid3.status, 200);
   });
 
+  it('P2: Chặn prototype inheritance lookup (constructor, __proto__, toString), trả 404 CINEMA_NOT_FOUND thay vì ném TypeError', async () => {
+    // 1. "constructor" không được đọc qua prototype inheritance và phải trả 404
+    const reqConstructor = new Request('http://localhost:3000/api/cinemas/constructor');
+    const resConstructor = await getCinemaById(reqConstructor, { params: Promise.resolve({ id: 'constructor' }) });
+    assert.equal(resConstructor.status, 404);
+    const bodyConstructor = (await resConstructor.json()) as any;
+    assert.equal(bodyConstructor.error.code, 'CINEMA_NOT_FOUND');
+
+    // 2. "__proto__" không được đọc qua prototype inheritance và phải trả 404
+    const reqProto = new Request('http://localhost:3000/api/cinemas/__proto__');
+    const resProto = await getCinemaById(reqProto, { params: Promise.resolve({ id: '__proto__' }) });
+    assert.equal(resProto.status, 404);
+    const bodyProto = (await resProto.json()) as any;
+    assert.equal(bodyProto.error.code, 'CINEMA_NOT_FOUND');
+
+    // 3. "toString" không được đọc qua prototype inheritance và phải trả 404
+    const reqToString = new Request('http://localhost:3000/api/cinemas/toString');
+    const resToString = await getCinemaById(reqToString, { params: Promise.resolve({ id: 'toString' }) });
+    assert.equal(resToString.status, 404);
+    const bodyToString = (await resToString.json()) as any;
+    assert.equal(bodyToString.error.code, 'CINEMA_NOT_FOUND');
+
+    // 4. Các rạp hợp lệ vẫn trả 200
+    const reqValid = new Request('http://localhost:3000/api/cinemas/cgv-dong-khoi');
+    const resValid = await getCinemaById(reqValid, { params: Promise.resolve({ id: 'cgv-dong-khoi' }) });
+    assert.equal(resValid.status, 200);
+  });
+
   it('P2: Lọc format và date chính xác sau chuẩn hóa, NOT-2D và 2099-04/11 không trả dữ liệu', async () => {
     // 1. Format không hợp lệ hoặc format giả chứa chuỗi 2D -> mảng rỗng
     const reqBadFormatMovies = new Request('http://localhost:3000/api/movies?format=NOT-2D');
