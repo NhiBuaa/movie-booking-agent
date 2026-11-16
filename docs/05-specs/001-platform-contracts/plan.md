@@ -1,8 +1,8 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
-**Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [specs/001-platform-contracts/spec.md](spec.md)
+**Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [docs/05-specs/001-platform-contracts/spec.md](spec.md)
 
-**Input**: Feature specification from `specs/001-platform-contracts/spec.md`
+**Input**: Feature specification from `docs/05-specs/001-platform-contracts/spec.md`
 
 ## Summary
 

@@ -46,6 +46,7 @@ For meaningful work:
 - Preserve unresolved questions instead of guessing.
 - Promote durable findings into the correct `docs/` category when needed.
 - Follow the GitHub Spec Kit workflow (`.specify/`) for major feature development (`constitution -> specify -> plan -> tasks -> implement -> converge`).
+- Before creating or moving Spec Kit artifacts, follow the feature-directory guidance in [docs/05-specs/README.md](docs/05-specs/README.md).
 
 ## Agent Configuration Rules
 

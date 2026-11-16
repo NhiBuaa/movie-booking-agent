@@ -1,8 +1,8 @@
 # Implementation Plan: Web BFF Route Handlers
 
-**Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Spec**: [specs/002-web-bff-routes/spec.md](spec.md)
+**Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Spec**: [docs/05-specs/002-web-bff-routes/spec.md](spec.md)
 
-**Input**: Feature specification from `specs/002-web-bff-routes/spec.md`
+**Input**: Feature specification from `docs/05-specs/002-web-bff-routes/spec.md`
 
 ---
 
