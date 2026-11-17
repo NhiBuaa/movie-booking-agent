@@ -24,12 +24,14 @@ Mọi màn hình hoặc thành phần UI mới phải trải qua 4 giai đoạn 
 
 1. **Giai đoạn 1 — Bố cục & Phân cấp (Layout & Visual Hierarchy)**:
    - Sử dụng khoảng trắng (negative space) và căn lề thay vì lạm dụng khung viền.
-   - Web dùng biến CSS từ `@platform/design-tokens`; Mobile ánh xạ token chung sang cơ chế theme
-     của framework đã chọn, giữ bản sắc `DESIGN.md` và tương tác phù hợp từng hệ điều hành.
+   - Web/Organizer sử dụng biến CSS từ `@platform/design-tokens`; Mobile ánh xạ cùng token sang
+     native theme theo [ADR-0016](../06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+     `DESIGN.md` vẫn sở hữu bản sắc; không bắt UI native áp dụng CSS của Web.
 2. **Giai đoạn 2 — Công thái học & Trạng thái (Interactions & States)**:
-   - Thành phần tương tác có trạng thái mặc định, nhấn, vô hiệu và focus phù hợp phương thức nhập.
-     Web có `Hover` khi dùng con trỏ và `Focus Visible` khi điều hướng bàn phím;
-     app cảm ứng không phụ thuộc hover để hoàn thành tác vụ.
+   - Control tương tác phải có trạng thái `Default`, `Active/Pressed`, `Disabled` khi áp dụng;
+     `Hover` và `Focus Visible` theo khả năng con trỏ/bàn phím của nền tảng. Mobile giữ phản hồi chạm
+     và accessibility focus tương ứng; không bỏ trạng thái cần thiết trên Web/Organizer.
+   - App cảm ứng không phụ thuộc hover để hoàn thành tác vụ.
    - Phản hồi tức thời với các tác vụ chọn ghế, bộ đếm ngược thời gian giữ vé và thanh toán.
 3. **Giai đoạn 3 — Khả năng tiếp cận & Render thực tế (a11y & Render Verification)**:
    - Độ tương phản chữ và nền đạt chuẩn WCAG AA (tối thiểu 4.5:1 cho body text).

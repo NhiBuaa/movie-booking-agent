@@ -52,7 +52,11 @@ Quản trị nội dung, danh tính và báo cáo dùng service sở hữu tươ
 
 ## Stack
 
-Chưa chốt framework Mobile; không tạo scaffold hoặc dependency trong lần tổ chức thư mục này.
+React Native + Expo + TypeScript, Expo Router, development builds, expo-camera và SecureStore theo
+[ADR-0016](../../docs/06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+TanStack Query/Zustand và React Hook Form/Zod theo [README](README.md); dùng component native riêng.
+Không có kho/hàng đợi soát ngoại tuyến; thiết bị nhân viên vẫn phải online tới Core.
+Đây là lựa chọn công nghệ, chưa tạo scaffold/dependency/build hoặc kiểm chứng runtime.
 
 ## Brand Commitments
 

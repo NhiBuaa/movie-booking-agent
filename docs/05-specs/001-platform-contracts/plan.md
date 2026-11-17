@@ -20,6 +20,13 @@
 
 **Input**: Feature specification from `docs/05-specs/001-platform-contracts/spec.md`
 
+> **Quyết định tiếp nối — 2026-11-17:** kế hoạch gốc bên dưới chưa là kế hoạch migration được duyệt
+> cho [ADR-0014](../../06-decisions/0014-zod-json-schema-and-pydantic-contracts.md) (Zod 4/JSON Schema/Pydantic v2).
+> Zero runtime dependencies, TypeScript workspaces và các checklist giữ bằng chứng của feature ban đầu;
+> Python Agent dùng model sinh tự động theo hướng mới, không import TypeScript trực tiếp.
+> [ADR-0021](../../06-decisions/0021-layered-testing-stack-for-platform.md) giữ runner `node:test` hiện có,
+> chọn Vitest cho suite mới; chưa cài công cụ, chạy codegen hoặc tái xác nhận các kết quả test cũ.
+
 ## Summary
 
 Thiết lập thư viện hợp đồng dữ liệu chuẩn `@platform/contracts` kết nối toàn diện giữa Web Client, Organizer Portal, Mobile App, Cinema Core Backend và Conversational AI Agent Service theo đúng định hướng Monorepo Platform và các ranh giới dịch vụ độc lập tại ADR-0001.

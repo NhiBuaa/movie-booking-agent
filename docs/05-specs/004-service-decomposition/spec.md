@@ -22,9 +22,10 @@ thêm tính năng, màn hình, endpoint, schema, thuật toán khóa hoặc kế
   [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md) giữ nền monorepo và bốn app.
 - [Mô hình sản phẩm](../../03-product/use-cases.md) và [GLOSSARY](../../../GLOSSARY.md) sở hữu nghiệp vụ/thuật ngữ.
 
-Nguồn code nền đã đối chiếu là `2cd10657861db1b64e0b9f33e56769d59e9916f0`. Các bổ sung nghiệp vụ
-và ADR công nghệ đọc ở worktree khác có ghi nhận phê duyệt riêng, chưa được coi là đã hợp nhất vào
-bản này. Không đánh số lại ADR hoặc sao chép toàn bộ lựa chọn công nghệ sang đây.
+Nguồn code nền đã đối chiếu là `2cd10657861db1b64e0b9f33e56769d59e9916f0`. Các ADR công nghệ có
+nguồn phê duyệt riêng trong [danh mục ADR](../../06-decisions/README.md), được đối chiếu khi hòa giải
+PR #5; tài liệu tích hợp không là bằng chứng code/runtime mới. ADR-0002 giữ ranh giới app,
+NestJS/Fastify đổi từ mã 0002 ở nhánh tech stack sang ADR-0036 để tránh trùng mã.
 
 ## 2. Bản đồ service và dữ liệu sở hữu
 
@@ -49,6 +50,22 @@ lỗi và các bảo đảm cần biết, không chỉ danh sách hàm.
 Bốn ứng dụng là Customer Web/Mobile và Organizer Web/Mobile. Ứng dụng và BFF mỏng là kênh giao tiếp,
 không là chủ giao dịch mới. Worker là tiến trình thực thi trong trách nhiệm service sở hữu;
 PostgreSQL, Redis, Kafka và Debezium là hạ tầng, không tính thêm vào bảy service nghiệp vụ.
+
+### Kết hợp các lựa chọn công nghệ đã duyệt
+
+Stack không thay ranh giới dữ liệu ở bảng trên. NestJS/Fastify + Drizzle thuộc Core
+([ADR-0036](../../06-decisions/0036-nestjs-fastify-for-cinema-core.md), ADR-0005);
+Python/FastAPI/LangGraph/uv và checkpoint trong database Agent theo ADR-0009/0013.
+Better Auth thuộc Identity (ADR-0008), Resend do Notification tích hợp cùng Claim Check đã duyệt
+(ADR-0018), media R2/Images thuộc Catalog (ADR-0019). Không tự chọn framework/ORM cho các service
+bổ trợ chỉ vì đã chọn công nghệ của Core hoặc provider email.
+
+[ADR-0035](../../06-decisions/0035-search-module-in-cinema-core.md) bổ sung **module Search trong Core**,
+Typesense dẫn xuất và Cloudflare/Qwen3 external vectors theo ADR-0030–0034, BullMQ indexing nền.
+Nội dung nguồn vẫn thuộc Catalog, đánh giá/yêu thích thuộc Community, danh tính thuộc Identity;
+Search nhận dữ liệu qua hợp đồng/API/sự kiện, không SQL chéo database hoặc biến index thành chủ dữ liệu.
+Luồng search không thay HTTP snapshot phim khi lập suất hoặc cho Agent tự gửi lệnh giao dịch.
+Các DTO/projection/version/reconcile và quyền sở hữu profile/tín hiệu còn cần đặc tả; không thêm service thứ tám.
 
 ### Sơ đồ trách nhiệm tổng quát
 

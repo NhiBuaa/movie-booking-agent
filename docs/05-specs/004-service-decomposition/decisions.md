@@ -10,6 +10,13 @@ bằng chứng code, kiểm thử, hợp nhất hay triển khai vận hành.
 mất quyết định đã duyệt; không tiếp tục phát triển chúng thành đặc tả tính năng trong nhiệm vụ này.
 Các mục “chưa chốt” trong từng quyết định cần đọc cùng các quyết định tiếp sau nó.
 
+**Đối chiếu công nghệ khi hòa giải PR #5:** các nguồn duyệt dưới đây được giữ nguyên theo thời điểm.
+Lựa chọn provider/framework tiếp nối thuộc [danh mục ADR](../../06-decisions/README.md): Identity dùng
+Better Auth (ADR-0008), Notification tích hợp Resend (ADR-0018), Catalog quản lý media R2/Images
+(ADR-0019). Vì vậy các câu “chưa chọn provider” bên dưới mô tả phạm vi buổi thiết kế ban đầu,
+không mở lại lựa chọn công nghệ. Claim Check, database riêng và Agent đề xuất/app-BFF thực thi
+vẫn giữ nguyên. Search trong Core được ghi tiếp tại ADR-0035; không chuyển quyền biên tập Catalog vào Core.
+
 Chủ sản phẩm đã xác nhận quay về phạm vi kiến trúc. Việc tổ chức lại tài liệu không thay đổi
 các chấp thuận trước. Ba phương thức tích hợp được duyệt sau đợt nghiên cứu riêng, ghi ở cuối file;
 không nhầm đề xuất đồng bộ Catalog qua sự kiện trước đó với lựa chọn HTTP đã được duyệt sau này.

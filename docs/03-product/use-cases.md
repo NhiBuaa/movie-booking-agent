@@ -4,6 +4,13 @@
 **Nguồn quyết định:** các vòng Q1–Q30 và xác nhận bản tổng hợp Q31 trong hội thoại thiết kế
 use case. Phê duyệt này không phải bằng chứng triển khai, kiểm thử, hợp nhất hoặc triển khai vận hành.
 
+Bổ sung ngày 2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`):
+chủ sản phẩm đồng ý phương án A cho quyền kiểm soát cá nhân hóa tại BR-18.
+Sau đó đồng ý phương án A cho chuyển từ phiên khách sang tài khoản tại BR-19.
+Tiếp đó đồng ý phương án A ưu tiên truy vấn trong thứ hạng tìm kiếm tại BR-20.
+Nguồn tín hiệu, phạm vi nhận diện và khám phá ngay không có bảng hỏi ban đầu được ghi tại BR-21.
+Đây là các quyết định mục tiêu của nâng cấp D-01; luồng chi tiết, API và các chính sách còn mở cần đặc tả.
+
 ## Cách đọc
 
 - Khi tạo hoặc cập nhật bộ sơ đồ, tuân theo [quy chuẩn phân tích và trình bày use case](../04-standards/use-case-modeling.md).
@@ -31,8 +38,15 @@ Phạm vi gồm khám phá phim/rạp/suất chiếu; tài khoản; đặt vé t
 combo và ưu đãi; thanh toán; vé điện tử; hỗ trợ hủy/hoàn tiền; soát vé; giao combo;
 đánh giá/yêu thích; hội viên/điểm/đổi voucher; quản trị chuỗi, vận hành rạp và báo cáo.
 
+D-01 bao gồm tìm theo tên/alias, không dấu/lỗi gõ và ý nghĩa nội dung; tìm kiếm kết hợp từ khóa/ngữ nghĩa
+và khám phá cá nhân hóa theo nội dung + hồ sơ phiên/tài khoản đã chọn tại
+[ADR-0030](../06-decisions/0030-typesense-for-movie-search-and-discovery.md) và
+[ADR-0031](../06-decisions/0031-content-based-and-profile-scoring-for-personalization.md).
+BR-18–21 quy định kiểm soát dữ liệu và thứ hạng; OPEN-11 giữ các chính sách dữ liệu còn thiếu.
+
 Không bổ sung bán vé tiền mặt tại quầy, quản lý kho nguyên liệu vật lý, sàn nhiều đơn vị rạp độc lập,
-soát vé ngoại tuyến hoặc thuật toán đề xuất phim phức tạp. Các mục này không được suy ra từ chữ
+soát vé ngoại tuyến hoặc collaborative filtering/mô hình đề xuất huấn luyện phức tạp ở bản đầu.
+Phạm vi loại trừ đó không loại cá nhân hóa theo nội dung/hồ sơ đã chọn. Các mục này không được suy ra từ chữ
 “sản phẩm thực tế”. Hỗ trợ hủy/hoàn tiền không đồng nghĩa hỗ trợ đổi suất/đổi ghế sau khi mua.
 
 ### Actor
@@ -46,12 +60,16 @@ soát vé ngoại tuyến hoặc thuật toán đề xuất phim phức tạp. C
 | ACT-MANAGER | Quản lý rạp | Phòng/ghế, lịch chiếu, quyền nhân viên và báo cáo của rạp được giao; xét yêu cầu hủy theo chính sách; đề nghị hủy suất đã bán vé. |
 | ACT-ADMIN | Quản trị viên toàn chuỗi | Danh mục phim, giá/ưu đãi, quyền quản lý rạp, báo cáo toàn chuỗi, quản lý tổng thể; ngoại lệ hoàn tiền, duyệt hủy suất và ẩn đánh giá vi phạm. |
 | ACT-PAY | Cổng thanh toán | Thu tiền, cung cấp kết quả/đối soát và xử lý hoàn tiền; phạm vi là MoMo, VNPAY. |
-| ACT-MAIL | Dịch vụ email | Chuyển email xác minh, khôi phục, mã xác nhận và thông báo giao dịch. Nhà cung cấp chưa chọn. |
+| ACT-MAIL | Dịch vụ email | Chuyển email xác minh, khôi phục, mã xác nhận và thông báo giao dịch. Đã chọn Resend theo [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md), chưa xác nhận tích hợp runtime. |
 
 Actor là vai trò, không phải mỗi actor một con người hoặc một tài khoản bắt buộc.
 Một người có thể được cấp cả hai vai trò nhân viên. Không dùng kế thừa actor để ngầm cấp quyền
 soát vé/giao combo cho quản lý, hoặc quyền của khách hàng cho tài khoản vận hành.
-Nhà cung cấp mô hình AI bên ngoài chưa được quyết định; không vẽ một actor như đã có tích hợp (`OPEN-09`).
+Đã chọn LLM bên ngoài: Cloudflare Workers AI + GPT-OSS 120B theo
+[ADR-0012](../06-decisions/0012-cloudflare-workers-ai-and-gpt-oss-120b.md), dự phòng Groq Free GPT-OSS 120B tại
+[ADR-0028](../06-decisions/0028-groq-free-for-agent-provider-fallback.md). Khi cả hai gián đoạn, thông báo
+Agent không dùng được và giữ đường đặt vé trực tiếp; không tự trả phí hoặc hứa AI luôn sẵn sàng.
+Việc chọn provider không tự chứng minh dịch vụ ngoài đã vận hành hoặc thay đổi bộ actor trong sơ đồ.
 
 ## 2. Sơ đồ use case: tổng quát đến chi tiết
 
@@ -450,7 +468,7 @@ flowchart LR
 
 | Mã | Mục tiêu | Actor chính/phối hợp | Quyết định |
 |---|---|---|---|
-| D-01 | Khám phá phim, rạp và suất chiếu | Khách chưa đăng nhập, khách hàng | Q1–Q4, Q22 |
+| D-01 | Khám phá phim, rạp và suất chiếu | Khách chưa đăng nhập, khách hàng | Q1–Q4, Q22; Tech Stack 2026-11-17, BR-18–21 |
 | A-01 | Đăng ký tài khoản | Khách chưa đăng nhập | Q19, Q21, Q25 |
 | A-02 | Xác minh email | Khách hàng; dịch vụ email | Q19 |
 | A-03 | Đăng nhập | Khách chưa đăng nhập, người được cấp vai trò vận hành | Q4, Q19, Q21 |
@@ -526,7 +544,11 @@ chữ ký của Core theo [ranh giới giao dịch](../02-architecture/system-bo
 | BR-14 | Tự thành hội viên khi tạo tài khoản; điểm thuộc tài khoản đặt, cộng theo phần vé đã soát, không cộng ngay khi thanh toán. | Q25 |
 | BR-15 | Đổi đủ điểm lấy voucher vé/combo; trừ điểm và cấp đúng một lần; không dùng điểm như phương thức thanh toán trực tiếp. | Q24–Q25 |
 | BR-16 | Chỉ tài khoản có vé phim đã soát được đánh giá; một đánh giá/tài khoản/phim, được sửa/xóa; đăng ngay. Quản trị viên được ẩn nội dung vi phạm, ghi lý do, không sửa lời khách. | Q23, Q26 |
-| BR-17 | AI chỉ gửi lệnh giao dịch sau xác nhận cần thiết của khách, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30 |
+| BR-17 | AI lập đề xuất; app/BFF thực thi lệnh dưới danh tính khách sau xác nhận đúng nội dung/phiên bản Core đã kiểm tra. AI không trực tiếp gửi lệnh ghi, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30; quyết định service 2026-11-17 |
+| BR-18 | Bản đầu cho người dùng bật/tắt cá nhân hóa và đặt lại dữ liệu đã học. Khi tắt, ngừng học và sử dụng hồ sơ sở thích; vẫn tìm theo truy vấn/bộ lọc. Đặt lại không xóa đơn hàng/vé. Chưa thêm xem lịch sử học và xóa từng tương tác. | Tech Stack 2026-11-17, phương án A |
+| BR-19 | Khi đăng nhập, không nhập hành vi đã thu thập ở phiên khách vào hồ sơ tài khoản. Giữ hồ sơ tài khoản hiện có, học tiếp từ tương tác sau đăng nhập khi cá nhân hóa được bật; không thêm bước hỏi gộp phiên ở bản đầu. Quyết định không tự quy định thời hạn lưu/xóa dữ liệu phiên khách. | Tech Stack 2026-11-17, phương án A về phiên khách |
+| BR-20 | Tìm kiếm ưu tiên độ khớp truy vấn: tên phim/alias khớp chính xác đứng trước; sở thích chỉ điều chỉnh giữa các kết quả có độ phù hợp tương đương. Trang khám phá có thể cá nhân hóa mạnh hơn. Cả hai phải giữ đúng bộ lọc đã chọn; công thức, ngưỡng tương đương và trọng số chưa chốt. | Tech Stack 2026-11-17, phương án A về thứ hạng |
+| BR-21 | Cá nhân hóa dùng sở thích khai báo, yêu thích, đánh giá, mua vé đã xác nhận, lượt xem chi tiết, click kết quả và lịch sử tìm kiếm; không tự nhập toàn bộ chat Agent. Khách chưa đăng nhập chỉ có hồ sơ theo phiên; hồ sơ lâu dài/xuyên thiết bị gắn tài khoản. Tìm/khám phá không bắt đăng nhập hoặc hỏi sở thích lúc bắt đầu; người mới khám phá danh mục/ngữ cảnh rồi học dần. | Tech Stack 2026-11-17: tín hiệu B, nhận diện A, người mới B |
 
 Các quy tắc trên là yêu cầu đã chốt của mô hình sản phẩm. Nền tảng dự án, hiến pháp và các đặc tả
 nghiệp vụ đã được đồng bộ về phạm vi mục tiêu ngày 2026-11-16. DTO, cơ chế xác thực, máy trạng thái
@@ -569,7 +591,9 @@ không gán nghĩa thời gian cho đường UML use case.
 
 ## 6. Các quyết định còn mở
 
-Các nhóm còn mở đã được giữ lại khi chủ sản phẩm xác nhận Q31. Không giả định chúng đã được giải quyết.
+OPEN-01–10 được giữ lại khi chủ sản phẩm xác nhận Q31. OPEN-11 tập hợp phần chính sách dữ liệu
+còn mở sau các lựa chọn Tech Stack ngày 2026-11-17; không thuộc lần xác nhận Q31 trước đó.
+Không giả định các phần này đã được giải quyết.
 
 | Mã | Cần quyết định | Ảnh hưởng / ai cần chốt |
 |---|---|---|
@@ -581,8 +605,9 @@ Các nhóm còn mở đã được giữ lại khi chủ sản phẩm xác nhậ
 | OPEN-06 | Xác minh ngoại lệ khi không nhận được email/mất quyền truy cập; mất mạng; thời gian cho vào rạp và yêu cầu kiểm tra độ tuổi. | O-01…O-03; không tự cho phép bỏ qua Core/mã xác nhận hoặc tự gán quy định pháp lý. |
 | OPEN-07 | Ai quản lý danh mục/giá combo, phạm vi cung cấp, bằng chứng nhận combo không có QR, giao từng phần và xử lý nhận nhầm. | B-03, O-04; vai trò giao combo đã chốt, quyền sửa danh mục chưa chốt. |
 | OPEN-08 | Nội dung/quy tắc kiểm duyệt chi tiết, khiếu nại nội dung bị ẩn; quyền lợi của người đi cùng nhưng không đứng tên đơn. | L-04…L-05; quyền viết hiện gắn với tài khoản có vé đã soát, không chứng minh từng người đã xem. |
-| OPEN-09 | Nhà cung cấp email, tham số/quy trình ngoại lệ gửi lại/lỗi giao email; dùng LLM nội bộ hay bên ngoài; các kênh bổ sung ngoài hai kênh đã chốt (email, hộp thông báo trong app). | A-02/A-05/O-02/L-06 và AI; Notification sở hữu chuyển phát/hộp thông báo theo thiết kế service, không mặc định SMS, push, Google login hoặc vendor LLM. |
+| OPEN-09 | Còn mở: tham số/quy trình mã, gửi lại/lỗi giao email và các kênh bổ sung ngoài email, hộp thông báo trong app. Email chọn Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); LLM Workers AI + GPT-OSS 120B tại ADR-0012 và Groq Free dự phòng tại [ADR-0028](../06-decisions/0028-groq-free-for-agent-provider-fallback.md). | A-02/A-05/O-02/L-06 và AI; Notification sở hữu chuyển phát/hộp thông báo theo thiết kế service. Không mặc định SMS, push hoặc Google login. Chọn provider chưa xác nhận tích hợp runtime. |
 | OPEN-10 | Phạm vi chỉ số báo cáo, cách thể hiện doanh thu/hoàn tiền và dữ liệu cá nhân; quy trình sửa thông tin liên hệ, lưu trữ/xóa dữ liệu tài khoản. | M-07, A-04; không suy dữ liệu báo cáo mẫu thành định nghĩa đối soát. |
+| OPEN-11 | Cách nhận diện/hết hạn phiên khách; thời hạn lưu tín hiệu thô và hồ sơ dẫn xuất; xử lý tín hiệu cũ khi đặt lại/bật lại cá nhân hóa; phạm vi dữ liệu gửi/log/trace ra ngoài. | D-01, BR-18–21; không tự lưu khách ẩn danh dài hạn, nhập chat, xóa chứng từ giao dịch hoặc quyết định cách dùng/replay tín hiệu cũ sau đặt lại. Chi tiết hợp đồng/công thức và hành vi khi index hỏng cần đặc tả/kiểm chứng riêng. |
 
 Các yêu cầu an toàn đã chốt (xác thực chữ ký, phân quyền, chống dùng lặp, bảo toàn đơn khi chưa rõ
 thanh toán) vẫn bắt buộc; “còn mở” không cho phép bỏ qua chúng. Không tuyên bố sẵn sàng vận hành
@@ -647,6 +672,10 @@ Xem CONTEXT và nguồn BFF khi chuẩn bị triển khai tiếp; không dùng n
 | Q27–Q28 | Duyệt hủy suất ở cấp chuỗi; tách nhân viên quầy | R-05…R-07, O-04, ACT-CONCESSION |
 | Q29–Q30 | Sơ đồ ghế theo phòng; AI có hỗ trợ sau mua | M-03, phạm vi kênh AI, mục 7 |
 | Q31 | Chủ sản phẩm xác nhận bản tổng hợp và giữ các quyết định còn mở | Trạng thái tài liệu; OPEN-01…OPEN-10 |
+| Tech Stack 2026-11-17 — khám phá | Nâng cấp tìm kiếm từ khóa/ngữ nghĩa/kết hợp; cá nhân hóa theo nội dung + hồ sơ. Tín hiệu B, nhận diện A và người mới B được chấp thuận; các chính sách chưa chốt giữ tại OPEN-11. | D-01, BR-21; ADR-0030/0031. Nguồn: hội thoại `01a1e2f4-4de8-75d2-a43e-efd7365dbd58`. |
+| Tech Stack 2026-11-17 | Đồng ý đề xuất A: bật/tắt cá nhân hóa và đặt lại dữ liệu đã học; giữ đơn hàng/vé. | BR-18; mô tả D-01. Nguồn: hội thoại `01a1e2f4-4de8-75d2-a43e-efd7365dbd58`. |
+| Tech Stack 2026-11-17 — phiên khách | Đồng ý đề xuất A: không nhập hành vi phiên khách khi đăng nhập, giữ hồ sơ tài khoản và học tiếp sau đăng nhập. Tránh trộn sở thích của người dùng chung thiết bị; chấp nhận không mang tín hiệu phiên khách sang hồ sơ lâu dài. | BR-19; mô tả D-01. Nguồn: cùng hội thoại Tech Stack nêu trên. |
+| Tech Stack 2026-11-17 — thứ hạng | Đồng ý đề xuất A: ưu tiên truy vấn, cá nhân hóa giữa các kết quả phù hợp tương đương; trang khám phá có thể cá nhân hóa mạnh hơn. Giữ khả năng tìm đúng phim, chấp nhận kết quả tìm kiếm ít khác biệt giữa người dùng hơn phương án trộn điểm truy vấn/sở thích. | BR-20; mô tả D-01. Nguồn: cùng hội thoại Tech Stack nêu trên. |
 
 ## 9. Nguồn và kiểm tra mô hình
 

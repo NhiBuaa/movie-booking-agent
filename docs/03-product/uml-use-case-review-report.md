@@ -1,5 +1,10 @@
 # Báo cáo review độc lập bộ UML Use Case — Movie Booking Platform
 
+> **Phạm vi lịch sử:** giữ nguyên kết quả review ngày 2026-11-16 và commit đối chiếu bên dưới.
+> Báo cáo không đánh giá các bổ sung Tech Stack ngày 2026-11-17; xem
+> [mô hình sản phẩm hiện hành](use-cases.md) và [danh mục ADR](../06-decisions/README.md).
+> Không dùng nhận xét/bằng chứng cũ như phê duyệt hoặc xác minh runtime cho các lựa chọn mới.
+
 > Ghi chú tra cứu sau chuyển thư mục: đường dẫn/mốc code trong báo cáo giữ nguyên như lúc review.
 > Vị trí ứng dụng hiện tại theo [ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
 > Ghi chú này không sửa kết luận hoặc tái xác nhận bằng chứng của reviewer.

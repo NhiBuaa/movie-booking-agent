@@ -74,10 +74,75 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - Mẫu ghế và UI fixture hiện chưa thống nhất; mục tiêu là sơ đồ theo phòng, không cố định 64 ghế.
 - `ETicketDto` còn trạng thái chung và yêu cầu soát chưa chọn tập ghế; chưa đại diện đầy đủ soát/hủy một phần.
 - Ba role hiện tại chưa xác định ánh xạ cho các vai trò vận hành mục tiêu.
-- Logic chat hiện ở client theo quy tắc; nhà cung cấp LLM/email và tham số vận hành chưa chốt.
-  Thiết kế đích đã chọn Agent đề xuất → app/BFF thực thi; Notification chuyển phát bất đồng bộ,
-  email có mã bảo mật dùng Claim Check theo mục 4 của thiết kế, chưa phải tích hợp đã chạy.
+- Logic chat hiện ở client theo quy tắc; Cloudflare Workers AI + GPT-OSS 120B đã được chọn tại
+  [ADR-0012](docs/06-decisions/0012-cloudflare-workers-ai-and-gpt-oss-120b.md), chưa xác nhận tích hợp runtime.
+  Resend đã được chọn cho Notification Service chuyển phát email tại [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md),
+  chưa xác nhận tích hợp; chính sách xử lý lỗi/gửi lại còn mở.
+- R2 Standard và Cloudflare Images đã chọn cho ảnh danh mục tại
+  [ADR-0019](docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
+  Catalog sở hữu nội dung/metadata ảnh phim, Core giữ snapshot theo suất; chưa cấu hình upload/biến thể/cache hoặc xác nhận runtime. Trailer dùng URL/embed nguồn ngoài.
+- OpenTelemetry + Grafana Alloy + Grafana Cloud đã chọn cho quan sát nền tảng tại
+  [ADR-0020](docs/06-decisions/0020-opentelemetry-alloy-and-grafana-cloud.md), giữ LangSmith riêng cho Agent.
+  Chưa chọn gói/topology hoặc xác nhận instrumentation, dashboard/cảnh báo và telemetry runtime.
+- Bộ kiểm thử mục tiêu đã chọn tại [ADR-0021](docs/06-decisions/0021-layered-testing-stack-for-platform.md).
+  Chưa cài công cụ, migrate suite `node:test`, thay scripts/CI hoặc chạy stack kiểm thử mới;
+  lựa chọn không tái xác nhận kết quả test trước đây.
+- GitHub Actions với GitHub-hosted Linux, Buildx/BuildKit và GHCR đã chọn tại
+  [ADR-0022](docs/06-decisions/0022-github-actions-buildx-and-ghcr-for-ci.md).
+  Chưa tạo workflow/Dockerfile, chạy CI hoặc publish image; hosting/CD chưa chọn, giữ quyết định hoãn.
+- MMKV bật mã hóa + SecureStore giữ khóa đã chọn cho snapshot vé offline trên Customer Mobile tại
+  [ADR-0023](docs/06-decisions/0023-encrypted-mmkv-for-offline-mobile-tickets.md).
+  Chưa cài/build hoặc kiểm mã hóa/native lifecycle; thiết bị nhân viên vẫn cần Core online khi soát.
+- Browser fetch trên Web, expo/fetch trên Mobile và eventsource-parser chung đã chọn cho SSE client tại
+  [ADR-0024](docs/06-decisions/0024-fetch-and-eventsource-parser-for-sse-clients.md).
+  Chưa viết adapter/kiểm streaming runtime; auth delivery, lifecycle và phục hồi còn cần đặc tả.
+- React Hook Form + resolvers + Zod 4 đã chọn cho form nghiệp vụ tại
+  [ADR-0025](docs/06-decisions/0025-react-hook-form-and-zod-for-frontend-forms.md), giữ React state cho form nhỏ.
+  Chưa cài/migrate form hoặc kiểm SSR/native; Core vẫn kiểm payload/quyền và quyết định giao dịch.
+- React Aria Components đã chọn cho nền tương tác Web/Organizer tại
+  [ADR-0026](docs/06-decisions/0026-react-aria-components-for-web-ui-primitives.md); giữ CSS modules/tokens
+  và component native riêng trên Mobile. Chưa cài, migrate UI hoặc kiểm accessibility/SSR/runtime.
+- HTTP trực tiếp + Node fetch/crypto, adapter MoMo/VNPAY riêng đã chọn tại
+  [ADR-0027](docs/06-decisions/0027-direct-http-and-node-crypto-for-payment-gateways.md).
+  Chưa viết adapter, gọi sandbox/production, xác nhận merchant/phí hoặc vectors; giữ chính sách hoàn còn mở.
+- Groq Free GPT-OSS 120B đã chọn làm dự phòng cho primary Cloudflare Free tại
+  [ADR-0028](docs/06-decisions/0028-groq-free-for-agent-provider-fallback.md).
+  Nếu cả hai không dùng được, mục tiêu là báo Agent gián đoạn/giữ booking trực tiếp; chưa triển khai routing/UI
+  hoặc xác minh quota/runtime. Không chấp thuận trả phí; free fallback không là bảo đảm AI 24/7.
+- Core SSE + Query snapshot, Redis Pub/Sub fanout, polling fallback/resync đã chọn tại
+  [ADR-0029](docs/06-decisions/0029-core-sse-and-query-for-seat-map-synchronization.md).
+  Chưa viết endpoint/consumer/client, chọn chu kỳ/freshness hoặc kiểm realtime/multi-replica/runtime;
+  PostgreSQL/Core vẫn quyết định ghế và TTL, không chờ Kafka để xác nhận hold.
+- Typesense OSS đã chọn làm chỉ mục tìm kiếm phim lexical/vector dẫn xuất tại
+  [ADR-0030](docs/06-decisions/0030-typesense-for-movie-search-and-discovery.md), bổ sung ngoại lệ search của ADR-0003.
+  Model embedding theo ADR-0033; chưa cài server/client, tạo index, viết consumer, chọn công thức rank hoặc kiểm chất lượng Việt/tải/runtime.
+  BFF/UI search hiện vẫn dùng fixture; quyết định không xác nhận nâng cấp đã tích hợp hoặc tracking đã triển khai.
+- Phương pháp content-based + hồ sơ phiên/tài khoản đã chọn tại
+  [ADR-0031](docs/06-decisions/0031-content-based-and-profile-scoring-for-personalization.md).
+  Chưa triển khai profile/ranker/tracking; collaborative chỉ xem xét sau khi có dữ liệu/bằng chứng,
+  LLM không là phụ thuộc bắt buộc. Model embedding theo ADR-0033; trọng số và chính sách dữ liệu còn mở.
+  Quyền bật/tắt cá nhân hóa và đặt lại dữ liệu đã học được chọn tại
+  [BR-18](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất); không xóa đơn/vé.
+  Khi đăng nhập không nhập hành vi phiên khách vào hồ sơ tài khoản, giữ hồ sơ hiện có và học tiếp
+  sau đăng nhập khi cá nhân hóa được bật theo [BR-19](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  Chưa triển khai control/chuyển phiên hoặc chốt retention, thời hạn phiên khách và xử lý tín hiệu cũ khi đặt lại/bật lại.
+  Thứ hạng tìm kiếm ưu tiên truy vấn và tên/alias chính xác; cá nhân hóa giữa kết quả phù hợp tương đương,
+  mạnh hơn ở trang khám phá nhưng giữ bộ lọc theo [BR-20](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  Công thức/trọng số/ngưỡng và chất lượng thực tế chưa được xác minh.
+- Cloudflare Workers AI API đã chọn làm provider embedding tại
+  [ADR-0032](docs/06-decisions/0032-cloudflare-workers-ai-for-managed-embeddings.md), trong allocation miễn phí
+  dùng chung với chat. Model `@cf/qwen/qwen3-embedding-0.6b` được chọn tại
+  [ADR-0033](docs/06-decisions/0033-qwen3-embedding-for-movie-retrieval.md); chiều vector/preprocessing và adapter chưa kiểm chứng.
+  [ADR-0034](docs/06-decisions/0034-backend-orchestrated-external-embeddings.md) chọn backend điều phối API
+  và Typesense nhận vector ngoài, không dùng auto-embedding.
+  [ADR-0035](docs/06-decisions/0035-search-module-in-cinema-core.md) chọn module Search thuộc Core,
+  BullMQ indexing nền từ hợp đồng/sự kiện Catalog, Community và owner liên quan; không SQL chéo. Agent gọi API Core. Cấu trúc module/adapter, giới hạn tài nguyên và cách tách worker còn mở.
+  Chưa gọi API, tạo vector/index hoặc cấu hình quota/billing/runtime.
+- Thiết kế đích giữ Agent đề xuất → app/BFF thực thi bằng quyền khách và mã thao tác ổn định;
+  Notification chuyển phát bất đồng bộ, email bảo mật dùng Claim Check theo mục 4 của thiết kế.
+  Identity giữ Better Auth, Notification giữ Resend, Catalog giữ media phim; checkpoint thuộc database Agent. Các lựa chọn này chưa chứng minh đã tích hợp các ranh giới hoặc chọn framework cho năm service bổ trợ.
 - [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên;
+  OPEN-11 tập hợp chính sách dữ liệu cá nhân hóa còn mở sau các lựa chọn tại BR-18–21;
   thiếu chính sách liên quan thì chưa được tuyên bố sẵn sàng vận hành chức năng đó.
 
 ## Canonical References

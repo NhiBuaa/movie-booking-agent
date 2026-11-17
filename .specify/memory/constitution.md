@@ -19,6 +19,13 @@ migrations MUST remain with their service. Services MUST use contracts rather th
 SQL/JOIN/FK or imports of internal persistence models. Shared TypeScript types do not by themselves
 prove runtime compatibility between independently deployed versions.
 
+The target contract source is Zod 4 schemas in `packages/contracts`, with inferred TypeScript
+types and JSON Schema export used to generate Pydantic v2 models for the Python Agent via
+`datamodel-code-generator`, as accepted in [ADR-0014](../../docs/06-decisions/0014-zod-json-schema-and-pydantic-contracts.md).
+Schema/code generation and boundary validation must be checked across languages; shared declarations
+alone do not establish runtime compatibility. Existing interfaces/types have not yet been migrated
+by this documentation amendment.
+
 ### IV. Design System Consistency (Ferrari Dark Cinema)
 All visual presentation across Web, Mobile, and Organizer adheres strictly to the tokens and guidelines defined in `DESIGN.md` and `@platform/design-tokens` (Carbone Nero `#000000`, Notte Profonda `#181818`, Rosso Corsa `#DA291C`, hairline borders, uppercase tracked typography).
 Native navigation and interaction MUST fit the target operating system while preserving the shared identity.
@@ -42,10 +49,14 @@ when relevant; document checks do not establish runtime behavior.
   `apps/organizer-web`, `apps/organizer-mobile`, per
   [ADR-0002](../../docs/06-decisions/0002-customer-organizer-app-boundaries.md).
 - Both Mobile apps MUST target iOS and Android with platform-appropriate interfaces.
-  Mobile frameworks and the Organizer Web framework remain undecided in this amendment.
+  React Native / Expo Router is the Mobile foundation per ADR-0016; the apps remain separate.
 - Customer Mobile serves customers; staff scanning belongs to Organizer Mobile.
   Organizer Web/Mobile provide cinema management and operations by assigned role/cinema;
   co-location MUST NOT imply shared permissions. Mobile management-screen coverage needs feature specification.
+- Organizer Web targets React/Vite/TanStack Router per ADR-0015.
+- Accepted technology choices and rationale are owned by the [ADR index](../../docs/06-decisions/README.md),
+  projected in [PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md#architecture-direction).
+  [CONTEXT](../../CONTEXT.md) distinguishes current implementation; hosting/topology/CD remain deferred.
 - Auditorium layouts MUST support per-room seat counts/configuration. A 64-seat matrix is an existing
   sample, not a universal product constraint. Sweetbox pairs and max 6 seats per booking remain required.
 - Seat Hold Engine enforces atomic all-or-nothing holds with a 5-minute countdown TTL.
@@ -68,9 +79,9 @@ the microservices decisions approved in the 2026-11-17 design conversation and t
 to align project documentation. It replaces shared internal models with service-owned models and
 separates Agent proposals from app/BFF transaction execution. Existing feature evidence remains
 historical; future implementation MUST reconcile affected contracts and checks before claiming compliance.
-This amendment does not approve application implementation, merge or deployment. Future version
+Version 2.0.1 clarifies the already accepted technology choices, including the Zod 4 / JSON Schema / Pydantic boundary-contract pipeline, under the owner's synchronization request in Tech Stack conversation `01a1e2f4-4de8-75d2-a43e-efd7365dbd58`. It preserves the four-app/seven-service principles and does not approve application implementation, merge or deployment. Future version
 increments use major for incompatible principle changes, minor for added obligations and patch
 for non-semantic clarification. Compliance review MUST distinguish accepted requirements from
 implemented and verified behavior, preserving unresolved product policies at their canonical owner.
 
-**Version**: 2.0.0 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not recorded | **Last Amended**: 2026-11-17
+**Version**: 2.0.1 | **Ratified**: TODO(RATIFICATION_DATE): original adoption date not recorded | **Last Amended**: 2026-11-17

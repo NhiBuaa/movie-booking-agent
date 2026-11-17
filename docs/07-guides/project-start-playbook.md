@@ -69,6 +69,10 @@ Chỉ chốt **mô hình tổng quan** ở đây; cách xác thực từng reque
 
 ### 7. Chọn công nghệ
 
+Trong Movie Booking Platform, các lựa chọn hiện hành đã được ghi tại
+[danh mục ADR](../06-decisions/README.md); dùng chúng làm đầu vào thay vì chọn lại từ ví dụ chung bên dưới.
+Nhà cung cấp hosting, topology máy và CD vẫn hoãn đến lúc chuẩn bị deploy theo [PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md).
+
 - **Bạn làm:** Dựa trên use case, dữ liệu cần xử lý, System Architecture và mô hình Security vừa chốt, chọn công nghệ cho frontend, backend, **loại database (SQL/NoSQL)** và các phần cần thiết; ghi ngắn gọn lý do.
 - **Agent giúp:** So sánh phương án theo dữ liệu, cách truy vấn và độ phức tạp thực tế.
 - **Xong khi:** Bạn biết dùng công nghệ gì và vì sao, đặc biệt là loại database.

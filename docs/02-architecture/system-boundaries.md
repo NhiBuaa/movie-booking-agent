@@ -18,7 +18,7 @@ giữ lý do/nguồn duyệt. Bảng dưới tóm tắt góc nhìn giao tiếp, 
 | Phân hệ | Trách nhiệm chính | Dữ liệu chuyển giao tiếp theo | Nguyên tắc an toàn giao dịch |
 | :--- | :--- | :--- | :--- |
 | **Khách hàng** | Thể hiện ý định, chọn phim/suất/ghế, chủ động xác nhận thanh toán. | Yêu cầu ngôn ngữ tự nhiên, danh sách ghế chọn, phương thức trả tiền. | Thao tác thể hiện ý định người dùng; chưa phải kết quả giao dịch. |
-| **Web & Mobile Apps (`apps/customer-web`, `apps/customer-mobile`)** | Render giao diện, điều hướng, thu thập input và phản hồi trực quan. | Lệnh tương tác gửi về BFF / API Gateway. | Phản ánh trung thực trạng thái backend; không tự ý che giấu lỗi. |
+| **Web & Mobile Apps (`apps/customer-web`, `apps/customer-mobile`)** | Render giao diện, điều hướng, thu thập input và phản hồi trực quan. | HTTP tới service sở hữu theo quyền; Web qua BFF khi phù hợp. | Phản ánh trung thực trạng thái backend; không tự ý che giấu lỗi. |
 | **Organizer Web và Mobile (`apps/organizer-web`, `apps/organizer-mobile`)** | Quản trị/vận hành theo M-*/R-* được cấp; Mobile còn có trải nghiệm nhân viên soát vé theo O-* đã chốt, mỗi vai trò tách biệt. Phạm vi kênh theo [nền tảng dự án](../../PROJECT-OVERVIEW.md#in-scope). | Cấu hình, yêu cầu/quyết định hủy, tiến độ hoàn và yêu cầu soát từng ghế theo vai trò. | Kiểm tra vai trò, rạp và dữ liệu ở cả hai kênh; không gộp mọi quyền vào `ORGANIZER_ADMIN` hoặc tự cấp quyền soát/giao combo. |
 | **AI Agent Service (`services/agent-service`)** | Diễn giải ý định, giữ ngữ cảnh, truy vấn theo quyền và lập đề xuất có cấu trúc. | Đề xuất gửi về app/BFF; kết quả Core đã xác minh dùng để tiếp tục chat. | Khách xác nhận đúng nội dung Core đã kiểm tra; app/BFF thực thi dưới quyền khách. Agent không giữ credential giao dịch rộng trong mô hình/checkpoint. |
 | **Cinema Core Service (`services/cinema-core`)** | Rạp/phòng/lịch, snapshot phim theo suất, giá/hold/đơn, thanh toán/hoàn, quyền vé/soát; module Hội viên, Ưu đãi/Voucher và Combo. | Kết quả giao dịch có thẩm quyền, vé ký; sự kiện đã commit. | Transaction cục bộ bảo vệ nhất quán; không chờ consumer để xác nhận giao dịch. |
@@ -31,6 +31,13 @@ giữ lý do/nguồn duyệt. Bảng dưới tóm tắt góc nhìn giao tiếp, 
 ---
 
 ## 2. Hai điểm vào — Một ranh giới giao dịch thống nhất
+
+Các công nghệ đã chọn được ghi tại [danh mục ADR](../06-decisions/README.md), tổng hợp trong
+[PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md#architecture-direction). Module Search thuộc Core,
+BullMQ indexing nền theo [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md);
+client và Agent dùng API Core, không tự truy cập Typesense. Search nhận dữ liệu Catalog, Community và owner liên quan qua hợp đồng/sự kiện, không SQL chéo. PostgreSQL từng service giữ thẩm quyền dữ liệu tương ứng; Core giữ thẩm quyền giao dịch;
+Redis, Typesense và sự kiện không xác nhận giá/ghế/vé thay Core. Đây là kiến trúc đã chọn,
+chưa là bằng chứng các dịch vụ, pipeline hoặc worker đã tích hợp; hosting/topology/CD vẫn hoãn.
 
 Nền tảng cung cấp 2 phương thức đặt vé song song:
 1. **Luồng trực tiếp (Direct Booking)**: Người dùng duyệt phim truyền thống qua trang chủ → chi tiết phim → lịch chiếu → trang chọn ghế → trang thanh toán → trang vé.

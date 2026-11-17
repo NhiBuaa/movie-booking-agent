@@ -46,7 +46,11 @@ Chấp thuận hủy chưa đồng nghĩa hoàn tiền thành công. Chỉ hiể
 
 ## Stack
 
-Chưa chốt framework triển khai của Organizer Web; lần này chỉ tổ chức thư mục và bối cảnh.
+React 19 + TypeScript + Vite + TanStack Router dạng SPA theo
+[ADR-0015](../../docs/06-decisions/0015-react-vite-and-tanstack-router-for-organizer.md).
+TanStack Query/Zustand, React Hook Form/Zod và React Aria Components cho Web theo
+[README](README.md), giữ CSS modules/tokens và React local state cho tương tác gần component.
+Chưa scaffold/cài dependency, chọn host hoặc kiểm chứng build/runtime.
 
 ## Brand Commitments
 

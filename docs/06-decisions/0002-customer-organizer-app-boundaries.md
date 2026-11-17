@@ -35,6 +35,12 @@ Quản lý/quản trị không tự nhận quyền soát vé, giao combo. Kênh/
 tính năng quản trị trên Mobile cần đặc tả riêng trước triển khai; không mặc định parity mọi màn hình Web.
 Công nghệ Mobile, framework Organizer Web và cơ chế xác thực triển khai chưa được chọn trong quyết định này.
 
+Lựa chọn công nghệ tiếp nối thuộc [ADR-0015](0015-react-vite-and-tanstack-router-for-organizer.md)
+(Organizer Web React/Vite/TanStack Router), [ADR-0016](0016-expo-router-and-mobile-native-foundation.md)
+(nền Expo/React Native/Expo Router cho hai app Mobile) và
+[ADR-0008](0008-better-auth-with-direct-login.md) (Better Auth do Identity sở hữu).
+Các lựa chọn đó không chốt parity màn hình hoặc cấp quyền mới; chưa có runtime cho ba app scaffold.
+
 ## Alternatives Considered
 
 - Gộp khách hàng và vận hành vào hai app Web/Mobile: ít ứng dụng hơn nhưng trộn nhiệm vụ và luồng quyền khác nhau.

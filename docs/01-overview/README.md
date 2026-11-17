@@ -10,7 +10,9 @@ Good examples:
 - system landscape;
 - stable high-level conceptual diagrams.
 
-`PROJECT-OVERVIEW.md` remains the canonical project foundation for intent, scope, major constraints, architecture direction, current state, and explicit open questions.
+[`PROJECT-OVERVIEW.md`](../../PROJECT-OVERVIEW.md) remains the canonical project foundation for intent,
+scope, major constraints, architecture direction, and explicit open questions.
+[`CONTEXT.md`](../../CONTEXT.md) owns the current-state projection and implementation limits.
 
 Do not create overview documents that merely restate or paraphrase that root file. If there is no distinct orientation material worth retaining, keep only this `README.md`.
 

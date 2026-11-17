@@ -7,6 +7,12 @@ ranh giới thực thi lệnh và [quyết định](004-service-decomposition/de
 [mô tả use case](../03-product/use-case-descriptions.md) sở hữu điều kiện, kết quả và ngoại lệ.
 CB-01–CB-06 là các bước hành trình, không phải mã use case thay thế B-01–B-08.
 
+**Lựa chọn kỹ thuật tiếp nối:** [Agent](../../services/agent-service/README.md) dùng Python/FastAPI/LangGraph,
+SSE/sse-starlette và Cloudflare Free → Groq Free; [Core](../../services/cinema-core/README.md) sở hữu giao dịch
+và module Search. Agent gọi API Search của Core theo [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md).
+Thông tin/link thanh toán theo từng adapter tại [ADR-0027](../06-decisions/0027-direct-http-and-node-crypto-for-payment-gateways.md);
+QR trong ví dụ không là cam kết mọi cổng/operation đều trả QR. Các lựa chọn này chưa xác nhận tích hợp runtime.
+
 ## 1. Mục đích và Phạm vi
 
 Quy định luồng đặt vé toàn trình bằng ngôn ngữ tự nhiên (Conversational Booking) trong không gian làm việc của **AI Agent Workspace** (`apps/customer-web/chat`, `apps/customer-mobile/chat`).
@@ -99,13 +105,14 @@ sequenceDiagram
   - Ghế đã bán: Bị khóa (`disabled`), không thể click.
   - Hỗ trợ nút mở rộng "Xem toàn màn hình" khi người dùng cần không gian thao tác lớn hơn.
 - **CB-04 — Tóm tắt đơn hàng & Kích hoạt Hold**: Hiển thị chi tiết vé, rạp, phòng chiếu, tổng tiền và bộ đếm ngược thời gian giữ chỗ (Hold Countdown TTL 5 phút).
-- **CB-05 — Thanh toán bảo mật**: Hiển thị tùy chọn thanh toán và mã QR chuyển khoản MoMo/VNPAY.
+- **CB-05 — Thanh toán bảo mật**: Hiển thị tùy chọn và thông tin/link thanh toán do adapter MoMo/VNPAY cung cấp; chỉ hiện QR khi operation thực tế hỗ trợ.
 - **CB-06 — Vé điện tử E-Ticket QR**: Chỉ hiển thị sau khi Cinema Core xác thực thanh toán thành công. Mã QR chứa payload JSON có chữ ký bảo mật xác thực tại cổng vào rạp.
 
 Sơ đồ trên chỉ minh họa luồng thành công. Callback lặp, kết quả chưa rõ hoặc thu tiền sau khi ghế
 được giải phóng phải theo B-06/R-03; AI không xác nhận từ redirect hay tự đổi ghế.
-Email vé được phối hợp gửi sau phát hành, lỗi email không hủy vé. Nhà cung cấp và tham số/quy trình
-ngoại lệ gửi lại còn theo OPEN-09; ranh giới chuyển phát và bảo vệ mã theo thiết kế microservices.
+Email vé được phối hợp gửi sau phát hành, lỗi email không hủy vé. Resend đã được chọn tại
+[ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); tham số/quy trình ngoại lệ gửi lại
+còn theo OPEN-09. Notification sở hữu chuyển phát, bảo vệ mã theo thiết kế microservices; chưa xác nhận tích hợp runtime.
 
 Các bước kiểm tra/xác nhận trên biểu diễn trách nhiệm, không quy định endpoint hoặc số HTTP request.
 Xác nhận gắn đúng nội dung/phiên bản Core kiểm tra; thay đổi nội dung phải xác nhận lại.

@@ -13,6 +13,14 @@ Core giữ hạt nhân giao dịch; Agent đề xuất, app/BFF thực thi; thê
 Mô hình nội bộ/ORM không dùng chung qua contracts. Nội dung bên dưới giữ nguyên ngữ cảnh quyết định
 ban đầu, không là danh sách đầy đủ service đích hoặc bằng chứng triển khai độc lập đã đạt.
 
+Các lựa chọn công nghệ tiếp nối: npm workspaces quản lý JavaScript/TypeScript, Agent Python dùng uv
+theo [ADR-0009](0009-python-fastapi-langgraph-and-uv-for-agent-service.md); nguồn public contracts là
+Zod 4 → JSON Schema → Pydantic v2 tại [ADR-0014](0014-zod-json-schema-and-pydantic-contracts.md).
+Không chia sẻ domain model/ORM giữa service và không coi TypeScript tự kiểm Agent Python.
+[ADR-0035](0035-search-module-in-cinema-core.md) bổ sung module Search thuộc Core, không thêm service thứ tám.
+Các câu về ba app, toàn bộ services dùng npm hay codebase đã tách runtime ở phần lịch sử dưới đây
+không mô tả trạng thái hiện hành; xem [CONTEXT](../../CONTEXT.md) và danh mục ADR.
+
 ## Context
 
 Dự án ban đầu được khởi tạo như một đồ án môn học UI/UX đơn lẻ. Khi mở rộng thành một **Nền tảng hoàn chỉnh (Full Platform)** phục vụ cả 3 đối tượng người dùng:

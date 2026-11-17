@@ -48,8 +48,13 @@ Theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.m
 
 ## Stack
 
-Chưa chốt framework triển khai. Các đề cập React Native/Expo trong tài liệu kỹ thuật cũ là định hướng
-trước [ADR-0002](../../docs/06-decisions/0002-customer-organizer-app-boundaries.md), không phải quyết định stack của lần này.
+React Native + Expo + TypeScript, Expo Router, development builds và SecureStore cho phiên theo
+[ADR-0016](../../docs/06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+Kho snapshot vé offline chọn MMKV mã hóa, SecureStore giữ khóa theo
+[ADR-0023](../../docs/06-decisions/0023-encrypted-mmkv-for-offline-mobile-tickets.md); không cho phép soát ngoại tuyến.
+TanStack Query/Zustand, React Hook Form/Zod và client SSE theo [README](README.md).
+Giữ component native riêng, không dùng primitive DOM React Aria như component native.
+Đây là lựa chọn công nghệ, chưa có scaffold/dependency/build hoặc runtime được kiểm chứng.
 
 ## Brand Commitments
 

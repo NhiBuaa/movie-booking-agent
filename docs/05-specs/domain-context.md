@@ -42,7 +42,9 @@ Theo BR-05–BR-07 và B-05/B-06:
   liên kết đơn và xử lý lặp. Hết hold không tự kết luận thanh toán thất bại khi cổng chưa rõ.
 - Đã thu tiền sau khi ghế được giải phóng: xử lý hoàn khoản thu qua R-03, không tự đặt ghế thay thế.
 - Core phát sự kiện sau commit để Notification gửi email vé; lỗi gửi không đảo ngược kết quả mua.
-  Chi tiết gửi lại/ngoại lệ và provider theo OPEN-09; kênh bàn giao kiến trúc đã chốt tại thiết kế microservices.
+  Chi tiết gửi lại/ngoại lệ theo OPEN-09; Resend đã chọn tại
+  [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md). Kênh bàn giao kiến trúc đã chốt
+  tại thiết kế microservices; chưa xác nhận tích hợp provider hoặc runtime.
 
 ## 4. Đơn, quyền theo ghế và QR chung
 
@@ -83,7 +85,7 @@ Webhook thanh toán và tra cứu công khai không phụ thuộc phiên khách 
 
 Điểm sau soát, đổi điểm lấy voucher, điều kiện đánh giá và kiểm duyệt theo BR-13–BR-16 và L-01–L-06.
 Không dùng tỷ lệ/giá fixture làm chính sách. Chi tiết còn thiếu tham chiếu
-[OPEN-01–OPEN-10](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.
+[OPEN-01–OPEN-11](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.
 
 ## 7. Hợp đồng hiện có và đặc tả tiếp theo
 

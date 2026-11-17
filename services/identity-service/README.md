@@ -10,6 +10,15 @@ Thư mục định vị service theo thiết kế đã chốt; hiện chỉ có 
 - Phát hành/xác minh mã thuộc luồng danh tính; Notification chỉ chuyển phát nội dung được phép gửi.
 - Sở hữu database PostgreSQL logic riêng theo thiết kế; không chia sẻ ORM hoặc đọc SQL của service khác.
 
+## Công nghệ đã chọn
+
+Better Auth với form đăng nhập trực tiếp, session và hướng JWT ký bất đối xứng/JWKS cho API theo
+[ADR-0008](../../docs/06-decisions/0008-better-auth-with-direct-login.md). Session quản lý đăng nhập;
+JWT không thay kiểm quyền tài nguyên hoặc bảo đảm quyền vẫn hiện hành. Identity giữ dữ liệu Auth
+trong database PostgreSQL riêng, không dùng chung bảng/migration Core.
+Chưa chọn framework/ORM triển khai Identity hoặc hợp đồng claim/phiên/luân chuyển khóa cụ thể.
+Không cấp Agent credential giao dịch rộng hoặc token giả danh mọi khách; chưa tích hợp runtime.
+
 ## Ranh giới tích hợp
 
 Service sở hữu tài nguyên tự kiểm quyền nghiệp vụ. Core kiểm bằng chứng quyền cục bộ cho soát/giao
