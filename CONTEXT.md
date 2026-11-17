@@ -85,11 +85,13 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   [ADR-0020](docs/06-decisions/0020-opentelemetry-alloy-and-grafana-cloud.md), giữ LangSmith riêng cho Agent.
   Chưa chọn gói/topology hoặc xác nhận instrumentation, dashboard/cảnh báo và telemetry runtime.
 - Bộ kiểm thử mục tiêu đã chọn tại [ADR-0021](docs/06-decisions/0021-layered-testing-stack-for-platform.md).
-  Chưa cài công cụ, migrate suite `node:test`, thay scripts/CI hoặc chạy stack kiểm thử mới;
+  Chưa cài công cụ, migrate suite `node:test` hoặc chạy stack kiểm thử mới;
   lựa chọn không tái xác nhận kết quả test trước đây.
 - GitHub Actions với GitHub-hosted Linux, Buildx/BuildKit và GHCR đã chọn tại
   [ADR-0022](docs/06-decisions/0022-github-actions-buildx-and-ghcr-for-ci.md).
-  Chưa tạo workflow/Dockerfile, chạy CI hoặc publish image; hosting/CD chưa chọn, giữ quyết định hoãn.
+  [Workflow CI nền](.github/workflows/ci.yml) kiểm suite `node:test`, kiểu, build Customer Web và tài liệu
+  cho PR vào `main`/push `main`; bằng chứng thực thi theo SHA thuộc PR/Actions tương ứng.
+  Chưa có Dockerfile hoặc publish image; hosting/CD chưa chọn, giữ quyết định hoãn.
 - MMKV bật mã hóa + SecureStore giữ khóa đã chọn cho snapshot vé offline trên Customer Mobile tại
   [ADR-0023](docs/06-decisions/0023-encrypted-mmkv-for-offline-mobile-tickets.md).
   Chưa cài/build hoặc kiểm mã hóa/native lifecycle; thiết bị nhân viên vẫn cần Core online khi soát.

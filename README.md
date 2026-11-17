@@ -56,9 +56,30 @@ movie-booking-agent/
 
 ### Chạy kiểm thử tự động
 ```bash
-# Chạy toàn bộ bộ kiểm thử hiện tại của Web App
-npm test
+# Cài dependency theo lockfile gốc, từ thư mục gốc repository
+npm ci
+
+# Chạy toàn bộ test contracts và Customer Web hiện có
+npm run test:all
+
+# Kiểm kiểu contracts và Customer Web; build Customer Web
+npm run typecheck
+npm run build
 ```
+
+### CI nền
+
+[Workflow CI](.github/workflows/ci.yml) chạy trên Ubuntu cho PR vào `main` và push `main`.
+Job code chạy các lệnh trên, giữ suite `node:test`; job tài liệu dùng checkout sạch riêng và
+`check-kit.ps1` từ [Agentic Repo Kit](https://github.com/NhiBuaa/agentic-repo-kit) đã pin commit
+trong workflow. Không cài dependency trong job tài liệu để tránh quét dependency lồng.
+Giữ cảnh báo ngoại lệ Spec Kit theo [hướng dẫn agent](.agents/README.md#spec-kit-integration).
+
+PR kiểm merge commit của sự kiện; push kiểm commit được push. Mỗi job xác nhận và ghi SHA thực
+kiểm, PR ghi thêm head SHA để đối chiếu. Kết quả local và Actions thuộc SHA tương ứng trong PR;
+cấu hình trigger `main` không phải bằng chứng lượt push `main` đã đạt.
+Các app/service chưa có code không có job giả. CI chưa chạy E2E/native, dịch vụ thật, build image,
+publish hoặc deploy; kiểm tài liệu giữ phạm vi và giới hạn của bộ kiểm kit hiện hành.
 
 ### Chạy ứng dụng Web ở môi trường phát triển
 ```bash
