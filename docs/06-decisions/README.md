@@ -14,5 +14,13 @@ Nơi lưu trữ các văn bản ghi nhận quyết định kiến trúc quan tr�
 ---
 
 ## Hướng dẫn tạo ADR mới
+
+[Quyết định thiết kế microservices](../05-specs/004-service-decomposition/decisions.md) giữ nguồn duyệt,
+lý do và đánh đổi của bản tổng hợp 7 service. Đây là bản ghi theo phạm vi thiết kế, không cấp số ADR
+trùng với các ADR công nghệ đang được soạn ở worktree khác; giữ nguyên bằng chứng lịch sử của ADR-0001/0002.
+
+Nền monorepo của ADR-0001 và bốn app của ADR-0002 tiếp tục áp dụng. Ranh giới backend Core/Agent
+ban đầu đọc theo phần mở rộng trong bản thiết kế bảy service; ghi chú tại từng ADR xác định quan hệ này.
+
 - Sử dụng mẫu quyết định chuẩn tại `agentic-repo-kit/templates/adr.md`.
 - Mỗi quyết định cần nêu rõ: Bối cảnh (Context), Quyết định (Decision), Các phương án đã cân nhắc (Alternatives Considered) và Hệ quả/Đánh đổi (Consequences).

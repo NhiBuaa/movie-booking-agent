@@ -8,6 +8,10 @@ Core là thành phần có thẩm quyền **bên trong** nền tảng, không ph
 Mọi thao tác kiểm tra lại quyền tài khoản và phạm vi rạp; biết mã đơn/QR không cấp quyền xem hồ sơ
 khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây không tự định nghĩa enum/API mới.
 
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) sở hữu phân chia trách nhiệm,
+dữ liệu và giao tiếp giữa bảy service nội bộ. Mô tả một kết quả sản phẩm dưới đây không hàm ý mọi bước
+cùng database/transaction hoặc Agent trực tiếp gửi lệnh giao dịch; app/BFF thực thi theo quyền khách.
+
 ## Tài khoản và khám phá
 
 ### D-01 — Khám phá phim, rạp và suất chiếu
@@ -119,7 +123,10 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Kết quả:** đơn/vé xác nhận đúng một lần; chưa đánh dấu ghế đã vào.
 - **Ngoại lệ:** giả/sai đơn/sai tiền: không phát vé; callback lặp: không phát/thu trùng; chưa rõ: kiểm tra tiếp; thu tiền sau khi ghế giải phóng: không tự đặt ghế khác, khởi tạo R-03 trả khoản thu, không yêu cầu khách xin hủy.
 - **Quy tắc:** BR-05…BR-08. Email lỗi không biến vé đã xác nhận thành chưa thanh toán. Thời hạn/ngoại lệ đối soát còn OPEN-03/OPEN-09.
-- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành, chưa chọn cơ chế đồng bộ/xử lý nền. L-06 diễn giải việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu để mô tả thứ tự gửi. Nhà cung cấp và cơ chế gửi lại/lỗi email giữ ở OPEN-09.
+- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành;
+  thiết kế service đã chọn Core phát sự kiện sau commit để Notification chuyển phát. L-06 diễn giải
+  việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu
+  để mô tả thứ tự gửi. Nhà cung cấp và tham số/ngoại lệ gửi lại còn theo OPEN-09.
 
 ### B-07 — Xem đơn và vé
 

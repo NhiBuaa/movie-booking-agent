@@ -45,6 +45,11 @@ trạng thái và ghi nhận giao dịch; app không tự xác nhận soát thà
 gồm ngoại lệ không nhận email/mất mạng, thời gian vào rạp, giao combo, hoàn tiền và báo cáo.
 Ứng dụng không bổ sung soát ngoại tuyến hay cơ chế bỏ qua kiểm tra. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
 
+[Thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md) phân biệt Core còn online với
+Identity gián đoạn: phiên nhân viên sẵn sàng có thể tiếp tục soát bằng bằng chứng quyền cục bộ theo
+điều kiện/thời hạn đã duyệt. Quyền thu hồi đã biết phải bị từ chối; đây chưa phải khả năng đã kiểm chứng trên app.
+Quản trị nội dung, danh tính và báo cáo dùng service sở hữu tương ứng, không mặc định đều thuộc Core.
+
 ## Stack
 
 Chưa chốt framework Mobile; không tạo scaffold hoặc dependency trong lần tổ chức thư mục này.

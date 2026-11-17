@@ -1,5 +1,10 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
+> **Thiết kế backend mới hơn:** [thiết kế bảy service](../004-service-decomposition/spec.md) sở hữu
+> ranh giới dữ liệu và hợp đồng đích: mô hình lưu trữ riêng từng service; Agent đề xuất, app/BFF thực thi.
+> Kế hoạch và Constitution Check bên dưới giữ bối cảnh/phiên bản hiến pháp của feature ban đầu,
+> không xác nhận tuân thủ hiến pháp mới hoặc đã triển khai kiến trúc đích.
+
 > **Đường dẫn lịch sử:** danh sách workspace, React Native/Expo và số test bên dưới thuộc kế hoạch
 > feature ban đầu. Cấu trúc và nền tảng hiện hành theo
 > [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md); framework Mobile chưa chốt.

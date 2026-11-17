@@ -8,6 +8,15 @@ Nguồn thẩm quyền duy nhất (Single Source of Truth) cho các kiểu dữ 
 - `services/cinema-core` (Transactional Backend)
 - `services/agent-service` (Conversational AI Agent)
 
+Danh sách trên phản ánh các workspace hiện có. [Thiết kế bảy service](../../docs/05-specs/004-service-decomposition/spec.md)
+mở rộng chủ hợp đồng tới Catalog, Identity & Access, Notification, Community và Reporting khi triển khai;
+không có nghĩa DTO/event schema cho các service đó đã tồn tại.
+
+Chỉ hợp đồng giao tiếp công khai dùng chung: DTO, schema xác thực biên, định danh và sự kiện theo chủ sở hữu.
+Mô hình nghiệp vụ nội bộ, ORM/schema lưu trữ và migration thuộc từng service; package này không cấp
+quyền SQL chéo hoặc buộc các service dùng cùng mô hình dữ liệu. Hợp đồng Agent hiện có cần được hòa giải
+với ranh giới Agent đề xuất → app/BFF thực thi, không tự trao quyền giao dịch trực tiếp.
+
 **Ranh giới hiện trạng/mục tiêu:** thư viện này sở hữu hợp đồng code hiện có, không sở hữu chính sách
 sản phẩm. [Mô hình use case](../../docs/03-product/use-cases.md) và
 [đặc tả nghiệp vụ](../../docs/05-specs/domain-context.md) định nghĩa yêu cầu mục tiêu.
@@ -39,7 +48,9 @@ packages/contracts/src/
 
 - **Node.js ESM & Type Stripping**: Tương thích hoàn toàn với cờ `erasableSyntaxOnly: true` (TypeScript 5.8+). Không sử dụng `enum` cũ, sử dụng `as const` object constants kết hợp type union.
 - **Zero Runtime Overhead**: Không phụ thuộc vào thư viện bên ngoài; nạp siêu tốc trên cả Web, Mobile, và Backend containers.
-- **End-to-End Type Safety**: Đảm bảo mọi thay đổi về cấu trúc ghế, thời gian giữ chỗ TTL, hoặc chữ ký số vé đều được TypeScript cảnh báo tự động ở toàn bộ các ứng dụng.
+- **End-to-End Type Safety**: TypeScript kiểm tra các bên dùng hợp đồng trong phạm vi build tương ứng;
+  không tự bảo đảm tương thích giữa các phiên bản service đang triển khai độc lập. Cần kiểm chứng hợp đồng
+  và quy trình thay đổi phiên bản theo thiết kế trước khi tuyên bố tích hợp đạt.
 
 ---
 

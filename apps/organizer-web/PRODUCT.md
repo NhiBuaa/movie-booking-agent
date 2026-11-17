@@ -22,7 +22,7 @@ Thuộc [Movie Booking Platform](../../PROJECT-OVERVIEW.md), tách bối cảnh 
 ## Operating Context
 
 Sử dụng trong trình duyệt máy tính và điện thoại, phối hợp với
-[Organizer Mobile](../organizer-mobile/PRODUCT.md). Cùng nền nghiệp vụ và dữ liệu Core;
+[Organizer Mobile](../organizer-mobile/PRODUCT.md). Cùng nền nghiệp vụ và các service sở hữu dữ liệu;
 khả năng dùng trên điện thoại không thay nghĩa app Mobile cài riêng.
 Phạm vi màn hình quản trị trên Mobile cần đặc tả theo tính năng, không tự đồng nhất với mọi màn hình Web.
 
@@ -34,8 +34,10 @@ Phạm vi màn hình quản trị trên Mobile cần đặc tả theo tính năn
   [mô hình use case](../../docs/03-product/use-cases.md) và
   [mô tả use case](../../docs/03-product/use-case-descriptions.md), không suy từ tên app/role.
 
-Core sở hữu dữ liệu và trạng thái giao dịch; Web gửi yêu cầu trong quyền được cấp, phản ánh kết quả
-được xác minh. Chấp thuận hủy chưa đồng nghĩa hoàn tiền thành công. Chỉ hiển thị dữ liệu đúng phạm vi rạp;
+Core sở hữu dữ liệu giao dịch; Catalog sở hữu nội dung phim, Identity sở hữu danh tính/quyền,
+Reporting cung cấp báo cáo có mốc cập nhật theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md).
+Web gửi yêu cầu tới đúng chủ dữ liệu trong quyền được cấp, phản ánh kết quả được xác minh.
+Chấp thuận hủy chưa đồng nghĩa hoàn tiền thành công. Chỉ hiển thị dữ liệu đúng phạm vi rạp;
 ẩn nút không thay kiểm tra quyền tại backend. Không gộp mọi quyền vào role hiện có `ORGANIZER_ADMIN`.
 
 [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) vẫn giữ nguyên;

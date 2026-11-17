@@ -1,5 +1,11 @@
 # Feature Specification: Standard Platform Data Contracts (@platform/contracts)
 
+> **Thiết kế backend mới hơn:** [bảy service](../004-service-decomposition/spec.md) và
+> [quyết định ngày 2026-11-17](../004-service-decomposition/decisions.md) mở rộng góc nhìn Core/Agent.
+> Contracts chia sẻ hợp đồng biên, không chia sẻ ORM/mô hình lưu trữ. Agent đề xuất, app/BFF thực thi
+> lệnh dưới quyền khách; các ví dụ Agent gửi hold/thanh toán bên dưới là bối cảnh feature cũ,
+> không là quyền thực thi của kiến trúc đích. Giữ nguyên tiêu chí và bằng chứng lịch sử.
+
 > **Đường dẫn lịch sử:** phần phạm vi, ví dụ và tiêu chí dưới đây giữ bối cảnh feature ban đầu.
 > Cấu trúc app hiện hành và việc chuyển nhân viên sang Organizer Mobile theo
 > [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md).

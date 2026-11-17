@@ -4,6 +4,11 @@ Hệ sinh thái đặt vé xem phim và quản trị rạp chiếu phim thế h�
 
 ---
 
+Kiến trúc đích gồm **7 service**: Cinema Core, Agent, Catalog, Identity & Access, Notification,
+Community và Reporting. [Bản thiết kế](docs/05-specs/004-service-decomposition/spec.md) sở hữu ranh giới
+dữ liệu/giao tiếp/xử lý lỗi; [quyết định](docs/05-specs/004-service-decomposition/decisions.md) giữ lý do đã duyệt.
+Cây dưới đây phản ánh thư mục hiện có, chưa phải bảy service đã triển khai.
+
 ## 🏛️ Cấu trúc Nền tảng (Platform Monorepo)
 
 ```text
@@ -15,7 +20,7 @@ movie-booking-agent/
 │   └── organizer-mobile/        # App quản trị/vận hành, soát vé iOS/Android (tài liệu mục tiêu)
 ├── services/
 │   ├── cinema-core/             # Backend thẩm quyền tồn kho ghế, khóa giữ vé (Hold TTL), vé điện tử
-│   └── agent-service/           # Dịch vụ AI Agent điều phối tác vụ hội thoại và tool calling
+│   └── agent-service/           # Hội thoại, truy vấn và đề xuất; app/BFF thực thi lệnh theo quyền khách
 ├── packages/
 │   ├── design-tokens/           # Biến màu, kiểu chữ Dark Cinema (từ DESIGN.md)
 │   ├── ui/                      # Thư viện component UI dùng chung
@@ -75,6 +80,7 @@ Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinem
   [Organizer Mobile](apps/organizer-mobile/PRODUCT.md).
 - [Quyết định phân chia ứng dụng và ánh xạ đường dẫn cũ](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
 - [Phạm vi sản phẩm](PROJECT-OVERVIEW.md) và [hiện trạng bản làm việc](CONTEXT.md).
+- [Kiến trúc microservices và các luồng quan trọng](docs/05-specs/004-service-decomposition/spec.md).
 - [UML use case: General → ánh xạ → chi tiết](docs/03-product/use-cases.md),
   [mô tả use case](docs/03-product/use-case-descriptions.md) và [thuật ngữ](GLOSSARY.md).
 - [Quy chuẩn phân tích/vẽ UML](docs/04-standards/use-case-modeling.md) và [bản đồ docs](docs/README.md).

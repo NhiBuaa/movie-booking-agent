@@ -48,6 +48,9 @@ Cinema Core là nguồn thẩm quyền cho ghế, giá, giữ ghế, xác nhận
 Web và AI chỉ trình bày đơn đã xác nhận/vé hợp lệ khi có phản hồi Core được xác minh theo hợp đồng;
 không dùng lời chat hoặc trang chuyển hướng thanh toán làm bằng chứng thành công.
 
+Theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md), Agent lập đề xuất;
+Web/BFF gửi lệnh đã được khách xác nhận dưới quyền khách. BFF không sở hữu giao dịch hoặc dữ liệu service.
+
 Các [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên
 tại nguồn: chính sách hủy/hoàn, ưu đãi/điểm, ngoại lệ vận hành, nhà cung cấp và các phần chưa chốt
 phải được quyết định trước khi tuyên bố chức năng tương ứng sẵn sàng phục vụ thực tế.

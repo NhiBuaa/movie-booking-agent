@@ -10,7 +10,16 @@ Tài liệu này diễn giải ràng buộc giao dịch để đặc tả từng
 
 - Cinema Core là nguồn có thẩm quyền về tồn kho, giá, hold, thanh toán, vé và ghi nhận sử dụng.
 - AI diễn giải ý định và điều phối; chỉ trình bày mua vé thành công sau xác minh phản hồi/chữ ký Core.
+- Theo [thiết kế microservices](004-service-decomposition/spec.md), Agent lập đề xuất; app/BFF gửi
+  lệnh đã được khách xác nhận dưới danh tính khách. Core kiểm lại điều kiện, dùng mã thao tác ổn định;
+  timeout phải tra cứu, không tạo một giao dịch mới mù quáng.
 - Client không tự suy thành công/thất bại từ redirect hoặc kết quả chưa rõ. Thiết bị soát vé cần kết nối Core.
+
+Catalog sở hữu nội dung phim; Core giữ snapshot phiên bản theo suất. Identity sở hữu danh tính/quyền;
+Notification sở hữu chuyển phát; Community sở hữu đánh giá/yêu thích; Reporting giữ bản sao tổng hợp.
+Hội viên, Ưu đãi/Voucher và Combo là module Core. Mỗi service sở hữu database riêng và giao tiếp qua
+hợp đồng, không SQL chéo. Quyền sở hữu, sự kiện và ba kênh tích hợp cụ thể do thiết kế trên sở hữu,
+không suy nhóm use case hoặc tên DTO thành service mới.
 
 ## 2. Phòng chiếu và giữ ghế
 
@@ -32,7 +41,8 @@ Theo BR-05–BR-07 và B-05/B-06:
 - Chỉ phát hành khi có căn cứ thanh toán hợp lệ và quyền sở hữu ghế; xác minh nguồn, toàn vẹn, số tiền,
   liên kết đơn và xử lý lặp. Hết hold không tự kết luận thanh toán thất bại khi cổng chưa rõ.
 - Đã thu tiền sau khi ghế được giải phóng: xử lý hoàn khoản thu qua R-03, không tự đặt ghế thay thế.
-- Email vé gửi sau xác nhận phát hành; lỗi email không đảo ngược kết quả mua. Cơ chế gửi lại/lỗi giữ ở OPEN-09.
+- Core phát sự kiện sau commit để Notification gửi email vé; lỗi gửi không đảo ngược kết quả mua.
+  Chi tiết gửi lại/ngoại lệ và provider theo OPEN-09; kênh bàn giao kiến trúc đã chốt tại thiết kế microservices.
 
 ## 4. Đơn, quyền theo ghế và QR chung
 
@@ -65,6 +75,11 @@ Theo BR-10–BR-12 và R-01–R-07:
 [Danh mục actor](../03-product/use-cases.md#actor) định nghĩa vai trò nghiệp vụ mục tiêu và phạm vi rạp/dữ liệu.
 Các enum `CUSTOMER`, `CINEMA_STAFF`, `ORGANIZER_ADMIN` hiện tại chưa cung cấp ánh xạ đầy đủ;
 đặc tả triển khai phải xác định quyền cụ thể, không ngầm cấp quyền giữa soát vé, giao combo và quản lý.
+
+Core kiểm bằng chứng quyền cục bộ cho soát/giao combo thường xuyên, áp dụng thu hồi đã biết;
+tác vụ rủi ro cao cần quyền hiện hành. Mục tiêu tiếp tục soát 60 phút khi Identity gián đoạn và các
+điều kiện/giới hạn theo [quyết định](004-service-decomposition/decisions.md), không phải soát ngoại tuyến.
+Webhook thanh toán và tra cứu công khai không phụ thuộc phiên khách hoặc gọi Identity mỗi lượt.
 
 Điểm sau soát, đổi điểm lấy voucher, điều kiện đánh giá và kiểm duyệt theo BR-13–BR-16 và L-01–L-06.
 Không dùng tỷ lệ/giá fixture làm chính sách. Chi tiết còn thiếu tham chiếu

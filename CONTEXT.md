@@ -1,6 +1,6 @@
 ---
 status: active
-last_verified: 2026-11-16
+last_verified: 2026-11-17
 ---
 
 # Current Project Context
@@ -16,9 +16,11 @@ last_verified: 2026-11-16
 
 - **Project Name:** movie-booking-agent
 - **Has UI Surface:** True
-- **Platform Architecture:** Bốn app `customer-web`, `customer-mobile`, `organizer-web`, `organizer-mobile`,
-  Cinema Core, Agent Service và packages dùng chung; ranh giới theo
-  [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
+- **Platform Architecture:** Bốn app `customer-web`, `customer-mobile`, `organizer-web`, `organizer-mobile`
+  theo [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md); backend đích gồm 7 service
+  theo [thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md): Cinema Core, Agent,
+  Catalog, Identity & Access, Notification, Community và Reporting. Thư mục service hiện chỉ có Core/Agent;
+  đây không phải bằng chứng bảy service đã có runtime.
   Hai app Mobile nhắm iOS/Android; phần nhân viên soát vé thuộc Organizer Mobile. Chỉ Customer Web có mã nguồn;
   ba app còn lại mới có tài liệu mục tiêu, chưa có build/runtime được xác nhận.
 - **Target Product:** Một đơn vị/chuỗi rạp; actor, phạm vi, BR và OPEN do mô hình use case sở hữu.
@@ -42,6 +44,10 @@ không dùng trạng thái checkout khác làm bằng chứng của bản này.
 ## Active Direction
 
 Dùng mô hình mục tiêu làm đầu vào cho đặc tả và kiểm chứng từng tính năng trước khi sửa code.
+Các ranh giới service/dữ liệu/giao tiếp đã chốt được sở hữu bởi
+[thiết kế](docs/05-specs/004-service-decomposition/spec.md) và
+[quyết định](docs/05-specs/004-service-decomposition/decisions.md) ngày 2026-11-17.
+Bản tổng hợp vẫn chờ chủ sản phẩm đọc lại; việc đồng bộ tài liệu không thay trạng thái chấp thuận đó.
 Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
 phải được thiết kế/kiểm thử theo workflow Spec Kit, không suy ra là đã thực hiện từ lần đồng bộ docs.
 
@@ -68,7 +74,9 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - Mẫu ghế và UI fixture hiện chưa thống nhất; mục tiêu là sơ đồ theo phòng, không cố định 64 ghế.
 - `ETicketDto` còn trạng thái chung và yêu cầu soát chưa chọn tập ghế; chưa đại diện đầy đủ soát/hủy một phần.
 - Ba role hiện tại chưa xác định ánh xạ cho các vai trò vận hành mục tiêu.
-- Logic chat hiện ở client theo quy tắc; nhà cung cấp LLM/email và xử lý lỗi/gửi lại chưa chốt.
+- Logic chat hiện ở client theo quy tắc; nhà cung cấp LLM/email và tham số vận hành chưa chốt.
+  Thiết kế đích đã chọn Agent đề xuất → app/BFF thực thi; Notification chuyển phát bất đồng bộ,
+  email có mã bảo mật dùng Claim Check theo mục 4 của thiết kế, chưa phải tích hợp đã chạy.
 - [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên;
   thiếu chính sách liên quan thì chưa được tuyên bố sẵn sàng vận hành chức năng đó.
 
@@ -79,6 +87,8 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   [thuật ngữ](GLOSSARY.md) và [quy chuẩn UML](docs/04-standards/use-case-modeling.md).
 - [Hiến pháp](.specify/memory/constitution.md), [ranh giới hệ thống](docs/02-architecture/system-boundaries.md)
   và [đặc tả nghiệp vụ](docs/05-specs/domain-context.md).
+- [Kiến trúc microservices](docs/05-specs/004-service-decomposition/spec.md) và
+  [nguồn chấp thuận/lý do](docs/05-specs/004-service-decomposition/decisions.md).
 - [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md)
   và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
 - [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live

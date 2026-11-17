@@ -33,7 +33,10 @@ Các nhóm phục vụ tổng quát:
   không có mạng; thiết bị soát vé vẫn phải online. Cả Customer Mobile và Organizer Mobile hỗ trợ iOS/Android,
   giao diện phù hợp từng hệ; framework Mobile và Organizer Web chưa chốt.
 - **Cinema Core Backend (`services/cinema-core`)**: Quản lý tồn kho ghế, cơ chế khóa giữ vé (Atomic Hold TTL 5 phút), thanh toán và phát hành vé có chữ ký số.
-- **AI Agent Service (`services/agent-service`)**: Xử lý ngôn ngữ tự nhiên, trích xuất điều kiện lọc và điều phối gọi công cụ tới Cinema Core.
+- **AI Agent Service (`services/agent-service`)**: Xử lý ngôn ngữ tự nhiên, truy vấn theo quyền và đề xuất hành động; app/BFF thực thi lệnh đã được khách xác nhận dưới danh tính khách.
+- **Các service nghiệp vụ bổ trợ**: Catalog sở hữu nội dung phim; Identity & Access sở hữu danh tính/quyền;
+  Notification sở hữu thông báo/chuyển phát; Community sở hữu đánh giá/yêu thích; Reporting sở hữu mô hình đọc tổng hợp.
+  Đây là ranh giới thiết kế đích, chưa có đủ thư mục hoặc runtime của bảy service.
 - **Packages dùng chung (`packages/*`)**: `design-tokens`, `contracts`, `ui`, `shared-logic`.
 - **Tài liệu chuẩn hóa**: Kiến trúc và quy chuẩn phát triển tại `docs/` và `.agents/`.
 - **Khả năng sản phẩm mục tiêu**: Tài khoản/xác minh email; combo/voucher; yêu cầu hủy và hoàn tiền;
@@ -53,7 +56,11 @@ Các nhóm phục vụ tổng quát:
 - **Frontend Architecture**: Customer Web dùng Next.js App Router với lớp Backend for Frontend (BFF) mỏng;
   Server Components đọc dữ liệu backend, Client Components xử lý tương tác UI. Định hướng này không
   tự chọn framework cho Organizer Web hoặc hai app Mobile.
-- **Backend Architecture**: Cinema Core đóng vai trò Single Source of Truth cho các giao dịch; Agent Service đóng vai trò Orchestrator.
+- **Backend Architecture**: [Thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md)
+  chốt 7 service và [bản ghi quyết định](docs/05-specs/004-service-decomposition/decisions.md) giữ lý do/nguồn duyệt.
+  Core giữ hạt nhân giao dịch cùng các module Hội viên, Ưu đãi/Voucher và Combo; Agent điều phối hội thoại.
+  Mỗi service sở hữu database PostgreSQL logic riêng. HTTP/JSON phục vụ lệnh/truy vấn;
+  sự kiện đã commit qua transactional outbox, Debezium/Kafka Connect và Kafka. BFF không sở hữu giao dịch.
 - **Design System Authority**: `DESIGN.md` và `packages/design-tokens` là nguồn thẩm quyền duy nhất về màu sắc (Rosso Corsa, Carbone Nero, Notte Profonda), kiểu chữ và quy chuẩn bố cục.
 - **Application Boundaries**: Bốn app Customer/Organizer × Web/Mobile theo
   [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md). PRODUCT trong mỗi app ghi bối cảnh
@@ -96,7 +103,11 @@ sự hiện diện của màn hình/scaffold để khẳng định giao dịch, 
 
 ## Open Questions
 
-- Lựa chọn framework backend cho `services/cinema-core` (Node.js NestJS / Fastify vs Go / Python FastAPI) trong Phase tiếp theo.
-- Lựa chọn giải pháp lưu trữ cache cho Seat Hold Concurrency Lock (Redis vs Postgres Row-Level Lock).
+- Các lựa chọn framework/provider và NFR thuộc luồng tài liệu riêng; cần đối chiếu ADR tương ứng
+  trước triển khai, không mở lại lựa chọn đã được duyệt chỉ vì chưa hợp nhất vào checkout này.
+- Chi tiết khóa/isolation cho giữ ghế và topology/HA/backup chưa được chọn trong phạm vi thiết kế này;
+  PostgreSQL của Core giữ dữ liệu giao dịch có thẩm quyền, Redis không thay nguồn thẩm quyền đó.
+- Chi tiết hợp đồng còn mở và các giá trị cần đặc tả trước triển khai theo
+  [mục 7 của thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md#7-đánh-đổi-và-phần-để-mở).
 - Các chính sách nghiệp vụ chưa chốt giữ tại [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);
   tham chiếu nguồn này thay vì tạo danh sách chính sách song song.
