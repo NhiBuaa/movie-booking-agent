@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  node:
+    name: Tests, types and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out tested commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Verify tested commit
+        env:
+          EVENT_SHA: ${{ github.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          tested_sha=$(git rev-parse HEAD)
+          printf 'Event SHA: %s\nTested SHA: %s\nPR head SHA: %s\n' "$EVENT_SHA" "$tested_sha" "$PR_HEAD_SHA"
+          test "$tested_sha" = "$EVENT_SHA"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: apps/customer-web/package.json
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Run existing tests
+        run: npm run test:all
+
+      - name: Check types
+        run: npm run typecheck
+
+      - name: Build customer web
+        run: npm run build
+
+  documentation:
+    name: Documentation integrity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out tested commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          path: project
+          persist-credentials: false
+
+      - name: Verify tested commit
+        env:
+          EVENT_SHA: ${{ github.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          tested_sha=$(git -C project rev-parse HEAD)
+          printf 'Event SHA: %s\nTested SHA: %s\nPR head SHA: %s\n' "$EVENT_SHA" "$tested_sha" "$PR_HEAD_SHA"
+          test "$tested_sha" = "$EVENT_SHA"
+
+      - name: Check out pinned validation kit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: NhiBuaa/agentic-repo-kit
+          ref: 0ac239c5719db315869e522d80d57b63212caf3e
+          path: kit
+          persist-credentials: false
+
+      - name: Check documentation integrity
+        run: pwsh -File kit/scripts/check-kit.ps1 -TargetPath project

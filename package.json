@@ -11,6 +11,8 @@
   "scripts": {
     "test": "npm test --workspace=apps/customer-web",
     "test:contracts": "npm test --workspace=@platform/contracts",
-    "test:all": "npm run test:contracts && npm run test"
+    "test:all": "npm run test:contracts && npm run test",
+    "typecheck": "npm run typecheck --workspace=@platform/contracts && npm run typecheck --workspace=apps/customer-web",
+    "build": "npm run build --workspace=apps/customer-web"
   }
 }
