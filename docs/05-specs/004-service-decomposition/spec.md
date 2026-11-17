@@ -28,15 +28,18 @@ bản này. Không đánh số lại ADR hoặc sao chép toàn bộ lựa chọ
 
 ## 2. Bản đồ service và dữ liệu sở hữu
 
+Tên service trong bảng dẫn tới README tại thư mục tương ứng trong `services/`. Các thư mục hiện chỉ
+định vị trách nhiệm bằng tài liệu, chưa có code, manifest hoặc cấu hình chạy service.
+
 | Service | Trách nhiệm và dữ liệu sở hữu | Lý do giữ/tách |
 | --- | --- | --- |
-| **Cinema Core** | Rạp, phòng, sơ đồ ghế, lịch chiếu, phiên bản phim gắn với suất, giá/điều kiện bán; hold, đơn, thanh toán/hoàn, quyền vé/soát; Hội viên, Ưu đãi/Voucher, Combo. | Các điều kiện giao dịch liên quan cần được bảo vệ trong một chủ dữ liệu. Không tách theo mỗi bảng hoặc mỗi bước đặt vé. |
-| **Agent** | Ngữ cảnh hội thoại, checkpoint, truy vấn và đề xuất hành động. | Vòng đời mô hình/hội thoại khác giao dịch; không sở hữu trạng thái ghế, tiền hoặc vé. |
-| **Catalog** | Nội dung phim: tên, mô tả, thể loại, trailer, thời lượng, phân loại độ tuổi. | Biên tập nội dung độc lập; Core giữ phiên bản cần cho giao dịch của suất. |
-| **Identity & Access** | Tài khoản, xác thực, xác minh email, phiên/khóa tài khoản; cấp/thu hồi vai trò và phạm vi rạp. | Một nguồn danh tính cho bốn app; service sở hữu tài nguyên vẫn tự kiểm quyền nghiệp vụ. |
-| **Notification** | Mẫu/hộp thông báo, yêu cầu gửi email, lịch sử/trạng thái gửi và gửi lại. | Tách lỗi chuyển phát khỏi giao dịch và xác thực; không tự phát hành/xác minh mã nghiệp vụ. |
-| **Community** | Đánh giá, trạng thái hiển thị/lịch sử kiểm duyệt, phim yêu thích. | Nội dung khách hàng có vòng đời riêng; căn cứ đủ điều kiện đánh giá lấy từ Core. |
-| **Reporting** | Bản sao/mô hình đọc và tổng hợp vận hành/doanh thu, mốc cập nhật. | Tách truy vấn tổng hợp; chấp nhận dữ liệu trễ có thông báo, không là nguồn xác nhận thu/hoàn tiền. |
+| **[Cinema Core](../../../services/cinema-core/README.md)** | Rạp, phòng, sơ đồ ghế, lịch chiếu, phiên bản phim gắn với suất, giá/điều kiện bán; hold, đơn, thanh toán/hoàn, quyền vé/soát; Hội viên, Ưu đãi/Voucher, Combo. | Các điều kiện giao dịch liên quan cần được bảo vệ trong một chủ dữ liệu. Không tách theo mỗi bảng hoặc mỗi bước đặt vé. |
+| **[Agent](../../../services/agent-service/README.md)** | Ngữ cảnh hội thoại, checkpoint, truy vấn và đề xuất hành động. | Vòng đời mô hình/hội thoại khác giao dịch; không sở hữu trạng thái ghế, tiền hoặc vé. |
+| **[Catalog](../../../services/catalog-service/README.md)** | Nội dung phim: tên, mô tả, thể loại, trailer, thời lượng, phân loại độ tuổi. | Biên tập nội dung độc lập; Core giữ phiên bản cần cho giao dịch của suất. |
+| **[Identity & Access](../../../services/identity-service/README.md)** | Tài khoản, xác thực, xác minh email, phiên/khóa tài khoản; cấp/thu hồi vai trò và phạm vi rạp. | Một nguồn danh tính cho bốn app; service sở hữu tài nguyên vẫn tự kiểm quyền nghiệp vụ. |
+| **[Notification](../../../services/notification-service/README.md)** | Mẫu/hộp thông báo, yêu cầu gửi email, lịch sử/trạng thái gửi và gửi lại. | Tách lỗi chuyển phát khỏi giao dịch và xác thực; không tự phát hành/xác minh mã nghiệp vụ. |
+| **[Community](../../../services/community-service/README.md)** | Đánh giá, trạng thái hiển thị/lịch sử kiểm duyệt, phim yêu thích. | Nội dung khách hàng có vòng đời riêng; căn cứ đủ điều kiện đánh giá lấy từ Core. |
+| **[Reporting](../../../services/reporting-service/README.md)** | Bản sao/mô hình đọc và tổng hợp vận hành/doanh thu, mốc cập nhật. | Tách truy vấn tổng hợp; chấp nhận dữ liệu trễ có thông báo, không là nguồn xác nhận thu/hoàn tiền. |
 
 Core có các module trách nhiệm: Lịch/phòng, Ghế/hold, Đơn, Thanh toán/hoàn, Quyền vé/soát,
 Hội viên, Ưu đãi/Voucher và Combo. Chúng phối hợp qua interface, không tự ghi dữ liệu của nhau;

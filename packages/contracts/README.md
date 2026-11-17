@@ -7,10 +7,15 @@ Nguồn thẩm quyền duy nhất (Single Source of Truth) cho các kiểu dữ 
 - `apps/organizer-mobile` (Organizer Mobile và soát vé theo vai trò, iOS/Android)
 - `services/cinema-core` (Transactional Backend)
 - `services/agent-service` (Conversational AI Agent)
+- `services/catalog-service` (Movie Catalog)
+- `services/identity-service` (Identity & Access)
+- `services/notification-service` (Notifications & Delivery)
+- `services/community-service` (Reviews & Favorites)
+- `services/reporting-service` (Reporting Read Models)
 
-Danh sách trên phản ánh các workspace hiện có. [Thiết kế bảy service](../../docs/05-specs/004-service-decomposition/spec.md)
-mở rộng chủ hợp đồng tới Catalog, Identity & Access, Notification, Community và Reporting khi triển khai;
-không có nghĩa DTO/event schema cho các service đó đã tồn tại.
+Danh sách trên ánh xạ các bên dùng hợp đồng theo [thiết kế bảy service](../../docs/05-specs/004-service-decomposition/spec.md).
+Thư mục service hiện chỉ có README, chưa phải package chạy được; việc có thư mục không chứng minh
+DTO/event schema hoặc tích hợp cho mọi service đã tồn tại.
 
 Chỉ hợp đồng giao tiếp công khai dùng chung: DTO, schema xác thực biên, định danh và sự kiện theo chủ sở hữu.
 Mô hình nghiệp vụ nội bộ, ORM/schema lưu trữ và migration thuộc từng service; package này không cấp

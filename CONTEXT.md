@@ -19,8 +19,8 @@ last_verified: 2026-11-17
 - **Platform Architecture:** Bốn app `customer-web`, `customer-mobile`, `organizer-web`, `organizer-mobile`
   theo [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md); backend đích gồm 7 service
   theo [thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md): Cinema Core, Agent,
-  Catalog, Identity & Access, Notification, Community và Reporting. Thư mục service hiện chỉ có Core/Agent;
-  đây không phải bằng chứng bảy service đã có runtime.
+  Catalog, Identity & Access, Notification, Community và Reporting. Đã có đủ bảy thư mục service
+  với README trách nhiệm; chưa có code hoặc cấu hình chạy service, không phải bằng chứng có runtime.
   Hai app Mobile nhắm iOS/Android; phần nhân viên soát vé thuộc Organizer Mobile. Chỉ Customer Web có mã nguồn;
   ba app còn lại mới có tài liệu mục tiêu, chưa có build/runtime được xác nhận.
 - **Target Product:** Một đơn vị/chuỗi rạp; actor, phạm vi, BR và OPEN do mô hình use case sở hữu.

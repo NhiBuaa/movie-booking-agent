@@ -7,7 +7,8 @@ Hệ sinh thái đặt vé xem phim và quản trị rạp chiếu phim thế h�
 Kiến trúc đích gồm **7 service**: Cinema Core, Agent, Catalog, Identity & Access, Notification,
 Community và Reporting. [Bản thiết kế](docs/05-specs/004-service-decomposition/spec.md) sở hữu ranh giới
 dữ liệu/giao tiếp/xử lý lỗi; [quyết định](docs/05-specs/004-service-decomposition/decisions.md) giữ lý do đã duyệt.
-Cây dưới đây phản ánh thư mục hiện có, chưa phải bảy service đã triển khai.
+Cây dưới đây phản ánh thư mục hiện có. Bảy thư mục service hiện chỉ có README định vị trách nhiệm,
+chưa có code hoặc cấu hình chạy; không phải bảy service đã triển khai.
 
 ## 🏛️ Cấu trúc Nền tảng (Platform Monorepo)
 
@@ -20,7 +21,12 @@ movie-booking-agent/
 │   └── organizer-mobile/        # App quản trị/vận hành, soát vé iOS/Android (tài liệu mục tiêu)
 ├── services/
 │   ├── cinema-core/             # Backend thẩm quyền tồn kho ghế, khóa giữ vé (Hold TTL), vé điện tử
-│   └── agent-service/           # Hội thoại, truy vấn và đề xuất; app/BFF thực thi lệnh theo quyền khách
+│   ├── agent-service/           # Hội thoại, truy vấn và đề xuất; app/BFF thực thi lệnh theo quyền khách
+│   ├── catalog-service/         # Nội dung phim và snapshot phiên bản cho Core
+│   ├── identity-service/        # Tài khoản, xác thực, vai trò và phạm vi rạp
+│   ├── notification-service/    # Hộp thông báo và chuyển phát email
+│   ├── community-service/       # Đánh giá, kiểm duyệt và phim yêu thích
+│   └── reporting-service/       # Mô hình đọc và báo cáo có mốc cập nhật
 ├── packages/
 │   ├── design-tokens/           # Biến màu, kiểu chữ Dark Cinema (từ DESIGN.md)
 │   ├── ui/                      # Thư viện component UI dùng chung

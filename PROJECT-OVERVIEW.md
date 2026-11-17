@@ -36,7 +36,7 @@ Các nhóm phục vụ tổng quát:
 - **AI Agent Service (`services/agent-service`)**: Xử lý ngôn ngữ tự nhiên, truy vấn theo quyền và đề xuất hành động; app/BFF thực thi lệnh đã được khách xác nhận dưới danh tính khách.
 - **Các service nghiệp vụ bổ trợ**: Catalog sở hữu nội dung phim; Identity & Access sở hữu danh tính/quyền;
   Notification sở hữu thông báo/chuyển phát; Community sở hữu đánh giá/yêu thích; Reporting sở hữu mô hình đọc tổng hợp.
-  Đây là ranh giới thiết kế đích, chưa có đủ thư mục hoặc runtime của bảy service.
+  Bảy service đã có thư mục/README định vị theo thiết kế đích; chưa có code hoặc runtime service.
 - **Packages dùng chung (`packages/*`)**: `design-tokens`, `contracts`, `ui`, `shared-logic`.
 - **Tài liệu chuẩn hóa**: Kiến trúc và quy chuẩn phát triển tại `docs/` và `.agents/`.
 - **Khả năng sản phẩm mục tiêu**: Tài khoản/xác minh email; combo/voucher; yêu cầu hủy và hoàn tiền;
