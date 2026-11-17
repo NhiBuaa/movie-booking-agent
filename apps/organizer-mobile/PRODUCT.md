@@ -33,7 +33,7 @@ và hỗ trợ nhân viên tra cứu/soát quyền ghế tại rạp. Bối cả
 ## Capabilities and Constraints
 
 Phạm vi mục tiêu gồm quản trị/vận hành theo M-* và R-* được cấp, cùng soát vé/tra cứu hỗ trợ O-01–O-03,
-kiểm tra quyền ghế O-05 theo [mô hình use case](../../docs/03-product/use-cases.md) và
+kiểm tra quyền ghế O-05 và cập nhật vận hành nhận khách O-06 theo [mô hình use case](../../docs/03-product/use-cases.md) và
 [mô tả](../../docs/03-product/use-case-descriptions.md).
 
 QR chung của lượt đặt tra cứu quyền theo ghế; một lần quét không dùng hết đơn.
@@ -41,8 +41,10 @@ Thiếu QR phải theo luồng xác minh đã chốt; tên/số điện thoại/
 Nhân viên không tự duyệt hoàn; quản lý không tự nhận quyền soát/giao combo. Core kiểm tra quyền,
 trạng thái và ghi nhận giao dịch; app không tự xác nhận soát thành công từ QR cục bộ.
 
-[OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) giữ nguyên,
-gồm ngoại lệ không nhận email/mất mạng, thời gian vào rạp, giao combo, hoàn tiền và báo cáo.
+Q173-A bổ sung yêu cầu về xét lại nội dung, sửa sai hội viên, sự cố combo, ngoại lệ xóa dữ liệu và
+cảnh báo Organizer Web/Mobile theo đúng quyền; chưa tự chốt mọi màn hình quản trị Mobile hoặc kênh giao combo.
+[OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) giữ phần phụ thuộc
+nhà cung cấp/hợp đồng/nhân sự, bảng lưu/xóa, pháp lý và kiểm chứng; không hỏi lại chính sách đã được chọn.
 Ứng dụng không bổ sung soát ngoại tuyến hay cơ chế bỏ qua kiểm tra. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
 
 ## Stack

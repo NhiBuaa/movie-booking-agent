@@ -1,9 +1,12 @@
 ---
 status: active
-last_verified: 2026-11-16
+last_verified: 2026-11-17
 ---
 
 # Current Project Context
+
+Ngày kiểm tra trên áp dụng cho việc đối chiếu tài liệu UML theo Q173-A; các ghi nhận code/runtime
+bên dưới giữ nguyên mốc bằng chứng riêng, không được tái xác nhận từ lần kiểm tra tài liệu này.
 
 ## Current Phase
 
@@ -68,9 +71,11 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - Mẫu ghế và UI fixture hiện chưa thống nhất; mục tiêu là sơ đồ theo phòng, không cố định 64 ghế.
 - `ETicketDto` còn trạng thái chung và yêu cầu soát chưa chọn tập ghế; chưa đại diện đầy đủ soát/hủy một phần.
 - Ba role hiện tại chưa xác định ánh xạ cho các vai trò vận hành mục tiêu.
-- Logic chat hiện ở client theo quy tắc; nhà cung cấp LLM/email và xử lý lỗi/gửi lại chưa chốt.
-- [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên;
-  thiếu chính sách liên quan thì chưa được tuyên bố sẵn sàng vận hành chức năng đó.
+- Logic chat hiện ở client theo quy tắc; nhà cung cấp LLM/email và cấu hình tích hợp chưa chốt; chính sách lỗi/gửi lại mục tiêu đã được Q149/Q153 chọn.
+- [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) giữ mã truy vết,
+  phần đã chốt được ghi tại [Q32–Q172](docs/03-product/use-cases.md#61-quyết-định-đã-xác-nhận);
+  Q173-A xác nhận tổng hợp; sơ đồ/danh mục/mô tả/BR đã đồng bộ phần bổ sung trong tài liệu;
+  phụ thuộc đặc tả/pháp lý/tích hợp/nhân sự còn chưa kiểm chứng, không tuyên bố sẵn sàng vận hành.
 
 ## Canonical References
 

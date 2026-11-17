@@ -28,8 +28,11 @@ Phạm vi màn hình quản trị trên Mobile cần đặc tả theo tính năn
 
 ## Capabilities and Constraints
 
-- Mục tiêu M-01–M-07: danh mục phim/trailer, giá/ưu đãi, phòng/ghế, lịch chiếu, quyền và báo cáo.
+- Mục tiêu M-01–M-10: danh mục phim/trailer, giá/ưu đãi, phòng/ghế, lịch chiếu, quyền và báo cáo; danh mục/giá combo, bật/tắt cung cấp tại rạp, chính sách hội viên theo từng vai trò.
 - R-02–R-06: xét yêu cầu hủy, theo dõi thực hiện/hoàn tiền, đề nghị và duyệt hủy suất theo đúng vai trò.
+- Bổ sung R-08 lập hồ sơ lỗi dịch vụ; O-06/O-07 giám sát nhận khách/xử lý sự cố combo;
+  L-09/L-10 đề nghị/duyệt sửa sai hội viên, L-05/L-08 kiểm duyệt/xét lại bởi người khác,
+  A-08 xử lý ngoại lệ xóa dữ liệu được giao; L-06/N-01 thông báo/cảnh báo theo quyền.
 - Các quyền khác của quản trị viên chỉ theo
   [mô hình use case](../../docs/03-product/use-cases.md) và
   [mô tả use case](../../docs/03-product/use-case-descriptions.md), không suy từ tên app/role.
@@ -39,8 +42,8 @@ Core sở hữu dữ liệu và trạng thái giao dịch; Web gửi yêu cầu 
 ẩn nút không thay kiểm tra quyền tại backend. Không gộp mọi quyền vào role hiện có `ORGANIZER_ADMIN`.
 
 [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) vẫn giữ nguyên;
-đặc biệt quyền sửa suất đã bán/giữ ghế, hoàn tiền, quản lý combo và chỉ số báo cáo chưa đủ chính sách
-để tự tuyên bố sẵn sàng vận hành. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
+Q173-A đã đồng bộ chính sách sản phẩm, còn hợp đồng/quyền/nhân sự, bảng lưu/xóa, pháp lý và kiểm chứng tích hợp
+trước vận hành; không coi các lựa chọn đã chốt là chưa có hoặc tài liệu là bằng chứng runtime. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
 
 ## Stack
 

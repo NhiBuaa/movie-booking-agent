@@ -32,7 +32,10 @@ trong phạm vi được phép, theo dõi cùng một giao dịch và xuất tr�
 Phạm vi mục tiêu gồm khám phá phim/rạp/suất, tài khoản/xác minh email, chọn ghế, combo/voucher,
 thanh toán MoMo/VNPAY, xem đơn/vé, yêu cầu hủy/theo dõi hoàn; yêu thích/đánh giá,
 hội viên/điểm/đổi voucher và thông tin cá nhân/thông báo.
-Đây là phạm vi dự kiến, chưa phải chức năng đã triển khai.
+Bổ sung theo Q173-A: đổi ghế cùng suất B-09; gửi/theo dõi xét lại đánh giá L-07;
+đổi email xác minh cũ/mới, xóa chủ động một/toàn bộ chat A-06 và yêu cầu/theo dõi xóa tài khoản A-07.
+Chat không tự xóa theo kỳ; chờ đóng giữ quyền đơn cũ theo nguồn nghiệp vụ.
+Đây là yêu cầu mục tiêu đã chọn, chưa phải chức năng đã triển khai.
 
 [Mô hình use case](../../docs/03-product/use-cases.md) sở hữu mục tiêu, quyền, quy tắc và
 [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);

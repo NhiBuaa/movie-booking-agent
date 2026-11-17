@@ -35,7 +35,10 @@ Các khả năng dưới đây là **phạm vi sản phẩm mục tiêu**, khôn
 - Khám phá phim/rạp/suất chiếu; tài khoản và xác minh email; chọn ghế theo phòng; combo/voucher;
   thanh toán MoMo/VNPAY; xem đơn và vé điện tử.
 - Gửi yêu cầu hủy, theo dõi xử lý/hoàn tiền; lưu phim yêu thích, viết đánh giá; hội viên, điểm,
-  đổi voucher; hồ sơ và thông báo giao dịch.
+  đổi voucher; hồ sơ và thông báo dịch vụ.
+- Đổi ghế cùng suất (B-09), gửi/theo dõi xét lại đánh giá (L-07), đổi email theo xác minh cũ/mới;
+  xóa một/toàn bộ chat (A-06), yêu cầu/theo dõi xóa tài khoản (A-07) trên màn hình chuyên biệt.
+  Chat không tự xóa theo kỳ; chờ đóng vẫn giữ quyền đơn cũ theo mô hình.
 - Đặt trực tiếp và chat dùng cùng trạng thái giao dịch. Phạm vi thao tác qua chat do
   [mô hình use case](../../docs/03-product/use-cases.md#phạm-vi-kênh-ai) sở hữu;
   không suy mọi chức năng khách hàng đều được thao tác trong chat.
@@ -49,8 +52,8 @@ Web và AI chỉ trình bày đơn đã xác nhận/vé hợp lệ khi có phả
 không dùng lời chat hoặc trang chuyển hướng thanh toán làm bằng chứng thành công.
 
 Các [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên
-tại nguồn: chính sách hủy/hoàn, ưu đãi/điểm, ngoại lệ vận hành, nhà cung cấp và các phần chưa chốt
-phải được quyết định trước khi tuyên bố chức năng tương ứng sẵn sàng phục vụ thực tế.
+tại nguồn. Q173-A đã chốt cách hiểu chung và đồng bộ yêu cầu; phần nhà cung cấp/hợp đồng, bảng lưu/xóa,
+pháp lý và kiểm chứng triển khai vẫn phải hoàn tất trước vận hành. Không suy tài liệu thành chức năng đã chạy.
 
 ## Brand Commitments
 

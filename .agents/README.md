@@ -13,6 +13,9 @@ It is not a task tracker and must not duplicate Issue or Pull Request state.
 │   ├── README.md
 │   ├── codegraph.md
 │   └── ui-skill-routing.md
+├── skills/
+│   └── speckit-*/
+│       └── SKILL.md
 └── references/
     └── README.md
 ```
@@ -30,6 +33,22 @@ If a rule must also be obeyed by human developers or by the software itself, it 
 `.agents/references/` contains non-normative supporting material for agents: examples, patterns, lookup notes, or curated references.
 
 References do not override `AGENTS.md`, Standards, Specifications, ADRs, source code, or tests.
+
+## Spec Kit Integration
+
+Keep the project-local `speckit-*` skills managed by the
+[Codex integration manifest](../.specify/integrations/codex.manifest.json).
+They support the Spec Kit workflow required by `AGENTS.md`, using this project's `.specify/`
+configuration and feature specifications. Global planning/interview skills may complement that
+workflow; similar descriptions alone do not make them interchangeable with this integration.
+
+This is the concrete need that justifies `.agents/skills/`. The exception covers only the Spec Kit
+integration, not arbitrary custom skills or copies of personal global skills. Keep generated skills
+with their integration metadata; evaluate changes as part of a Spec Kit integration update.
+
+The external `check-kit.ps1` currently warns whenever `.agents/skills/` exists, without checking
+this justification or the integration manifest. Record that warning as a known checker limitation;
+do not remove the integration or disable other checks just to obtain a warning-free result.
 
 ## What Does Not Belong Here
 

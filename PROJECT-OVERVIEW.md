@@ -45,7 +45,9 @@ Các nhóm phục vụ tổng quát:
 - Tích hợp thanh toán bằng tiền mặt vật lý tại quầy rạp (Phase 1 tập trung cổng thanh toán số).
 - Hệ thống đề xuất phim cá nhân hóa bằng thuật toán học máy phức tạp nhiều bên (Multi-party dynamic scheduling).
 - Quản lý kho hàng bắp nước vật lý ngoài các combo vé tiêu chuẩn.
-- Sàn nhiều đơn vị rạp độc lập, soát vé ngoại tuyến và đổi suất/đổi ghế sau mua không thuộc mô hình đã chốt.
+- Sàn nhiều đơn vị rạp độc lập, soát vé ngoại tuyến và đổi sang suất khác sau mua ngoài phạm vi.
+  Đổi vị trí ghế trong cùng suất đã được bổ sung qua
+  [Q34–Q44](docs/03-product/use-cases.md#61-quyết-định-đã-xác-nhận); đã phản ánh tại B-09; hợp đồng kỹ thuật/kiểm chứng còn cần hoàn tất.
 
 ## Architecture Direction
 
@@ -98,5 +100,5 @@ sự hiện diện của màn hình/scaffold để khẳng định giao dịch, 
 
 - Lựa chọn framework backend cho `services/cinema-core` (Node.js NestJS / Fastify vs Go / Python FastAPI) trong Phase tiếp theo.
 - Lựa chọn giải pháp lưu trữ cache cho Seat Hold Concurrency Lock (Redis vs Postgres Row-Level Lock).
-- Các chính sách nghiệp vụ chưa chốt giữ tại [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);
+- Các nhóm quyết định và phụ thuộc đặc tả/kiểm chứng giữ tại [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);
   tham chiếu nguồn này thay vì tạo danh sách chính sách song song.

@@ -6,6 +6,8 @@
 - [Bảng phân rã chức năng](use-cases.md#22-bảng-phân-rã-chức-năng).
 - [Sơ đồ use case chi tiết theo chức năng](use-cases.md#23-sơ-đồ-use-case-chi-tiết).
 - [Phạm vi, actor, quy tắc và quyết định còn mở](use-cases.md).
+- [Lựa chọn đã xác nhận khi làm rõ OPEN, Q32–Q172](use-cases.md#61-quyết-định-đã-xác-nhận)
+  và [phần còn phải đặc tả/kiểm chứng](use-cases.md#62-giới-hạn-và-phần-tiếp-tục-làm-rõ).
 - [Mô tả từng use case](use-case-descriptions.md).
 - [Thuật ngữ nghiệp vụ](../../GLOSSARY.md).
 - Bối cảnh riêng: [Customer Web](../../apps/customer-web/PRODUCT.md),
@@ -16,6 +18,10 @@ Mô hình trên là sản phẩm mục tiêu đã xác nhận. Actor, mục tiê
 mô tả diễn giải luồng/ngoại lệ, không tạo chính sách khác. Các tài liệu kiến trúc/đặc tả dẫn tới nguồn này;
 đối chiếu code tại [mục 7](use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu) trước khi tuyên bố đã triển khai.
 Phương pháp vẽ/kiểm chứng thuộc [quy chuẩn UML](../04-standards/use-case-modeling.md).
+
+Chủ sản phẩm xác nhận tổng hợp tại **Q173-A** ngày 2026-11-17. Bộ tài liệu đã đồng bộ General → ánh xạ → chi tiết,
+danh mục, mô tả và BR theo Q32–Q172: 9 actor, 55 use case, 10 khối Mermaid.
+Các phụ thuộc tích hợp/pháp lý/nhân sự vẫn ở mục 6.2; tài liệu không xác nhận chức năng đã vận hành.
 
 PRODUCT ghi người dùng, công việc, nền tảng và giới hạn của từng app theo
 [ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
