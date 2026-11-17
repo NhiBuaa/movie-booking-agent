@@ -1,5 +1,10 @@
 # Báo cáo review độc lập bộ UML Use Case — Movie Booking Platform
 
+> **Phạm vi lịch sử:** giữ nguyên kết quả review ngày 2026-11-16 và commit đối chiếu bên dưới.
+> Báo cáo không đánh giá các bổ sung Tech Stack ngày 2026-11-17; xem
+> [mô hình sản phẩm hiện hành](use-cases.md) và [danh mục ADR](../06-decisions/README.md).
+> Không dùng nhận xét/bằng chứng cũ như phê duyệt hoặc xác minh runtime cho các lựa chọn mới.
+
 **Ngày thực hiện:** 2026-11-16  
 **Người thực hiện:** Antigravity (Độc lập)  
 **Phạm vi bàn giao:** Handoff `C:/Users/NhiBuaa/AppData/Local/Temp/movie-booking-use-case-review-handoff-20261116.md`  

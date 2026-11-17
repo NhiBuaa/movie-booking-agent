@@ -10,6 +10,12 @@
 
 **Spec Reference**: [docs/05-specs/002-web-bff-routes/spec.md](spec.md)
 
+> **Quyết định tiếp nối — 2026-11-17:** [danh mục ADR](../../06-decisions/README.md) sở hữu quyết định;
+> [README Core](../../../services/cinema-core/README.md) tổng hợp stack mục tiêu đã chọn, gồm
+> backend/database/auth/payment adapters và module Search. Kế hoạch dưới đây giữ phạm vi BFF
+> in-memory ban đầu; chưa phải kế hoạch migration/triển khai stack mới đã được duyệt.
+> Giữ nguyên fixture, header mô phỏng, HMAC và bằng chứng kiểm thử của feature; xác minh code mới riêng.
+
 ---
 
 ## 1. Tóm tắt kế hoạch (Summary)

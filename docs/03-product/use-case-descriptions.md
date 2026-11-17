@@ -16,8 +16,24 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Điều kiện trước:** có thông tin được công bố; đọc thông tin không bắt buộc đăng nhập.
 - **Luồng:** nhập tiêu chí hoặc duyệt danh mục → xem phim/trailer, rạp, lịch chiếu, giá và đánh giá → chọn suất. Có thể dùng giao diện trực tiếp hoặc chat.
 - **Kết quả:** có thông tin/lựa chọn suất; chưa giữ ghế hoặc tạo vé.
+- **Khám phá nâng cấp:** tìm tên/alias, không dấu/lỗi gõ và theo mô tả nội dung; kết hợp từ khóa/ngữ nghĩa.
+  Theo BR-21, hồ sơ dùng sở thích khai báo/yêu thích/đánh giá/mua đã xác nhận và lượt xem chi tiết/click/search;
+  không tự nhập toàn bộ chat. Khách chỉ theo phiên, tài khoản có hồ sơ lâu dài/xuyên thiết bị.
+  Không bắt đăng nhập hoặc hỏi sở thích lúc bắt đầu; người mới khám phá ngay theo danh mục/ngữ cảnh.
 - **Ngoại lệ:** không có kết quả, suất ngừng bán hoặc nguồn không truy vấn được: báo đúng tình trạng, không bịa suất thay thế.
+- **Khi LLM/embedding gián đoạn:** giữ tìm kiếm từ khóa/bộ lọc/danh mục và dữ liệu hợp lệ có sẵn;
+  tìm kiếm trực tiếp không phụ thuộc hội thoại Agent theo
+  [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md). Cách suy giảm khi chính index lỗi cần đặc tả riêng.
 - **Quy tắc:** BR-02, BR-17. Đọc lịch chiếu không phải bảo đảm còn ghế.
+- **Thứ hạng đã chốt:** BR-20 ưu tiên truy vấn, tên phim/alias khớp chính xác đứng trước;
+  hồ sơ sở thích chỉ điều chỉnh giữa các kết quả có độ phù hợp tương đương. Trang khám phá có thể
+  cá nhân hóa mạnh hơn, vẫn giữ đúng bộ lọc. Công thức/trọng số và ngưỡng tương đương cần đặc tả/đánh giá.
+- **Kiểm soát cá nhân hóa đã chốt:** BR-18 cho bật/tắt học và dùng hồ sơ sở thích, đặt lại dữ liệu đã học;
+  tìm theo truy vấn/bộ lọc vẫn dùng được. Đặt lại không xóa đơn/vé; chưa thêm xem/xóa từng tương tác.
+  BR-19: khi đăng nhập, không nhập hành vi phiên khách; giữ hồ sơ tài khoản hiện có và học tiếp từ
+  tương tác sau đăng nhập khi cá nhân hóa được bật. Chấp nhận không chuyển tín hiệu khách vào hồ sơ lâu dài.
+  Retention, thời hạn phiên khách và xử lý tín hiệu cũ khi đặt lại/bật lại còn OPEN-11;
+  đây chưa là đặc tả đầy đủ luồng nâng cấp hoặc bằng chứng tracking đã triển khai.
 
 ### A-01 — Đăng ký tài khoản
 
@@ -119,7 +135,7 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Kết quả:** đơn/vé xác nhận đúng một lần; chưa đánh dấu ghế đã vào.
 - **Ngoại lệ:** giả/sai đơn/sai tiền: không phát vé; callback lặp: không phát/thu trùng; chưa rõ: kiểm tra tiếp; thu tiền sau khi ghế giải phóng: không tự đặt ghế khác, khởi tạo R-03 trả khoản thu, không yêu cầu khách xin hủy.
 - **Quy tắc:** BR-05…BR-08. Email lỗi không biến vé đã xác nhận thành chưa thanh toán. Thời hạn/ngoại lệ đối soát còn OPEN-03/OPEN-09.
-- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành, chưa chọn cơ chế đồng bộ/xử lý nền. L-06 diễn giải việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu để mô tả thứ tự gửi. Nhà cung cấp và cơ chế gửi lại/lỗi email giữ ở OPEN-09.
+- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành, chưa chọn cơ chế đồng bộ/xử lý nền. L-06 diễn giải việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu để mô tả thứ tự gửi. Provider chọn Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); chính sách gửi lại/lỗi email vẫn OPEN-09.
 
 ### B-07 — Xem đơn và vé
 
@@ -316,6 +332,12 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Điều kiện trước:** có quyền; thông tin/media đáp ứng quy tắc danh mục.
 - **Luồng:** nhập/sửa metadata/trailer → kiểm tra → lưu/công bố theo trạng thái → các kênh dùng cùng dữ liệu.
 - **Kết quả:** danh mục cập nhật; không tự đổi quyền vé đã bán.
+- **Phạm vi media đã chốt:** hệ thống upload/lưu poster, banner và ảnh; trailer dùng URL/video nhúng
+  từ nguồn ngoài. Bản đầu không tự upload/lưu/phục vụ video trailer. Chủ sản phẩm chọn A ngày
+  2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`) để giữ trọng tâm
+  ở booking/Agent và kiến trúc phân tán. Storage/xử lý ảnh theo
+  [ADR-0019](../06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
+  nguồn video chưa chọn. Đây là phạm vi mục tiêu, chưa xác nhận tích hợp.
 - **Ngoại lệ:** nội dung sai hoặc bản ghi có giao dịch phụ thuộc: không xóa mù lịch sử; thay đổi dữ liệu liên quan suất đã bán còn OPEN-05.
 - **Quy tắc:** BR-01. Nhãn độ tuổi không chứng minh đã kiểm tra tuổi khách; cần OPEN-06.
 

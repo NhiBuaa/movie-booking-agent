@@ -41,3 +41,14 @@ _Tránh_: Tiền mặt hoặc số dư thanh toán.
 
 **Voucher**: Quyền hưởng một ưu đãi theo điều kiện áp dụng, có thể nhận từ chương trình khuyến mãi hoặc đổi điểm.
 _Tránh_: Đồng nhất voucher với điểm hội viên.
+
+## Khám phá và sở thích
+
+**Hồ sơ sở thích**: Thông tin mô tả gu xem phim để điều chỉnh gợi ý; khác hồ sơ liên hệ và mật khẩu của tài khoản.
+
+**Hồ sơ theo phiên**: Sở thích trong một phiên khám phá của khách chưa đăng nhập; không tự trở thành hồ sơ lâu dài qua nhiều lần truy cập.
+
+**Hồ sơ theo tài khoản**: Sở thích gắn với tài khoản đăng nhập, có thể dùng xuyên lần truy cập và thiết bị.
+
+**Đặt lại dữ liệu đã học**: Yêu cầu bắt đầu lại phần sở thích đã học; không đồng nghĩa xóa tài khoản, đơn hàng hoặc vé.
+_Tránh_: Dùng “xóa lịch sử” để ngầm bao gồm mọi loại dữ liệu. Chính sách chi tiết theo BR-18–21/OPEN-11 trong mô hình sản phẩm.

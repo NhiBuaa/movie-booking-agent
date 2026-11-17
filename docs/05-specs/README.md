@@ -24,6 +24,11 @@ Suggested validity states:
 Các feature spec/plan tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; đặc tả mới phải hòa giải với yêu cầu mục tiêu
 trước triển khai, không sửa hồi tố bằng chứng cũ hoặc tự đặt enum/quyền cho phần chưa thiết kế.
 
+Lựa chọn công nghệ hiện hành thuộc [danh mục ADR](../06-decisions/README.md), được tổng hợp trong
+[PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md#architecture-direction). Khi mở rộng feature cũ,
+đối chiếu các ADR mới và ghi rõ phần cần thay thế; không biến stack đã chọn thành bằng chứng
+đã migrate contracts, xác thực, database, tìm kiếm hoặc runtime.
+
 Starter: `templates/spec.md`
 
 ## Feature specifications and plans

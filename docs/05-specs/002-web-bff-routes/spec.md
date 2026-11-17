@@ -8,6 +8,13 @@
 
 **Feature Branch**: `feat/web-bff-routes`
 
+> **Quyết định tiếp nối — 2026-11-17:** [Core mục tiêu](../../../services/cinema-core/README.md)
+> đã chọn NestJS/Fastify, PostgreSQL/Redis/Drizzle, Better Auth và adapter MoMo/VNPAY riêng;
+> [ADR-0014](../../06-decisions/0014-zod-json-schema-and-pydantic-contracts.md) chọn pipeline hợp đồng mới.
+> Tìm kiếm đích thuộc [module Search của Core](../../06-decisions/0035-search-module-in-cinema-core.md).
+> Maps, fixture, header `x-user-email` và HMAC mô phỏng bên dưới vẫn mô tả feature BFF gốc;
+> không phải tích hợp các lựa chọn mới. Cần đặc tả và kiểm chứng migration riêng theo [CONTEXT](../../../CONTEXT.md).
+
 **Created**: 2026-11-15 | **Last Updated**: 2026-11-16
 
 **Status**: Ready for Review

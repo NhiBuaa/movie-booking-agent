@@ -4,6 +4,11 @@
 
 Accepted
 
+Các ADR tiếp nối làm rõ stack trong các ranh giới này: [ADR-0009](0009-python-fastapi-langgraph-and-uv-for-agent-service.md)
+chọn Python/uv cho Agent; [ADR-0014](0014-zod-json-schema-and-pydantic-contracts.md) chọn hợp đồng liên ngôn ngữ;
+[ADR-0035](0035-search-module-in-cinema-core.md) đặt Search trong Core. Đây là hướng đã duyệt,
+không xác nhận scaffold đã thành các service runtime; xem [CONTEXT](../../CONTEXT.md).
+
 ## Context
 
 Dự án ban đầu được khởi tạo như một đồ án môn học UI/UX đơn lẻ. Khi mở rộng thành một **Nền tảng hoàn chỉnh (Full Platform)** phục vụ cả 3 đối tượng người dùng:
@@ -18,7 +23,8 @@ Vấn đề đặt ra là: Làm thế nào để tổ chức mã nguồn và ki�
 Nhóm kỹ thuật quyết định áp dụng mô hình **Modular Monorepo Platform với Ranh giới Microservices Rõ ràng**:
 
 1. **Cấu trúc Monorepo Workspace**:
-   - Sử dụng **npm workspaces** (sẵn sàng tích hợp Turborepo) để quản lý tập trung toàn bộ ứng dụng và dịch vụ.
+   - Sử dụng **npm workspaces** cho JavaScript/TypeScript; Agent Python dùng **uv** theo ADR-0009.
+     Khả năng thêm build orchestrator là hướng khảo sát, chưa chọn Turborepo.
    - Các ứng dụng giao diện nằm trong `apps/`: `web`, `organizer`, `mobile`.
    - Các dịch vụ backend nghiệp vụ nằm trong `services/`: `cinema-core`, `agent-service`.
    - Các thư viện chia sẻ nằm trong `packages/`: `design-tokens`, `contracts`, `ui`, `shared-logic`.
@@ -31,7 +37,8 @@ Nhóm kỹ thuật quyết định áp dụng mô hình **Modular Monorepo Platf
    - **`apps/mobile` (Mobile Client & Scanner)**: Ứng dụng di động phân quyền linh hoạt (Role-based): khách hàng đặt vé và nhân viên soát vé QR tại cửa.
 
 3. **Chia sẻ hợp đồng dữ liệu & Token thiết kế**:
-   - Toàn bộ DTOs, Zod validation schemas và TypeScript types được tập trung tại `packages/contracts` để đảm bảo End-to-End Type Safety.
+   - Nguồn hợp đồng mục tiêu là Zod 4 tại `packages/contracts`; suy kiểu TypeScript và export JSON Schema
+     để sinh Pydantic v2 cho Python theo ADR-0014. Pipeline chưa được triển khai/kiểm chứng liên ngôn ngữ.
    - Toàn bộ Design Tokens được định nghĩa tại `DESIGN.md` và đóng gói tại `packages/design-tokens` để dùng chung cho Web, Mobile và Organizer.
 
 4. **Lộ trình tiến hóa (Evolutionary Microservices)**:
@@ -52,10 +59,12 @@ Nhóm kỹ thuật quyết định áp dụng mô hình **Modular Monorepo Platf
 
 ### Positive
 
-- **End-to-End Type Safety:** Thay đổi về kiểu dữ liệu suất chiếu hay ghế ngồi ở Cinema Core sẽ ngay lập tức được TypeScript cảnh báo tại Web, Mobile và Agent.
+- **Hợp đồng dùng chung:** TypeScript hỗ trợ các bên dùng TypeScript; Python Agent cần model Pydantic
+  sinh từ cùng nguồn schema và kiểm tương thích theo ADR-0014. Không suy có type chung là đã có validation runtime.
 - **Một nguồn chân lý thiết kế:** Cả 3 giao diện (Web, Mobile, Organizer) đều dùng chung một bộ token màu sắc, kiểu chữ từ `DESIGN.md`.
 - **Ranh giới an toàn giao dịch rõ ràng:** Phân tách rành mạch giữa UI tương tác, AI phỏng đoán ngữ cảnh và Cinema Core xác thực giao dịch tài chính.
-- **Sẵn sàng cho Microservices:** Codebase đã được module hóa thành các service độc lập từ ngày đầu, việc tách deploy container là hoàn toàn tự nhiên.
+- **Ranh giới triển khai độc lập:** Monorepo định hướng tách Core và Agent; scaffold hiện tại chưa chứng minh
+  các dịch vụ đã tích hợp/chạy độc lập. Hosting, topology và CD vẫn hoãn đến lúc chuẩn bị deploy.
 
 ### Negative / Trade-offs
 

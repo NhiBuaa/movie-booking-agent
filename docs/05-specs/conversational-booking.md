@@ -5,6 +5,12 @@
 [mô tả use case](../03-product/use-case-descriptions.md) sở hữu điều kiện, kết quả và ngoại lệ.
 CB-01–CB-06 là các bước hành trình, không phải mã use case thay thế B-01–B-08.
 
+**Lựa chọn kỹ thuật tiếp nối:** [Agent](../../services/agent-service/README.md) dùng Python/FastAPI/LangGraph,
+SSE/sse-starlette và Cloudflare Free → Groq Free; [Core](../../services/cinema-core/README.md) sở hữu giao dịch
+và module Search. Agent gọi API Search của Core theo [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md).
+Thông tin/link thanh toán theo từng adapter tại [ADR-0027](../06-decisions/0027-direct-http-and-node-crypto-for-payment-gateways.md);
+QR trong ví dụ không là cam kết mọi cổng/operation đều trả QR. Các lựa chọn này chưa xác nhận tích hợp runtime.
+
 ## 1. Mục đích và Phạm vi
 
 Quy định luồng đặt vé toàn trình bằng ngôn ngữ tự nhiên (Conversational Booking) trong không gian làm việc của **AI Agent Workspace** (`apps/web/chat`, `apps/mobile/chat`).
@@ -87,7 +93,8 @@ sequenceDiagram
 
 Sơ đồ trên chỉ minh họa luồng thành công. Callback lặp, kết quả chưa rõ hoặc thu tiền sau khi ghế
 được giải phóng phải theo B-06/R-03; AI không xác nhận từ redirect hay tự đổi ghế.
-Email vé được phối hợp gửi sau phát hành, lỗi email không hủy vé. Nhà cung cấp/cơ chế gửi lại giữ ở OPEN-09.
+Email vé được phối hợp gửi sau phát hành, lỗi email không hủy vé. Provider đã chọn Resend tại
+[ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); chính sách gửi lại/lỗi vẫn ở OPEN-09.
 
 ## 4. Ánh xạ hành trình và hỗ trợ sau mua
 

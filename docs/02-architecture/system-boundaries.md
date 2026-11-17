@@ -14,7 +14,7 @@ không phải phân hệ nội bộ; AI và Core vẫn nằm trong ranh giới t
 | Phân hệ | Trách nhiệm chính | Dữ liệu chuyển giao tiếp theo | Nguyên tắc an toàn giao dịch |
 | :--- | :--- | :--- | :--- |
 | **Khách hàng** | Thể hiện ý định, chọn phim/suất/ghế, chủ động xác nhận thanh toán. | Yêu cầu ngôn ngữ tự nhiên, danh sách ghế chọn, phương thức trả tiền. | Thao tác thể hiện ý định người dùng; chưa phải kết quả giao dịch. |
-| **Web & Mobile Apps (`apps/web`, `apps/mobile`)** | Render giao diện, điều hướng, thu thập input và phản hồi trực quan. | Lệnh tương tác gửi về BFF / API Gateway. | Phản ánh trung thực trạng thái backend; không tự ý che giấu lỗi. |
+| **Web & Mobile Apps (`apps/web`, `apps/mobile`)** | Render giao diện, điều hướng, thu thập input và phản hồi trực quan. | HTTP API Core/Agent theo kênh; Web qua BFF khi phù hợp. | Phản ánh trung thực trạng thái backend; không tự ý che giấu lỗi. |
 | **Organizer Portal (`apps/organizer`)** | Quản trị chuỗi/vận hành rạp theo mục tiêu M-* và R-* được cấp. | Cấu hình suất chiếu, giá, sơ đồ theo phòng; yêu cầu/quyết định hủy và tiến độ hoàn. | Kiểm tra vai trò, rạp và dữ liệu; không gộp mọi quyền vào `ORGANIZER_ADMIN` hoặc tự cấp quyền soát/giao combo. |
 | **AI Agent Service (`services/agent-service`)** | Diễn giải ý định, giữ ngữ cảnh và gọi công cụ trong phạm vi chat đã chốt. | Truy vấn phim/đơn/vé, lập đơn, thanh toán, bỏ hold, yêu cầu hủy/theo dõi hoàn theo quyền khách. | Xác nhận cần thiết của khách và kiểm chứng phản hồi Core; không tự xét duyệt hủy/hoàn hoặc cấp quyền vận hành. |
 | **Cinema Core Service (`services/cinema-core`)** | **Authoritative Core**: Kiểm soát tồn kho ghế, khóa giữ chỗ (hold TTL), kiểm tra giá, xác thực thanh toán và phát hành vé điện tử. | Trạng thái giao dịch chính thức, mã vé, QR code có chữ ký số. | Nguồn thẩm quyền duy nhất; xử lý tranh chấp ghế đồng thời (Concurrency lock). |
@@ -22,6 +22,13 @@ không phải phân hệ nội bộ; AI và Core vẫn nằm trong ranh giới t
 ---
 
 ## 2. Hai điểm vào — Một ranh giới giao dịch thống nhất
+
+Các công nghệ đã chọn được ghi tại [danh mục ADR](../06-decisions/README.md), tổng hợp trong
+[PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md#architecture-direction). Module Search thuộc Core,
+BullMQ indexing nền theo [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md);
+client và Agent dùng API Core, không tự truy cập Typesense. PostgreSQL/Core giữ thẩm quyền;
+Redis, Typesense và sự kiện không xác nhận giá/ghế/vé thay Core. Đây là kiến trúc đã chọn,
+chưa là bằng chứng các dịch vụ, pipeline hoặc worker đã tích hợp; hosting/topology/CD vẫn hoãn.
 
 Nền tảng cung cấp 2 phương thức đặt vé song song:
 1. **Luồng trực tiếp (Direct Booking)**: Người dùng duyệt phim truyền thống qua trang chủ → chi tiết phim → lịch chiếu → trang chọn ghế → trang thanh toán → trang vé.
