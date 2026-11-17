@@ -25,7 +25,14 @@ Nguồn tín hiệu, phạm vi nhận diện và khám phá ngay không có bả
 
 Subject của mọi sơ đồ là **Movie Booking Platform**, phục vụ **một đơn vị/chuỗi rạp**.
 Web khách hàng, Mobile, Organizer Portal, AI Agent và Cinema Core đều nằm bên trong ranh giới.
+Các kênh được tổ chức thành bốn app theo
+[ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md); việc chuyển trải nghiệm
+nhân viên sang Organizer Mobile không đổi actor, mục tiêu hoặc BR/OPEN của mô hình.
 Web/Mobile là kênh tương tác, không phải actor. AI và Core không được vẽ thành actor của toàn nền tảng.
+
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) phân chia backend thành bảy
+service nội bộ; các nhóm use case dưới đây không phải ranh giới service. Thiết kế đó sở hữu giao tiếp,
+dữ liệu và cách ly lỗi, không thay danh mục actor hoặc quyền nghiệp vụ của mô hình này.
 
 Phạm vi gồm khám phá phim/rạp/suất chiếu; tài khoản; đặt vé trực tiếp và trong chat;
 combo và ưu đãi; thanh toán; vé điện tử; hỗ trợ hủy/hoàn tiền; soát vé; giao combo;
@@ -537,7 +544,7 @@ chữ ký của Core theo [ranh giới giao dịch](../02-architecture/system-bo
 | BR-14 | Tự thành hội viên khi tạo tài khoản; điểm thuộc tài khoản đặt, cộng theo phần vé đã soát, không cộng ngay khi thanh toán. | Q25 |
 | BR-15 | Đổi đủ điểm lấy voucher vé/combo; trừ điểm và cấp đúng một lần; không dùng điểm như phương thức thanh toán trực tiếp. | Q24–Q25 |
 | BR-16 | Chỉ tài khoản có vé phim đã soát được đánh giá; một đánh giá/tài khoản/phim, được sửa/xóa; đăng ngay. Quản trị viên được ẩn nội dung vi phạm, ghi lý do, không sửa lời khách. | Q23, Q26 |
-| BR-17 | AI chỉ gửi lệnh giao dịch sau xác nhận cần thiết của khách, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30 |
+| BR-17 | AI lập đề xuất; app/BFF thực thi lệnh dưới danh tính khách sau xác nhận đúng nội dung/phiên bản Core đã kiểm tra. AI không trực tiếp gửi lệnh ghi, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30; quyết định service 2026-11-17 |
 | BR-18 | Bản đầu cho người dùng bật/tắt cá nhân hóa và đặt lại dữ liệu đã học. Khi tắt, ngừng học và sử dụng hồ sơ sở thích; vẫn tìm theo truy vấn/bộ lọc. Đặt lại không xóa đơn hàng/vé. Chưa thêm xem lịch sử học và xóa từng tương tác. | Tech Stack 2026-11-17, phương án A |
 | BR-19 | Khi đăng nhập, không nhập hành vi đã thu thập ở phiên khách vào hồ sơ tài khoản. Giữ hồ sơ tài khoản hiện có, học tiếp từ tương tác sau đăng nhập khi cá nhân hóa được bật; không thêm bước hỏi gộp phiên ở bản đầu. Quyết định không tự quy định thời hạn lưu/xóa dữ liệu phiên khách. | Tech Stack 2026-11-17, phương án A về phiên khách |
 | BR-20 | Tìm kiếm ưu tiên độ khớp truy vấn: tên phim/alias khớp chính xác đứng trước; sở thích chỉ điều chỉnh giữa các kết quả có độ phù hợp tương đương. Trang khám phá có thể cá nhân hóa mạnh hơn. Cả hai phải giữ đúng bộ lọc đã chọn; công thức, ngưỡng tương đương và trọng số chưa chốt. | Tech Stack 2026-11-17, phương án A về thứ hạng |
@@ -598,7 +605,7 @@ Không giả định các phần này đã được giải quyết.
 | OPEN-06 | Xác minh ngoại lệ khi không nhận được email/mất quyền truy cập; mất mạng; thời gian cho vào rạp và yêu cầu kiểm tra độ tuổi. | O-01…O-03; không tự cho phép bỏ qua Core/mã xác nhận hoặc tự gán quy định pháp lý. |
 | OPEN-07 | Ai quản lý danh mục/giá combo, phạm vi cung cấp, bằng chứng nhận combo không có QR, giao từng phần và xử lý nhận nhầm. | B-03, O-04; vai trò giao combo đã chốt, quyền sửa danh mục chưa chốt. |
 | OPEN-08 | Nội dung/quy tắc kiểm duyệt chi tiết, khiếu nại nội dung bị ẩn; quyền lợi của người đi cùng nhưng không đứng tên đơn. | L-04…L-05; quyền viết hiện gắn với tài khoản có vé đã soát, không chứng minh từng người đã xem. |
-| OPEN-09 | Còn mở: chính sách mã/gửi lại/lỗi giao email và các kênh thông báo ngoài email. Email chọn Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); LLM Workers AI + GPT-OSS 120B tại ADR-0012 và Groq Free dự phòng tại [ADR-0028](../06-decisions/0028-groq-free-for-agent-provider-fallback.md). | A-02/A-05/O-02/L-06; không mặc định SMS, push hoặc Google login. Chọn provider chưa xác nhận tích hợp runtime. |
+| OPEN-09 | Còn mở: tham số/quy trình mã, gửi lại/lỗi giao email và các kênh bổ sung ngoài email, hộp thông báo trong app. Email chọn Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); LLM Workers AI + GPT-OSS 120B tại ADR-0012 và Groq Free dự phòng tại [ADR-0028](../06-decisions/0028-groq-free-for-agent-provider-fallback.md). | A-02/A-05/O-02/L-06 và AI; Notification sở hữu chuyển phát/hộp thông báo theo thiết kế service. Không mặc định SMS, push hoặc Google login. Chọn provider chưa xác nhận tích hợp runtime. |
 | OPEN-10 | Phạm vi chỉ số báo cáo, cách thể hiện doanh thu/hoàn tiền và dữ liệu cá nhân; quy trình sửa thông tin liên hệ, lưu trữ/xóa dữ liệu tài khoản. | M-07, A-04; không suy dữ liệu báo cáo mẫu thành định nghĩa đối soát. |
 | OPEN-11 | Cách nhận diện/hết hạn phiên khách; thời hạn lưu tín hiệu thô và hồ sơ dẫn xuất; xử lý tín hiệu cũ khi đặt lại/bật lại cá nhân hóa; phạm vi dữ liệu gửi/log/trace ra ngoài. | D-01, BR-18–21; không tự lưu khách ẩn danh dài hạn, nhập chat, xóa chứng từ giao dịch hoặc quyết định cách dùng/replay tín hiệu cũ sau đặt lại. Chi tiết hợp đồng/công thức và hành vi khi index hỏng cần đặc tả/kiểm chứng riêng. |
 
@@ -606,7 +613,16 @@ Các yêu cầu an toàn đã chốt (xác thực chữ ký, phân quyền, ch�
 thanh toán) vẫn bắt buộc; “còn mở” không cho phép bỏ qua chúng. Không tuyên bố sẵn sàng vận hành
 khi chính sách liên quan chưa được chốt và kiểm chứng.
 
+OPEN-05/06/09 vẫn giữ các chính sách còn thiếu; không mở lại ranh giới kiến trúc đã duyệt:
+hủy suất đã duyệt có hiệu lực tại Core trước xử lý nền từng đơn; soát cần Core online nhưng không
+gọi Identity đồng bộ mỗi lượt; Notification nhận sự kiện sau commit và email có mã bảo mật dùng
+Claim Check. Điều kiện và phần còn mở theo [thiết kế service](../05-specs/004-service-decomposition/spec.md).
+
 ## 7. Hiện trạng và chênh lệch so với mục tiêu
+
+Đường dẫn trong bảng đối chiếu dưới đây thuộc mốc code đã nêu. Tra vị trí sau khi chuyển app theo
+[ánh xạ ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md#consequences);
+không thay đường dẫn hoặc kết quả lịch sử bằng một lần kiểm chứng mới.
 
 Đối chiếu đọc mã tại **549d7b2f76e63aefe34e0c3799c3d28495cdf868**; không chạy ứng dụng,
 không dùng kết quả test cũ làm bằng chứng của bộ tài liệu này. Các ghi nhận code dưới đây giữ nguyên

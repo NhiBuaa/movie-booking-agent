@@ -11,4 +11,7 @@ không xác nhận các hàm bên dưới đã được triển khai hoặc ki�
 Core giữ việc xác thực thanh toán, ký/phát hành vé và quyết định quyền sử dụng vé theo
 [ranh giới hệ thống](../../docs/02-architecture/system-boundaries.md).
 Package dùng chung không chứa secret ký vé/cổng thanh toán hoặc cho client tự phát hành vé.
-Phạm vi helper, exports và tests cụ thể cần đặc tả trước triển khai.
+Phạm vi helper, exports và tests cụ thể cần đặc tả trước triển khai. Theo
+[thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md), mỗi service sở hữu mô hình
+nội bộ và dữ liệu riêng; dùng chung package không cấp quyền truy cập dữ liệu chéo service.
+Khóa ký không được vào client bundle hoặc checkpoint Agent.

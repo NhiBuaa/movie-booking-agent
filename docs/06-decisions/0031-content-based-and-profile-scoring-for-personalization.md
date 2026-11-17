@@ -16,7 +16,10 @@ Cloudflare Workers AI API trong allocation miễn phí; model Qwen3 Embedding 0.
 ## Context
 
 [ADR-0030](0030-typesense-for-movie-search-and-discovery.md) chọn Typesense làm chỉ mục dẫn xuất,
-PostgreSQL/Core giữ dữ liệu/thẩm quyền. Search engine tìm ứng viên nhưng không tự sở hữu hồ sơ sở thích.
+PostgreSQL từng service giữ dữ liệu/thẩm quyền: Catalog sở hữu nội dung phim, Community đánh giá/yêu thích,
+Identity tài khoản; Core giữ giao dịch. Search engine tìm ứng viên nhưng không tự sở hữu hồ sơ sở thích.
+Module Search nhận nguồn qua hợp đồng/API/sự kiện, không SQL chéo service theo
+[thiết kế bảy service](../05-specs/004-service-decomposition/spec.md); owner cụ thể của profile/tín hiệu vẫn cần đặc tả.
 Portfolio chưa có bằng chứng dữ liệu tương tác người thật đủ độ phủ để học quan hệ cộng đồng.
 Cần cá nhân hóa từng người và xử lý người/phim mới, không phụ thuộc số đông đã tương tác.
 

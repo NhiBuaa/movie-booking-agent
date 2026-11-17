@@ -1,6 +1,6 @@
 ---
 status: active
-last_verified: 2026-11-16
+last_verified: 2026-11-17
 ---
 
 # Current Project Context
@@ -16,7 +16,13 @@ last_verified: 2026-11-16
 
 - **Project Name:** movie-booking-agent
 - **Has UI Surface:** True
-- **Platform Architecture:** Monorepo gồm Web, Organizer, Mobile, Cinema Core, Agent Service và packages dùng chung.
+- **Platform Architecture:** Bốn app `customer-web`, `customer-mobile`, `organizer-web`, `organizer-mobile`
+  theo [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md); backend đích gồm 7 service
+  theo [thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md): Cinema Core, Agent,
+  Catalog, Identity & Access, Notification, Community và Reporting. Đã có đủ bảy thư mục service
+  với README trách nhiệm; chưa có code hoặc cấu hình chạy service, không phải bằng chứng có runtime.
+  Hai app Mobile nhắm iOS/Android; phần nhân viên soát vé thuộc Organizer Mobile. Chỉ Customer Web có mã nguồn;
+  ba app còn lại mới có tài liệu mục tiêu, chưa có build/runtime được xác nhận.
 - **Target Product:** Một đơn vị/chuỗi rạp; actor, phạm vi, BR và OPEN do mô hình use case sở hữu.
   Cấu trúc thư mục không chứng minh từng phân hệ đã vận hành.
 
@@ -38,6 +44,10 @@ không dùng trạng thái checkout khác làm bằng chứng của bản này.
 ## Active Direction
 
 Dùng mô hình mục tiêu làm đầu vào cho đặc tả và kiểm chứng từng tính năng trước khi sửa code.
+Các ranh giới service/dữ liệu/giao tiếp đã chốt được sở hữu bởi
+[thiết kế](docs/05-specs/004-service-decomposition/spec.md) và
+[quyết định](docs/05-specs/004-service-decomposition/decisions.md) ngày 2026-11-17.
+Bản tổng hợp vẫn chờ chủ sản phẩm đọc lại; việc đồng bộ tài liệu không thay trạng thái chấp thuận đó.
 Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
 phải được thiết kế/kiểm thử theo workflow Spec Kit, không suy ra là đã thực hiện từ lần đồng bộ docs.
 
@@ -66,11 +76,11 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - Ba role hiện tại chưa xác định ánh xạ cho các vai trò vận hành mục tiêu.
 - Logic chat hiện ở client theo quy tắc; Cloudflare Workers AI + GPT-OSS 120B đã được chọn tại
   [ADR-0012](docs/06-decisions/0012-cloudflare-workers-ai-and-gpt-oss-120b.md), chưa xác nhận tích hợp runtime.
-  Resend đã được chọn cho email tại [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md),
+  Resend đã được chọn cho Notification Service chuyển phát email tại [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md),
   chưa xác nhận tích hợp; chính sách xử lý lỗi/gửi lại còn mở.
 - R2 Standard và Cloudflare Images đã chọn cho ảnh danh mục tại
   [ADR-0019](docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
-  chưa cấu hình upload/biến thể/cache hoặc xác nhận runtime. Trailer dùng URL/embed nguồn ngoài.
+  Catalog sở hữu nội dung/metadata ảnh phim, Core giữ snapshot theo suất; chưa cấu hình upload/biến thể/cache hoặc xác nhận runtime. Trailer dùng URL/embed nguồn ngoài.
 - OpenTelemetry + Grafana Alloy + Grafana Cloud đã chọn cho quan sát nền tảng tại
   [ADR-0020](docs/06-decisions/0020-opentelemetry-alloy-and-grafana-cloud.md), giữ LangSmith riêng cho Agent.
   Chưa chọn gói/topology hoặc xác nhận instrumentation, dashboard/cảnh báo và telemetry runtime.
@@ -80,7 +90,7 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - GitHub Actions với GitHub-hosted Linux, Buildx/BuildKit và GHCR đã chọn tại
   [ADR-0022](docs/06-decisions/0022-github-actions-buildx-and-ghcr-for-ci.md).
   Chưa tạo workflow/Dockerfile, chạy CI hoặc publish image; hosting/CD chưa chọn, giữ quyết định hoãn.
-- MMKV bật mã hóa + SecureStore giữ khóa đã chọn cho snapshot vé offline trên Mobile tại
+- MMKV bật mã hóa + SecureStore giữ khóa đã chọn cho snapshot vé offline trên Customer Mobile tại
   [ADR-0023](docs/06-decisions/0023-encrypted-mmkv-for-offline-mobile-tickets.md).
   Chưa cài/build hoặc kiểm mã hóa/native lifecycle; thiết bị nhân viên vẫn cần Core online khi soát.
 - Browser fetch trên Web, expo/fetch trên Mobile và eventsource-parser chung đã chọn cho SSE client tại
@@ -126,8 +136,11 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   [ADR-0034](docs/06-decisions/0034-backend-orchestrated-external-embeddings.md) chọn backend điều phối API
   và Typesense nhận vector ngoài, không dùng auto-embedding.
   [ADR-0035](docs/06-decisions/0035-search-module-in-cinema-core.md) chọn module Search thuộc Core,
-  BullMQ indexing nền; Agent gọi API Core. Cấu trúc module/adapter, giới hạn tài nguyên và cách tách worker còn mở.
+  BullMQ indexing nền từ hợp đồng/sự kiện Catalog, Community và owner liên quan; không SQL chéo. Agent gọi API Core. Cấu trúc module/adapter, giới hạn tài nguyên và cách tách worker còn mở.
   Chưa gọi API, tạo vector/index hoặc cấu hình quota/billing/runtime.
+- Thiết kế đích giữ Agent đề xuất → app/BFF thực thi bằng quyền khách và mã thao tác ổn định;
+  Notification chuyển phát bất đồng bộ, email bảo mật dùng Claim Check theo mục 4 của thiết kế.
+  Identity giữ Better Auth, Notification giữ Resend, Catalog giữ media phim; checkpoint thuộc database Agent. Các lựa chọn này chưa chứng minh đã tích hợp các ranh giới hoặc chọn framework cho năm service bổ trợ.
 - [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên;
   OPEN-11 tập hợp chính sách dữ liệu cá nhân hóa còn mở sau các lựa chọn tại BR-18–21;
   thiếu chính sách liên quan thì chưa được tuyên bố sẵn sàng vận hành chức năng đó.
@@ -139,6 +152,10 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   [thuật ngữ](GLOSSARY.md) và [quy chuẩn UML](docs/04-standards/use-case-modeling.md).
 - [Hiến pháp](.specify/memory/constitution.md), [ranh giới hệ thống](docs/02-architecture/system-boundaries.md)
   và [đặc tả nghiệp vụ](docs/05-specs/domain-context.md).
+- [Kiến trúc microservices](docs/05-specs/004-service-decomposition/spec.md) và
+  [nguồn chấp thuận/lý do](docs/05-specs/004-service-decomposition/decisions.md).
 - [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md)
   và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
+- [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live
+  và CodeGraph theo worktree. Cài công cụ/có index không xác nhận code hoặc giao dịch đã vận hành.
 - Quản lý công việc và bằng chứng kiểm chứng: GitHub Issues/PRs.

@@ -20,7 +20,9 @@ Chủ sản phẩm chọn miễn phí trong quota, chấp nhận Agent tạm ng�
   **Groq Free + `openai/gpt-oss-120b`** làm provider dự phòng. Không chọn 20B làm tầng thứ ba,
   Workers Paid hoặc Groq Developer. Không tự nâng gói khi quota hết.
 - Hướng tích hợp dùng Chat Completions/local tool calling từ Agent Python/LangGraph.
-  Model đề xuất tool; Agent kiểm schema/quyền/xác nhận trước thực thi Core. Không dùng agent runner
+  Model đề xuất tool; Agent kiểm schema/quyền truy vấn và tạo đề xuất có cấu trúc. App/BFF thực thi
+  lệnh đã được khách xác nhận đúng nội dung/phiên bản dưới danh tính khách theo
+  [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md). Không dùng agent runner
   của provider để tự điều phối giao dịch. Adapter/package/version cụ thể cần pin và kiểm tương thích.
 - Fallback ở bước inference có kiểm soát, không phát lại toàn graph. Retry/deadline/concurrency,
   giới hạn history/output/tool rounds và circuit breaker phải đặc tả; quota ngày hết không retry liên tục.

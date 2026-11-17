@@ -12,14 +12,16 @@ domain hoặc region, tạo tài khoản/bucket, cài SDK, upload hay kích ho�
 [M-01 trong mô tả use case](../03-product/use-case-descriptions.md) đã chốt upload/lưu poster,
 banner và ảnh; trailer dùng URL/video nhúng từ nguồn ngoài. Các client Web, Organizer và Mobile
 cần ảnh phù hợp kích thước hiển thị. Chỉ chọn object storage/CDN chưa giải quyết resize, crop và
-tối ưu định dạng. PostgreSQL/Core tiếp tục sở hữu metadata, liên kết danh mục và quyền xuất bản.
+tối ưu định dạng. **Catalog Service** sở hữu metadata nội dung/media, liên kết danh mục và quyền xuất bản
+trong database riêng theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md).
+Core giữ snapshot/version phim cần cho giao dịch suất, không sở hữu biên tập nội dung phim.
 
 ## Decision
 
 - Chọn **Cloudflare R2 Standard** lưu ảnh gốc và **Cloudflare Images remote transformations**
   để resize/crop, tối ưu chất lượng/định dạng và phân phối các biến thể qua cache/CDN.
   Đây là hai dịch vụ riêng; không mặc định lưu bản gốc trong Images hosted storage.
-- Core kiểm quyền upload và xuất bản; PostgreSQL giữ object key/version và metadata nghiệp vụ.
+- Catalog kiểm quyền upload và xuất bản; PostgreSQL Catalog giữ object key/version và metadata nội dung.
   R2 là object storage, không thay PostgreSQL hoặc bổ sung database giao dịch thứ ba.
 - Upload trực tiếp dùng URL ký có phạm vi và thời hạn ngắn do server cấp sau xác thực/phân quyền.
   Với R2, presigned URL dùng S3 API endpoint, không dùng custom domain; client không nhận credentials dài hạn.

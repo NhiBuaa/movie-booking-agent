@@ -26,6 +26,14 @@ Các ghi chú giữ nguồn và so sánh tại thời điểm nghiên cứu. L�
 [mô hình use case](../03-product/use-cases.md); ghi chú phải đọc cùng các quyết định tiếp nối.
 Giá/quota hoặc quan sát runtime ghi trong nghiên cứu là bằng chứng có thời điểm, không phải xác nhận lại tài khoản/code hiện tại.
 
+Khi đọc nghiên cứu trước đợt hòa giải PR #5, áp dụng [bốn app tại ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md)
+và [ranh giới bảy service](../05-specs/004-service-decomposition/spec.md): đường dẫn cũ
+`apps/web`/`apps/mobile`/`apps/organizer` lần lượt chuyển thành Customer Web/Customer Mobile/Organizer Web,
+nhân viên soát vé ở Organizer Mobile. Catalog sở hữu nội dung/media, Identity sở hữu Auth,
+Notification gửi email; Agent chỉ truy vấn/đề xuất, app/BFF thực thi lệnh đã xác nhận.
+Các ví dụ thực thi tool trực tiếp hoặc Core sở hữu mọi dữ liệu bên dưới là ngữ cảnh trước phân rã,
+không thay các ranh giới đã duyệt; link tới source hiện hành dùng đường dẫn mới.
+
 - [Benchmark ORM TypeScript — nguồn và giới hạn](typescript-orm-benchmarks.md).
 - [Phát outbox: polling và CDC qua Debezium](outbox-delivery-research.md).
 - [Xác thực tài khoản: Keycloak, Better Auth và Auth0](authentication-stack-research.md).
@@ -53,3 +61,10 @@ Giá/quota hoặc quan sát runtime ghi trong nghiên cứu là bằng chứng c
 - [Cá nhân hóa khám phá phim và lựa chọn embedding](movie-personalization-and-embedding-research.md).
 - [Model embedding Cloudflare: Qwen3 Embedding 0.6B và BGE-M3](cloudflare-multilingual-embedding-models-research.md).
 - [Tích hợp embedding: backend tạo vector hay Typesense auto-embedding](movie-embedding-integration-research.md).
+
+## Nghiên cứu kiến trúc
+
+- [Ranh giới dịch vụ](service-boundary-research.md) — nguồn sơ cấp, ba phương án và đánh đổi;
+  các quyết định dự án do đặc tả/ADR sở hữu.
+- [Ba ranh giới tích hợp service](service-integration-gaps-research.md) — so sánh Catalog–Core,
+  căn cứ đánh giá Core–Community và bàn giao email bảo mật; lựa chọn đã được ghi nhận trong bản quyết định.

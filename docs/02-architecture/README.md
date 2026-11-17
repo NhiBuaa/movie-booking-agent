@@ -13,3 +13,8 @@ Store component boundaries, data/control flow, ownership, integrations, and impo
 Do not use this directory for task plans, chronological history, or decision diaries.
 
 Starter: `templates/architecture.md`
+
+## Thiết kế đích
+
+- [Kiến trúc microservices](../05-specs/004-service-decomposition/spec.md) — bản tổng hợp 7 service,
+  sở hữu dữ liệu, giao tiếp và ranh giới lỗi; chưa mô tả runtime đã triển khai.

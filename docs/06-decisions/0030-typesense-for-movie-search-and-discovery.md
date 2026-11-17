@@ -30,7 +30,9 @@ Chi tiết chính sách/thuật toán còn mở; code hiện tìm trên fixture,
 - Chọn **Typesense OSS** làm **chỉ mục tìm kiếm dẫn xuất** cho lexical/vector/hybrid retrieval.
   Tận dụng typo/prefix/facets và khả năng kết hợp từ khóa/vector; schema, ngưỡng typo, weights,
   locale, dimensions, version/client cụ thể cần đặc tả/kiểm. Không chọn Typesense Cloud hoặc gói managed.
-- Giữ **PostgreSQL/Cinema Core** làm nguồn danh mục, lịch chiếu, giá, ghế, giao dịch và quyền.
+- Giữ **PostgreSQL theo service sở hữu**: Catalog làm nguồn nội dung phim/media, Core làm nguồn
+  lịch chiếu/giá/ghế/giao dịch; Identity cấp bằng chứng danh tính/quyền và service sở hữu tự kiểm quyền nghiệp vụ,
+  theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md).
   Typesense không là database giao dịch thứ ba có thẩm quyền, nguồn phát hành vé hoặc bằng chứng còn ghế.
   Không thêm OpenSearch, pgvector hoặc một vector DB khác trong quyết định này.
 - **Cá nhân hóa ở lớp ứng dụng**: search engine tìm ứng viên, backend kiểm dữ liệu/quyền và xếp hạng
@@ -38,9 +40,13 @@ Chi tiết chính sách/thuật toán còn mở; code hiện tìm trên fixture,
   Phương pháp ban đầu được chọn tiếp tại [ADR-0031](0031-content-based-and-profile-scoring-for-personalization.md):
   theo nội dung + hồ sơ phiên/tài khoản, chưa triển khai collaborative. Embedding theo ADR-0032/0033;
   trọng số và ngưỡng cụ thể vẫn cần đặc tả/đánh giá.
-- Projection cập nhật từ thay đổi danh mục đã commit qua outbox → Debezium/Kafka theo
+- Projection cập nhật từ thay đổi nội dung Catalog/điều kiện Core đã commit qua hợp đồng sự kiện,
+  outbox → Debezium/Kafka theo
   [ADR-0007](0007-transactional-outbox-debezium-kafka.md), consumer chống lặp/version và xử lý xóa/unpublish.
   Cần backfill/reconcile/reindex và chuyển collection có kiểm soát; không buộc sửa phim chờ model/index.
+  Module Search trong Core tiêu thụ dữ liệu dẫn xuất qua hợp đồng, không đọc SQL database Catalog/
+  Community/Identity. HTTP snapshot phim khi lập suất vẫn là tích hợp riêng đã duyệt, không thay bằng
+  sự kiện search hoặc dùng index làm snapshot có thẩm quyền.
 - Query API phải kiểm eligibility/visibility và điều kiện lịch từ nguồn Core phù hợp trước trả kết quả cuối.
   Rạp/ngày/giờ/định dạng phải cùng khớp một suất; không dùng các mảng độc lập tạo kết quả giả.
   Candidate expansion, facets/count và pagination sau lọc cần thiết kế, không mặc định lọc top-k là đủ.

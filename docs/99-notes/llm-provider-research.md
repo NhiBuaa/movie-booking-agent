@@ -6,7 +6,7 @@ Sau so sánh, chủ sản phẩm đã chọn Cloudflare Workers AI + GPT-OSS 120
 bối cảnh tại lúc nghiên cứu; ADR sở hữu lựa chọn hiện hành. Groq Free 120B được chọn tiếp làm dự phòng tại
 [ADR-0028](../06-decisions/0028-groq-free-for-agent-provider-fallback.md).
 Provider email được chọn tiếp là Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md);
-OPEN-09 vẫn còn chính sách mã/gửi lại/lỗi và kênh thông báo ngoài email.
+OPEN-09 vẫn còn chính sách mã/gửi lại/lỗi và các kênh bổ sung ngoài email/hộp thông báo trong app.
 Chỉ đọc tài liệu công khai; không gọi inference, tài khoản, secret hoặc cài SDK. Giá có thể thay đổi.
 Không xem subscription ChatGPT/Claude/Gemini là đã cấp quyền hoặc thanh toán mọi API request.
 

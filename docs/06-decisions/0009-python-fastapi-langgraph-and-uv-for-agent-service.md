@@ -53,8 +53,10 @@ so sánh LangGraph TypeScript, LangGraph Python và AI SDK + Workflow SDK; chưa
 - Resume/replay có thể chạy lại node và lệnh gọi Core. Cần định danh thao tác ổn định, chống lặp ở Core,
   tra cứu kết quả chưa rõ và kiểm lại giá/hold/quyền sau chờ xác nhận; không tự reset TTL 300 giây.
 - Thread/run thuộc người dùng đã xác thực; thread ID không là bằng chứng được phép đọc hoặc resume.
-  Token/secret không đưa vào prompt, checkpoint, SSE hoặc trace. Chưa chọn vị trí tool executor và
-  cơ chế ủy quyền Auth–Agent–Core theo phần còn mở của ADR-0008.
+  Token/secret không đưa vào prompt, checkpoint, SSE hoặc trace. Vị trí thực thi đã được làm rõ trong
+  [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md): Agent truy vấn/đề xuất,
+  app/BFF thực thi lệnh giao dịch đã xác nhận dưới quyền khách. Chi tiết token/quyền đọc của Agent
+  theo ADR-0008 còn cần đặc tả; resume graph không tự phát lại lệnh giao dịch.
 - Sự kiện UI có cấu trúc phải theo hợp đồng được kiểm tra; chỉ hiển thị vé/thành công sau xác minh Core.
   Không stream nội dung model như bằng chứng thanh toán hoặc trạng thái vé có thẩm quyền.
 - Tại thời điểm ADR này chưa chọn model/provider; phần đó được chốt tiếp tại

@@ -8,7 +8,9 @@ Build and maintain the comprehensive Movie Booking Platform featuring a Next.js 
 
 - `PROJECT-OVERVIEW.md` — project foundation, scope, architecture direction, and explicit open questions.
 - `CONTEXT.md` — current project-state projection and boundary conditions.
+- [Service architecture](docs/05-specs/004-service-decomposition/spec.md) and its [decisions](docs/05-specs/004-service-decomposition/decisions.md) — target service ownership, integration and failure boundaries; not runtime evidence.
 - `DESIGN.md` — canonical visual identity and design system (Ferrari Dark Cinema).
+- `apps/*/PRODUCT.md` — app-specific users, jobs, platform and constraints; shared product rules remain in the product model.
 - `docs/` — durable project knowledge (architecture, standards, specs, decisions, guides).
 - `.agents/rules/` — detailed and scoped agent-only rules (e.g. `ui-skill-routing.md`).
 - `.agents/references/` — non-normative supporting material for agents.
@@ -30,6 +32,13 @@ For meaningful work:
 6. Read applicable `.agents/rules/` or `.agents/references/` when useful.
 7. Inspect implementation and tests.
 
+Before designing service integrations, persistence ownership or Agent transaction flows, read the
+service architecture above; reconcile older Core/Agent-only descriptions with its approved decisions.
+
+Before non-trivial implementation, debugging or code review, use CodeGraph when it supports the
+affected language/area, following [the scoped CodeGraph rules](.agents/rules/codegraph.md).
+Documentation-only work and small edits with a clear location do not require a graph query.
+
 For use case analysis, diagrams or review, read [the modeling standard](docs/04-standards/use-case-modeling.md).
 Product actors, goals, BR/OPEN decisions belong to [the product model](docs/03-product/use-cases.md);
 use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation separately.
@@ -38,9 +47,9 @@ use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation 
 
 - **Authoritative Core:** Cinema Core (`services/cinema-core`) is the single source of truth for seat availability, pricing, hold TTL, payment confirmation, and ticket issuance. Client apps and AI Agent never assume authoritative status.
 - **Conversational Booking Safety:** The AI Agent interprets intent and coordinates tools. It must NEVER claim or present an order as confirmed or ticket as issued without cryptographic or explicit signature verification from Cinema Core.
-- **Visual Identity Discipline:** All user interfaces (`apps/web`, `apps/organizer`, `apps/mobile`) must adhere strictly to the Ferrari Dark Cinema design tokens in root `DESIGN.md` and `packages/design-tokens/tokens.css`.
+- **Visual Identity Discipline:** All four Customer/Organizer Web/Mobile apps must adhere to the Ferrari Dark Cinema identity in root `DESIGN.md` and shared design tokens, with platform-appropriate native interaction. Read the target app's `PRODUCT.md`; application boundaries are defined in [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
 - **Preserve Security Boundaries:** Enforce current contract roles and data boundaries. The target actor roles and cinema scope are defined in the product model; the three existing role values do not establish their full permission mapping. Never expose secrets or credentials in client bundles.
-- **Verification Before Completion:** Every code change in `apps/web` must run `npm test` or `npm run test:all` and pass all current tests before claiming task completion. For documentation-only changes, validate the affected documents/diagrams; do not infer runtime behavior from them.
+- **Verification Before Completion:** Every code change in `apps/customer-web` must run `npm test` or `npm run test:all` and pass all current tests before claiming task completion. For documentation-only changes, validate the affected documents/diagrams; do not infer runtime behavior from them.
 
 ## Working Agreements
 
@@ -74,7 +83,7 @@ Report briefly: no reusable finding, updated owner + evidence, or an out-of-scop
 ## Validation
 
 ```bash
-# Run all unit and logic tests across apps/web
+# Run all unit and logic tests across apps/customer-web
 npm test
 
 # Check kit conformance and markdown link integrity

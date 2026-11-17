@@ -32,6 +32,10 @@
 
 ### 4. Thiết kế UI/UX tổng quan (với ứng dụng có giao diện)
 
+Với cấu trúc hiện tại của dự án, dùng [bối cảnh riêng theo bốn app](development-tools.md#bối-cảnh-impeccable)
+và quy trình Figma tại [quy tắc UI](../../.agents/rules/ui-skill-routing.md).
+Không khởi tạo lại từ đầu hoặc chọn lại bản sắc đã được duyệt khi chỉ thêm/cập nhật một app.
+
 - **Bạn làm:** Từ Use Case Diagram và giá trị cốt lõi:
   - Xác định **cấu trúc điều hướng** (các khu vực/màn hình chính) và vẽ **User Flow chính**: người dùng đi qua những bước nào để hoàn thành việc quan trọng nhất.
   - Chốt **định hướng giao diện & độ nhận dạng** nếu sản phẩm cần cá tính riêng: phân loại mục đích màn hình (thuyết phục, thao tác nhanh, hay đọc tài liệu), chọn phong cách, font chữ chính, màu chủ đạo và một bộ icon duy nhất (như Lucide, Phosphor; không dùng emoji hoặc icon chắp vá làm nút bấm). Lưu vào file `DESIGN.md` ở thư mục gốc của dự án (tham khảo `templates/DESIGN.md`).

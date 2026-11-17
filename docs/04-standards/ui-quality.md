@@ -1,6 +1,10 @@
 # Chuẩn chất lượng UI/UX — Movie Booking Platform
 
-Tài liệu này xác định các tiêu chuẩn bắt buộc khi thiết kế, triển khai và review giao diện trên toàn bộ nền tảng (**Web**, **Mobile**, và **Organizer Portal**).
+Tài liệu này xác định tiêu chuẩn thiết kế, triển khai và review cho bốn ứng dụng
+Customer Web/Mobile và Organizer Web/Mobile theo
+[ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
+Đọc PRODUCT của app để xác định người dùng, tác vụ và nền tảng;
+[hướng dẫn công cụ](../07-guides/development-tools.md#bối-cảnh-impeccable) dẫn tới từng bối cảnh.
 
 ---
 
@@ -27,13 +31,20 @@ Mọi màn hình hoặc thành phần UI mới phải trải qua 4 giai đoạn 
    - Control tương tác phải có trạng thái `Default`, `Active/Pressed`, `Disabled` khi áp dụng;
      `Hover` và `Focus Visible` theo khả năng con trỏ/bàn phím của nền tảng. Mobile giữ phản hồi chạm
      và accessibility focus tương ứng; không bỏ trạng thái cần thiết trên Web/Organizer.
+   - App cảm ứng không phụ thuộc hover để hoàn thành tác vụ.
    - Phản hồi tức thời với các tác vụ chọn ghế, bộ đếm ngược thời gian giữ vé và thanh toán.
 3. **Giai đoạn 3 — Khả năng tiếp cận & Render thực tế (a11y & Render Verification)**:
    - Độ tương phản chữ và nền đạt chuẩn WCAG AA (tối thiểu 4.5:1 cho body text).
-   - Hỗ trợ đầy đủ điều hướng bằng bàn phím (Tab, Enter, Space, Escape) trên toàn bộ Web và Organizer Portal.
-   - Kích thước vùng chạm trên màn hình cảm ứng tối thiểu 44×44px.
+   - Hai app Web hỗ trợ điều hướng bàn phím (Tab, Enter, Space, Escape).
+     App iOS/Android hỗ trợ trình đọc màn hình, cỡ chữ hệ thống, vùng an toàn và thao tác quay lại của hệ.
+   - Vùng chạm tối thiểu: Web 44×44 CSS px; iOS 44×44 pt; Android 48×48 dp.
 4. **Giai đoạn 4 — Hiệu năng khung hình (Animation & Performance)**:
-   - Chuyển động (Transitions) chỉ tác động vào các thuộc tính `transform` và `opacity` để giữ vững 60fps/120fps mà không gây layout thrashing.
+   - Web chỉ dùng `transform` và `opacity` cho chuyển động, tránh tính lại bố cục mỗi khung hình.
+     Mobile dùng cơ chế chuyển động phù hợp nền tảng/framework. Tôn trọng cài đặt giảm chuyển động;
+     kết luận về 60fps/120fps cần đo trên môi trường liên quan, không suy ra từ việc dùng một thuộc tính.
+
+Web cần bằng chứng từ trình duyệt; app native cần simulator/emulator hoặc thiết bị và ghi rõ nguồn.
+PRODUCT, thiết kế Figma, cấu hình live hoặc build đạt không tự xác nhận giao diện đã đạt bốn giai đoạn này.
 
 ---
 

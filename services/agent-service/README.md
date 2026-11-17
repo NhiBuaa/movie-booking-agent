@@ -7,7 +7,8 @@ LLM/tool calling runtime đã tích hợp; xem [CONTEXT](../../CONTEXT.md).
 [ADR-0009](../../docs/06-decisions/0009-python-fastapi-langgraph-and-uv-for-agent-service.md).
 Theo [ADR-0013](../../docs/06-decisions/0013-modular-agent-postgres-checkpoints-and-httpx.md), dùng
 `langgraph` + `langchain-core` theo module, `langgraph-checkpoint-postgres`/`AsyncPostgresSaver`
-với Psycopg 3 async pool và HTTPX `AsyncClient` gọi Core. Checkpoint không thay trạng thái Core.
+với Psycopg 3 async pool trong database PostgreSQL logic riêng và HTTPX `AsyncClient` gọi API đọc
+Catalog/Core theo quyền. Checkpoint không thay trạng thái Core; không chứa credential giao dịch của khách.
 `packages/contracts` vẫn sở hữu hợp đồng; chọn Zod 4 → JSON Schema → `datamodel-code-generator` →
 Pydantic v2 theo [ADR-0014](../../docs/06-decisions/0014-zod-json-schema-and-pydantic-contracts.md).
 Adapter model, profile codegen và cấu hình cần thiết kế/kiểm chứng;
@@ -45,17 +46,23 @@ Adapter/tool/stream và chất lượng tiếng Việt cần kiểm chứng; ch�
 
 ## Core Responsibilities
 
-- Diễn giải nhu cầu phim/rạp/suất và điều phối công cụ Cinema Core; không tự giữ ghế, định giá hay phát vé.
+- Diễn giải nhu cầu phim/rạp/suất, truy vấn Catalog/Core theo quyền và lập đề xuất có cấu trúc.
+- Sở hữu hội thoại/checkpoint trong database riêng; không sở hữu ghế, giá, đơn, tiền hoặc vé.
 - Tìm/khám phá qua API module Search của Core theo
   [ADR-0035](../../docs/06-decisions/0035-search-module-in-cinema-core.md), không tự truy cập Typesense
   hoặc làm đường bắt buộc cho tìm kiếm trực tiếp. Tool/DTO cụ thể chưa được triển khai.
 - Giữ ngữ cảnh hành trình CB-01–CB-06 và cùng đơn/hold khi đổi kênh; không tự khởi động lại TTL.
 - Hỗ trợ tra cứu đơn/vé (B-07), bỏ hold (B-08), gửi yêu cầu hủy đã mua (R-01) và theo dõi hủy/hoàn (R-04).
-- Gửi lệnh sau xác nhận cần thiết của khách; chỉ trình bày vé hợp lệ sau xác minh phản hồi/chữ ký Core.
+- App/BFF thực thi lệnh đã được khách xác nhận dưới danh tính khách; Agent nhận kết quả đã xác minh
+  để tiếp tục chat, không giữ credential giao dịch rộng trong mô hình/checkpoint.
+  Chỉ trình bày vé hợp lệ sau xác minh phản hồi/chữ ký Core.
   Không xét duyệt hủy, hoàn tiền thay người có thẩm quyền, soát vé, giao combo hoặc quản trị vận hành.
 
 [Mô hình và bảng phạm vi kênh AI](../../docs/03-product/use-cases.md#phạm-vi-kênh-ai) sở hữu mục tiêu/quyền;
 [đặc tả chat](../../docs/05-specs/conversational-booking.md) ánh xạ CB sang use case.
+[Thiết kế microservices](../../docs/05-specs/004-service-decomposition/spec.md) sở hữu ranh giới dữ liệu,
+thực thi lệnh và lỗi; [quyết định](../../docs/05-specs/004-service-decomposition/decisions.md) giữ lý do đã duyệt.
 Hội viên/đổi điểm, đánh giá và tài khoản dùng màn hình chuyên biệt. Phần LLM của OPEN-09 đã chốt
 tại ADR-0012; provider email chọn Resend theo [ADR-0018](../../docs/06-decisions/0018-resend-for-transactional-email.md).
-Chính sách gửi lại/lỗi email và kênh thông báo khác còn mở; không suy danh sách tool hiện có thành phạm vi đã triển khai đầy đủ.
+Notification sở hữu hộp thông báo/chuyển phát. Chính sách gửi lại/lỗi email và kênh bổ sung ngoài email/in-app còn mở;
+không suy danh sách tool hiện có thành quyền thực thi trực tiếp hoặc phạm vi đã triển khai đầy đủ.

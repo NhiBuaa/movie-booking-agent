@@ -8,11 +8,18 @@
 - [Phạm vi, actor, quy tắc và quyết định còn mở](use-cases.md).
 - [Mô tả từng use case](use-case-descriptions.md).
 - [Thuật ngữ nghiệp vụ](../../GLOSSARY.md).
+- Bối cảnh riêng: [Customer Web](../../apps/customer-web/PRODUCT.md),
+  [Customer Mobile](../../apps/customer-mobile/PRODUCT.md), [Organizer Web](../../apps/organizer-web/PRODUCT.md),
+  [Organizer Mobile](../../apps/organizer-mobile/PRODUCT.md).
 
 Mô hình trên là sản phẩm mục tiêu đã xác nhận. Actor, mục tiêu và BR/OPEN được sở hữu tại `use-cases.md`;
 mô tả diễn giải luồng/ngoại lệ, không tạo chính sách khác. Các tài liệu kiến trúc/đặc tả dẫn tới nguồn này;
 đối chiếu code tại [mục 7](use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu) trước khi tuyên bố đã triển khai.
 Phương pháp vẽ/kiểm chứng thuộc [quy chuẩn UML](../04-standards/use-case-modeling.md).
+
+PRODUCT ghi người dùng, công việc, nền tảng và giới hạn của từng app theo
+[ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
+Impeccable init đọc/cập nhật đúng bối cảnh này, không tạo chính sách nghiệp vụ hoặc thay `DESIGN.md`.
 
 Use this directory for durable product and domain knowledge.
 

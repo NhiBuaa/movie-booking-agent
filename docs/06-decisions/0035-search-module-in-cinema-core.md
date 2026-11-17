@@ -13,13 +13,14 @@ gọi API/inference, chạy worker hoặc triển khai. Cách tách tiến trìn
 [ADR-0030](0030-typesense-for-movie-search-and-discovery.md) chọn Typesense dẫn xuất và
 [ADR-0034](0034-backend-orchestrated-external-embeddings.md) chọn backend điều phối Cloudflare/Qwen3
 tạo external vectors. Cần xác định backend sở hữu API và đường indexing, đồng thời giữ
-Core/PostgreSQL làm thẩm quyền danh mục, visibility, lịch/giá/ghế và giao dịch.
+Catalog/PostgreSQL Catalog giữ nội dung phim và quyền xuất bản; Core/PostgreSQL Core giữ lịch/giá/ghế
+và giao dịch theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md).
 Tìm kiếm công khai phải hoạt động độc lập với hội thoại Agent; chưa có yêu cầu tải/SLO được đo
 chứng minh cần thêm Search Service độc lập ở bản đầu.
 
 ## Decision
 
-- Đặt **module Search trong `services/cinema-core`**, dùng nền NestJS/Fastify đã chọn tại ADR-0002.
+- Đặt **module Search trong `services/cinema-core`**, dùng nền NestJS/Fastify đã chọn tại ADR-0036.
   Module cung cấp API tìm/khám phá và điều phối query embedding, Typesense retrieval, kiểm điều kiện
   từ Core, cùng ranking theo phương pháp/nguyên tắc đã chốt. Không tạo Search Service riêng ở bản đầu.
 - Web/Mobile/BFF và Agent dùng hợp đồng API Core phù hợp; Agent diễn giải ý định và gọi công cụ,
@@ -28,6 +29,10 @@ chứng minh cần thêm Search Service độc lập ở bản đầu.
 - Dùng **BullMQ cho indexing nền**, tái dùng ADR-0006; dữ liệu thay đổi từ outbox/CDC/Kafka
   theo ADR-0007/0030. Consumer bàn giao job cần chống lặp/version, xử lý lỗi và reconcile;
   chưa chọn chi tiết job ID, partition/concurrency, retry/backfill hoặc giao thức bàn giao.
+  Catalog vẫn sở hữu biên tập phim/media, Community đánh giá/yêu thích, Identity tài khoản/quyền;
+  Search chỉ dùng projection/hợp đồng/API có phạm vi, không SQL chéo database. Sở hữu index không
+  chuyển quyền sở hữu dữ liệu nguồn vào Core. Snapshot Catalog→Core khi lập suất vẫn lấy qua HTTP
+  và lưu cùng suất theo thiết kế bảy service, không lấy từ search index. Search không là service thứ tám.
 - Giữ ranh giới module/API rõ để có thể tách dịch vụ sau nếu có nhu cầu và bằng chứng tải/SLO.
   Thiết kế tiếp phải giới hạn tài nguyên search/indexing để bảo vệ giao dịch; đặt cùng codebase
   không chứng minh đã cách ly CPU, kết nối, queue hoặc lỗi runtime.

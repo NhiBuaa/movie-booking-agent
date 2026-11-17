@@ -1,5 +1,16 @@
 # Feature Specification: Standard Platform Data Contracts (@platform/contracts)
 
+> **Thiết kế backend mới hơn:** [bảy service](../004-service-decomposition/spec.md) và
+> [quyết định ngày 2026-11-17](../004-service-decomposition/decisions.md) mở rộng góc nhìn Core/Agent.
+> Contracts chia sẻ hợp đồng biên, không chia sẻ ORM/mô hình lưu trữ. Agent đề xuất, app/BFF thực thi
+> lệnh dưới quyền khách; các ví dụ Agent gửi hold/thanh toán bên dưới là bối cảnh feature cũ,
+> không là quyền thực thi của kiến trúc đích. Giữ nguyên tiêu chí và bằng chứng lịch sử.
+
+> **Đường dẫn lịch sử:** phần phạm vi, ví dụ và tiêu chí dưới đây giữ bối cảnh feature ban đầu.
+> Cấu trúc app hiện hành và việc chuyển nhân viên sang Organizer Mobile theo
+> [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md).
+> React Native/Expo hoặc Mobile gộp khách/nhân viên trong tài liệu cũ không chốt stack/phạm vi mới.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
@@ -13,6 +24,7 @@
 > Yêu cầu zero runtime dependencies trong feature gốc bên dưới là phạm vi lịch sử, cần hòa giải
 > khi đặc tả migration; chưa được tự thay bằng Zod trong code. [ADR-0021](../../06-decisions/0021-layered-testing-stack-for-platform.md)
 > chọn Vitest cho suite TypeScript mới và giữ `node:test` hiện có. Không sửa hồi tố tiêu chí/bằng chứng feature.
+
 **Created**: 2026-11-15
 **Status**: In Progress
 **Input**: Thiết lập hợp đồng dữ liệu chuẩn (`packages/contracts`) kết nối giữa Web Client, Organizer Portal, Mobile App, Cinema Core Backend và Conversational AI Agent Service.

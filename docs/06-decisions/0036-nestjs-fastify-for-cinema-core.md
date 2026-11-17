@@ -1,4 +1,8 @@
-# ADR-0002 — NestJS và Fastify cho Cinema Core
+# ADR-0036 — NestJS và Fastify cho Cinema Core
+
+Mã ADR ban đầu trong nhánh tech stack là 0002; đổi sang 0036 khi hòa giải PR #5 vì
+[ADR-0002](0002-customer-organizer-app-boundaries.md) đã được hợp nhất cho ranh giới bốn app.
+Nguồn duyệt, ngày và lựa chọn framework bên dưới giữ nguyên; việc đổi mã không là phê duyệt mới.
 
 ## Status
 

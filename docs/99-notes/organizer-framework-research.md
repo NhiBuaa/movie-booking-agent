@@ -8,10 +8,10 @@ Chỉ đọc code/tài liệu công khai; không scaffold, cài dependency, sử
 
 ## Bối cảnh đã kiểm tra
 
-`apps/organizer` hiện chỉ có [README](../../apps/organizer/README.md), mô tả quản trị danh mục, phòng/sơ đồ ghế,
+`apps/organizer` hiện chỉ có [README](../../apps/organizer-web/README.md), mô tả quản trị danh mục, phòng/sơ đồ ghế,
 lịch chiếu, quyền và báo cáo cho toàn chuỗi hoặc rạp được giao. Chưa có framework implementation để kế thừa.
 [Kiến trúc frontend](../02-architecture/frontend-architecture.md) chọn Next.js 16 + React 19 + TypeScript cho **`apps/web`**;
-[package Web](../../apps/web/package.json) có Next/React. Không tự mở rộng lựa chọn đó thành quyết định Organizer.
+[package Web](../../apps/customer-web/package.json) có Next/React. Không tự mở rộng lựa chọn đó thành quyết định Organizer.
 Core độc lập và [Better Auth direct login](../06-decisions/0008-better-auth-with-direct-login.md) đã có hướng được chọn;
 chưa chốt topology auth/domain, hosting hoặc runtime Organizer. Không giả định tải thật hay đội ngũ đã quen công cụ.
 

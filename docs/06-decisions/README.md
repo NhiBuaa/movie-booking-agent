@@ -9,7 +9,7 @@ Nơi lưu trữ các văn bản ghi nhận quyết định kiến trúc quan tr�
 | Mã ADR | Tiêu đề quyết định | Trạng thái | Ngày ghi nhận |
 | :--- | :--- | :--- | :--- |
 | [ADR-0001](0001-monorepo-platform-and-microservices-boundaries.md) | Kiến trúc Monorepo Platform và Ranh giới Microservices | `Accepted` | 2026-11-15 |
-| [ADR-0002](0002-nestjs-fastify-for-cinema-core.md) | NestJS và Fastify cho Cinema Core | `Accepted` | 2026-11-16 |
+| [ADR-0002](0002-customer-organizer-app-boundaries.md) | Tách ứng dụng Customer và Organizer theo nền tảng | `Accepted` | 2026-11-16 |
 | [ADR-0003](0003-postgresql-and-redis-for-platform-data.md) | PostgreSQL và Redis cho dữ liệu nền tảng | `Accepted` | 2026-11-16 |
 | [ADR-0004](0004-redis-roles-and-seat-hold-coordination.md) | Vai trò Redis và điều phối giữ ghế | `Accepted` | 2026-11-16 |
 | [ADR-0005](0005-drizzle-orm-and-kit-for-cinema-core.md) | Drizzle ORM và Kit cho Cinema Core | `Accepted` | 2026-11-16 |
@@ -43,8 +43,19 @@ Nơi lưu trữ các văn bản ghi nhận quyết định kiến trúc quan tr�
 | [ADR-0033](0033-qwen3-embedding-for-movie-retrieval.md) | Qwen3 Embedding 0.6B trên Cloudflare cho tìm kiếm phim | `Accepted` | 2026-11-17 |
 | [ADR-0034](0034-backend-orchestrated-external-embeddings.md) | Backend điều phối embedding, Typesense nhận vector ngoài | `Accepted` | 2026-11-17 |
 | [ADR-0035](0035-search-module-in-cinema-core.md) | Module Search trong Cinema Core, BullMQ indexing nền | `Accepted` | 2026-11-17 |
+| [ADR-0036](0036-nestjs-fastify-for-cinema-core.md) | NestJS và Fastify cho Cinema Core (mã 0002 ban đầu của PR #5) | `Accepted` | 2026-11-16 |
 
 ## Phạm vi của các lựa chọn
+
+ADR-0002 đã hợp nhất sở hữu ranh giới bốn app. Quyết định NestJS/Fastify trước đây dùng mã 0002
+ở nhánh tech stack được chuyển thành ADR-0036; các mã 0003–0035 giữ nguyên để tránh đổi toàn bộ
+lịch sử tham chiếu. Ngày chấp thuận không phụ thuộc thứ tự số sau khi hòa giải.
+
+[Thiết kế bảy service](../05-specs/004-service-decomposition/spec.md) và
+[quyết định đã duyệt](../05-specs/004-service-decomposition/decisions.md) sở hữu phân công dữ liệu,
+Agent đề xuất/app-BFF thực thi và các tích hợp. Các ADR công nghệ đọc cùng ranh giới đó:
+Identity sở hữu Better Auth; Notification dùng Resend; Catalog sở hữu nội dung/media phim;
+Search vẫn là module Core và nhận dữ liệu qua hợp đồng, không SQL chéo dịch vụ.
 
 Các ADR ghi quyết định công nghệ và lý do; `Accepted` không xác nhận đã cài đặt, tích hợp,
 kiểm thử, triển khai hoặc đạt hiệu năng mục tiêu. Xem [PROJECT-OVERVIEW](../../PROJECT-OVERVIEW.md)

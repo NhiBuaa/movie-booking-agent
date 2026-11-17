@@ -10,9 +10,12 @@ build ứng dụng, tạo tài khoản, phát hành hoặc mua dịch vụ.
 ## Context
 
 [Constitution](../../.specify/memory/constitution.md) đã định hướng React Native/Expo.
-Mobile phục vụ khách hàng và nhân viên soát vé theo [mô hình sản phẩm](../03-product/use-cases.md);
+Nền Mobile được áp dụng vào hai app tách riêng theo [ADR-0002](0002-customer-organizer-app-boundaries.md):
+Customer Mobile phục vụ khách; Organizer Mobile phục vụ quản trị/vận hành và nhân viên soát vé theo quyền.
+Phạm vi màn hình quản trị native cần đặc tả, không tự coi mọi màn hình Web có bản tương đương.
+Theo [mô hình sản phẩm](../03-product/use-cases.md),
 khách có thể lưu QR để xuất trình offline, thiết bị nhân viên phải online khi soát qua Core.
-`apps/mobile` hiện chỉ có README, chưa có native runtime được kiểm chứng.
+`apps/customer-mobile` và `apps/organizer-mobile` hiện có README/PRODUCT, chưa có native runtime được kiểm chứng.
 
 ## Decision
 
@@ -22,7 +25,7 @@ khách có thể lưu QR để xuất trình offline, thiết bị nhân viên p
 - Dùng **development builds** khi phát triển để có app với cấu hình native riêng. Bản preview/release
   để demo/phân phối là cấu hình build riêng, không coi development build là bản phát hành cuối.
   Expo Go có thể phục vụ thử nghiệm trong giới hạn của nó; không dùng làm bằng chứng tích hợp release.
-- Chọn **`expo-camera`** để đọc QR bằng camera. Callback chỉ cung cấp payload; Core kiểm quyền/rạp,
+- Chọn **`expo-camera`** cho luồng đọc QR của Organizer Mobile. Callback chỉ cung cấp payload; Core kiểm quyền/rạp,
   trạng thái và ghi nhận riêng các ghế được chọn. Không xem quét một lần là dùng hết đơn.
 - Chọn **`expo-secure-store`** cho dữ liệu phiên nhạy cảm theo tích hợp Better Auth đã chọn tại
   [ADR-0008](0008-better-auth-with-direct-login.md). Không lưu mật khẩu hoặc dùng SecureStore
@@ -33,7 +36,8 @@ khách có thể lưu QR để xuất trình offline, thiết bị nhân viên p
   `expo/fetch` và `eventsource-parser`, ứng dụng quản lý lifecycle/error/reconnect.
 - Chưa chọn Expo SDK/React Native version, gói cloud build hoặc kênh phát hành.
   UI giữ Ferrari Dark Cinema; ánh xạ tokens sang native theme thay vì giả định
-  CSS web tự chạy trên native. Không mở rộng Mobile sang quyền giao combo/quản trị.
+  CSS web tự chạy trên native. Bốn app giữ phạm vi ADR-0002; thư viện native không tự cấp quyền
+  giao combo/quản trị hay chọn màn hình ngoài phạm vi sản phẩm đã duyệt.
 
 ## Alternatives Considered
 

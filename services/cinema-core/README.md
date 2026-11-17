@@ -5,7 +5,7 @@
 [đặc tả giao dịch](../../docs/05-specs/domain-context.md) diễn giải ràng buộc cần triển khai.
 
 **Framework đã chọn:** NestJS + Fastify cho Core theo
-[ADR-0002](../../docs/06-decisions/0002-nestjs-fastify-for-cinema-core.md).
+[ADR-0036](../../docs/06-decisions/0036-nestjs-fastify-for-cinema-core.md).
 Lựa chọn framework chưa phải bằng chứng runtime đã hoạt động.
 
 **Kho dữ liệu đã chọn:** PostgreSQL làm kho nghiệp vụ chính và Redis có mặt từ bản đầu theo
@@ -21,7 +21,9 @@ Driver, phiên bản và schema/migration cụ thể cần thiết kế trước
 
 **Nền tìm kiếm đã chọn:** Typesense OSS làm chỉ mục lexical/vector dẫn xuất theo
 [ADR-0030](../../docs/06-decisions/0030-typesense-for-movie-search-and-discovery.md), cập nhật từ luồng
-outbox/CDC/Kafka. Core/PostgreSQL kiểm visibility, lịch/giá/ghế và nghiệp vụ; index không xác nhận còn ghế.
+outbox/CDC/Kafka theo hợp đồng của service sở hữu. Catalog sở hữu nội dung phim, Community sở hữu
+đánh giá/yêu thích; Core không đọc SQL của họ. Core kiểm điều kiện giao dịch, lịch/giá/ghế;
+index không xác nhận còn ghế. Hợp đồng projection/visibility cần đặc tả trước triển khai.
 Lớp ứng dụng giữ personalization theo nội dung + hồ sơ tại
 [ADR-0031](../../docs/06-decisions/0031-content-based-and-profile-scoring-for-personalization.md).
 Module Search thuộc Core, BullMQ xử lý indexing nền theo
@@ -51,12 +53,13 @@ consumer chuyển thông báo → Redis Pub/Sub → các replica Core SSE theo
 Giữ polling fallback và resync định kỳ cả khi stream sống; thông báo mất được, Core vẫn quyết định ghế/TTL.
 Chưa viết endpoint/consumer, pin client Redis, chọn chu kỳ/SLO hoặc kiểm multi-replica/proxy/runtime.
 
-**Xác thực đã chọn:** Better Auth với form đăng nhập trực tiếp, session và hướng JWT/JWKS cho API theo
-[ADR-0008](../../docs/06-decisions/0008-better-auth-with-direct-login.md). Core vẫn kiểm tra quyền theo
+**Xác thực đã chọn:** [Identity](../identity-service/README.md) sở hữu Better Auth, phiên và cấp bằng chứng
+theo [ADR-0008](../../docs/06-decisions/0008-better-auth-with-direct-login.md). Core kiểm JWT/JWKS và quyền theo
 người dùng, rạp và tài nguyên; không coi token hợp lệ là đủ quyền nghiệp vụ. Hợp đồng token,
-thu hồi phiên và nơi chạy Auth chưa chốt; chưa có bằng chứng tích hợp runtime.
+thu hồi/luân chuyển khóa cụ thể còn cần đặc tả; Auth thuộc Identity, không chạy như module sở hữu dữ liệu Core.
+Chưa có bằng chứng tích hợp runtime.
 
-**Email giao dịch đã chọn:** Resend theo
+**Email giao dịch đã chọn:** [Notification](../notification-service/README.md) chuyển phát qua Resend theo
 [ADR-0018](../../docs/06-decisions/0018-resend-for-transactional-email.md).
 Handoff sự kiện/job, theo dõi gửi/webhook và chống lặp cần đặc tả; chưa chọn gói/domain hoặc gửi thư.
 Email vé lỗi không đổi trạng thái thanh toán/vé Core; chính sách mã/gửi lại/lỗi vẫn thuộc OPEN-09.
@@ -67,9 +70,10 @@ Tách canonical signing/IPN/query/refund từng cổng/operation; không áp raw
 là xác nhận. Core giữ trạng thái/chống lặp/đối soát; chưa viết adapter/gọi sandbox, xác nhận merchant/phí
 hoặc giải quyết bất nhất tài liệu ký response MoMo. Chữ ký cổng và bằng chứng vé Core là hai ranh giới riêng.
 
-**Ảnh danh mục đã chọn:** R2 Standard giữ ảnh gốc và Cloudflare Images remote transformations theo
+**Ảnh danh mục đã chọn:** [Catalog](../catalog-service/README.md) sở hữu metadata/quyền upload/xuất bản,
+R2 Standard giữ ảnh gốc và Cloudflare Images remote transformations theo
 [ADR-0019](../../docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md).
-Core/PostgreSQL giữ metadata và quyền upload/xuất bản; upload hoàn tất không tự công bố ảnh.
+Upload hoàn tất không tự công bố ảnh; Core giữ snapshot cần cho suất, không sở hữu kho media Catalog.
 Chưa cấu hình bucket/domain, kiểm tra object/cache hoặc xác nhận runtime.
 
 **Quan sát nền tảng đã chọn:** OpenTelemetry + Grafana Alloy + Grafana Cloud theo
@@ -83,6 +87,8 @@ Tích hợp phải dùng đúng FastifyAdapter và kiểm DB/effects; chưa cấ
 
 ## Core Responsibilities
 
+- **Rạp và lịch**: Rạp/phòng/sơ đồ ghế, lịch chiếu, giá/điều kiện bán. Catalog sở hữu nội dung phim;
+  Core lấy snapshot có phiên bản qua HTTP khi lập/công bố suất và lưu cùng suất để dùng khi đặt/soát.
 - **Authoritative Core**: Tồn kho theo suất và sơ đồ riêng của từng phòng, giá, hold nguyên tử 300 giây,
   xác nhận thanh toán, phát hành và sử dụng vé; không lấy fixture 64 ghế làm giới hạn sản phẩm.
 - **Thanh toán và hoàn tiền**: MoMo/VNPAY; xác thực nguồn/chữ ký, số tiền và liên kết đơn, xử lý lặp
@@ -91,7 +97,23 @@ Tích hợp phải dùng đúng FastifyAdapter và kiểm DB/effects; chưa cấ
 - **Vé và soát vé**: Một QR chung cho lượt đặt, quyền/trạng thái theo ghế; kiểm tra và ghi nhận sử dụng
   qua Core để chống dùng lặp, kể cả đồng thời nhiều cửa. Thiết bị nhân viên phải online.
 - **Hủy theo quyền**: Thực thi quyết định hủy đã được người có quyền duyệt, giữ phần quyền còn lại;
-  phối hợp thông báo email. Không tự cấp quyền hoàn thủ công hoặc chốt cách xử lý sự cố còn mở.
+  hủy suất đã duyệt có hiệu lực tại Core trước xử lý nền từng đơn. Không tự cấp quyền hoàn thủ công
+  hoặc chốt cách xử lý sự cố còn mở.
+- **Module trong Core**: Hội viên, Ưu đãi/Voucher và Combo dùng interface và transaction cục bộ;
+  không tách thành service/database riêng trong thiết kế đã chọn.
+
+## Service Boundaries
+
+[Thiết kế microservices](../../docs/05-specs/004-service-decomposition/spec.md) sở hữu hợp đồng kiến trúc;
+[quyết định](../../docs/05-specs/004-service-decomposition/decisions.md) giữ lý do và nguồn duyệt.
+Core sở hữu database PostgreSQL logic riêng; không đọc SQL của service khác. Sự kiện đã commit qua
+outbox/CDC/Kafka phục vụ Reporting, Notification và căn cứ đánh giá của Community.
+Lệnh dùng mã thao tác ổn định, ngoại tác thanh toán/hoàn nằm ngoài transaction database.
+
+Identity sở hữu danh tính/quyền; Core kiểm bằng chứng cục bộ khi soát/giao combo thường xuyên và áp dụng
+thu hồi đã biết, không gọi Identity ở mỗi lượt. Webhook/đối soát độc lập với phiên khách; tác vụ rủi ro
+cao cần quyền hiện hành. Notification chuyển phát nhưng không sở hữu/xác minh mã nghiệp vụ;
+email có mã nhạy cảm dùng Claim Check qua luồng riêng theo thiết kế, không plaintext trong broker.
 
 ## Implementation Boundary
 

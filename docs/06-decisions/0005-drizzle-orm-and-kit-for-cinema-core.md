@@ -8,7 +8,7 @@ Accepted — chủ sản phẩm xác nhận ngày 2026-11-16 trong hội thoại
 
 ## Context
 
-Cinema Core đã chọn [NestJS + Fastify](0002-nestjs-fastify-for-cinema-core.md),
+Cinema Core đã chọn [NestJS + Fastify](0036-nestjs-fastify-for-cinema-core.md),
 [PostgreSQL và Redis](0003-postgresql-and-redis-for-platform-data.md).
 [ADR-0004](0004-redis-roles-and-seat-hold-coordination.md) chọn Redis tham gia điều phối hold,
 với PostgreSQL bảo vệ giao dịch cuối cùng và làm đường dự phòng khi Redis gặp sự cố.

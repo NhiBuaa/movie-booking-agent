@@ -1,5 +1,10 @@
 # Implementation Plan: Web BFF Route Handlers
 
+> **Thiết kế backend mới hơn:** [thiết kế bảy service](../004-service-decomposition/spec.md) sở hữu
+> việc phân chia dữ liệu, giao tiếp và thực thi lệnh Agent → app/BFF → Core. Kế hoạch/kiểm chứng
+> adapter dưới đây giữ phạm vi feature cũ; không phải kế hoạch triển khai hoặc bằng chứng tuân thủ
+> kiến trúc đích/hiến pháp mới. Tích hợp thật cần đặc tả và kiểm chứng riêng.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
@@ -12,7 +17,8 @@
 
 > **Quyết định tiếp nối — 2026-11-17:** [danh mục ADR](../../06-decisions/README.md) sở hữu quyết định;
 > [README Core](../../../services/cinema-core/README.md) tổng hợp stack mục tiêu đã chọn, gồm
-> backend/database/auth/payment adapters và module Search. Kế hoạch dưới đây giữ phạm vi BFF
+> backend/database/payment adapters và module Search. [Identity](../../../services/identity-service/README.md)
+> sở hữu auth, [Notification](../../../services/notification-service/README.md) sở hữu chuyển phát. Kế hoạch dưới đây giữ phạm vi BFF
 > in-memory ban đầu; chưa phải kế hoạch migration/triển khai stack mới đã được duyệt.
 > Giữ nguyên fixture, header mô phỏng, HMAC và bằng chứng kiểm thử của feature; xác minh code mới riêng.
 
@@ -20,7 +26,7 @@
 
 ## 1. Tóm tắt kế hoạch (Summary)
 
-Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/web` (Next.js 16 App Router) đóng vai trò làm trạm trung gian chuẩn hóa, điều phối dữ liệu giữa trình duyệt web và hệ thống giao dịch cốt lõi `services/cinema-core`, sử dụng 100% hợp đồng dữ liệu chuẩn từ `@platform/contracts`.
+Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/customer-web` (Next.js 16 App Router) đóng vai trò làm trạm trung gian chuẩn hóa, điều phối dữ liệu giữa trình duyệt web và hệ thống giao dịch cốt lõi `services/cinema-core`, sử dụng 100% hợp đồng dữ liệu chuẩn từ `@platform/contracts`.
 
 > [!NOTE]
 > **Hiện trạng kiến trúc:** Dịch vụ backend `services/cinema-core` chưa được triển khai runtime thực tế; biến môi trường `CINEMA_CORE_URL` chưa được đấu nối. Tầng BFF hiện vận hành bằng các adapter in-memory mô phỏng có độ trung thực cao (`catalog-adapter.ts`, `hold-adapter.ts`, `order-adapter.ts`, `crypto-utils.ts`), tuân thủ chặt chẽ ranh giới thẩm quyền được định nghĩa trong [ADR-0001](../../06-decisions/0001-monorepo-platform-and-microservices-boundaries.md).
@@ -55,7 +61,7 @@ Thiết lập tầng **Backend for Frontend (BFF Route Handlers)** trong `apps/w
 ## 4. Cấu trúc tệp hoàn chỉnh (File Structure)
 
 ```text
-apps/web/
+apps/customer-web/
 ├── package.json                                   # Dependency: "@platform/contracts": "*"
 ├── tsconfig.json                                  # Path mapping: "@platform/contracts"
 ├── tests/
@@ -183,7 +189,7 @@ apps/web/
 
 ## 6. Chiến lược kiểm chứng tự động (Verification Strategy)
 
-- **Test Suite chính:** `apps/web/tests/bff-route-handlers.test.ts`.
+- **Test Suite chính:** `apps/customer-web/tests/bff-route-handlers.test.ts`.
 - **Phạm vi kiểm thử:**
   1. Tra cứu danh mục phim, rạp chiếu, lịch chiếu và sơ đồ ma trận 64 ghế.
   2. Xử lý ID rạp prototype (`constructor`, `__proto__`, `toString`) trả về 404 không ném lỗi.
@@ -199,6 +205,6 @@ apps/web/
 - **Lệnh thực thi:**
   ```bash
   npm run test:all
-  npm run typecheck --workspace=apps/web
+  npm run typecheck --workspace=apps/customer-web
   powershell -ExecutionPolicy Bypass -File "C:\Developer\Projects\agentic-repo-kit-reference\scripts\check-kit.ps1" -TargetPath .
   ```

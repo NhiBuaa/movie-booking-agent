@@ -35,7 +35,9 @@ khác với mọi lượt chat đều sinh được câu trả lời khi provide
 ## Provider dự phòng khả thi: Groq GPT-OSS
 
 Groq có `openai/gpt-oss-120b` và `openai/gpt-oss-20b`; hướng gọi **Chat Completions + local tool calling**
-để LangGraph/Agent tự kiểm và thực thi Core tools, không đưa booking tool vào built-in search/code/MCP runner.
+để LangGraph/Agent kiểm truy vấn và tạo đề xuất có cấu trúc; theo
+[ranh giới bảy service](../05-specs/004-service-decomposition/spec.md), app/BFF thực thi lệnh giao dịch
+đã xác nhận bằng quyền khách. Không đưa booking tool vào built-in search/code/MCP runner.
 Tài liệu có vòng streaming local tools với 120B; bảng công bố GPT-OSS không hỗ trợ parallel tool use.
 Không coi OpenAI-compatible là hợp đồng mọi parameter/capability đều giống Cloudflare.
 [Groq tool overview](https://console.groq.com/docs/tool-use/overview),

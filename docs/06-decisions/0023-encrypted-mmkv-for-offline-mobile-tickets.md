@@ -9,6 +9,9 @@ prebuild/build, tạo/đọc khóa thiết bị hoặc xác nhận native runtim
 
 ## Context
 
+Sau khi tách app theo [ADR-0002](0002-customer-organizer-app-boundaries.md), kho snapshot vé này thuộc
+**Customer Mobile** (`apps/customer-mobile`); Organizer Mobile vẫn soát online, không là nơi giữ kho vé khách.
+
 [B-07 trong mô tả use case](../03-product/use-case-descriptions.md) cho khách lưu QR để xuất trình
 khi điện thoại không có mạng. QR chung có thể chia sẻ cho nhóm và dùng để xuất trình quyền còn lại;
 không cấp quyền xem tài khoản. Nhân viên phải online để Core kiểm tra và ghi nhận theo O-01/O-05.

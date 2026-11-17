@@ -10,7 +10,7 @@ Chỉ đọc docs/package scripts; không cài package, sửa code/config, chạ
 
 ## Hiện trạng và nguyên tắc chọn
 
-[Web package](../../apps/web/package.json) dùng Node `>=24.19.0 <25`, `node --test "tests/*.test.ts"`;
+[Web package](../../apps/customer-web/package.json) dùng Node `>=24.19.0 <25`, `node --test "tests/*.test.ts"`;
 [contracts](../../packages/contracts/package.json) dùng `node --test "tests/**/*.test.ts"`. Chưa chạy lại hoặc kết luận suites đang pass.
 Giữ các suite/scripts hiện có; chọn runner mục tiêu không tự chuyển test, thay CI hoặc bỏ regression coverage.
 Migration cần phạm vi/đối chiếu riêng, kể cả khi API Jest/Vitest tương tự. Type-check/build vẫn là kiểm tra khác với test execution.

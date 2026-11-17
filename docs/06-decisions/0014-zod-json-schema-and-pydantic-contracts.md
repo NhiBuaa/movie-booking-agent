@@ -19,6 +19,9 @@ Cần một nguồn hợp đồng và đầu ra dẫn xuất để tránh viết
 
 - Dùng **Zod 4 schemas trong `packages/contracts` làm nguồn hợp đồng được sửa tay**;
   suy kiểu TypeScript từ schema, tránh duy trì interface trùng nghĩa bằng tay.
+  Chỉ chia sẻ public API/event/boundary contracts có service sở hữu; domain model nội bộ, ORM/schema
+  và migration ở service owner theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md).
+  Pipeline Zod/codegen không cho phép import persistence model hoặc SQL chéo service.
 - Dùng **`z.toJSONSchema()` native** xuất JSON Schema; **`datamodel-code-generator`** sinh
   **Pydantic v2**, với đầu ra `pydantic_v2.BaseModel`. JSON Schema/model Python là đầu ra dẫn xuất,
   không sửa tay thành nguồn hợp đồng thứ hai.

@@ -13,7 +13,7 @@ Chỉ đọc tài liệu/code; không scaffold, cài dependency, chạy build, g
 ## Bối cảnh và hai hướng cùng nền tảng
 
 [Constitution](../../.specify/memory/constitution.md) đã định hướng React Native/Expo; không mở lại chọn framework native.
-`apps/mobile` hiện chỉ có [README](../../apps/mobile/README.md), chưa có runtime hoặc package cấu hình để kế thừa.
+`apps/mobile` hiện chỉ có [README](../../apps/customer-mobile/README.md), chưa có runtime hoặc package cấu hình để kế thừa.
 Mobile phục vụ **khách hàng** và **nhân viên soát vé** theo [product model](../03-product/use-cases.md).
 Nhân viên quầy bắp nước là quyền riêng, kênh chưa chốt; nghiên cứu này không mở Mobile cho actor đó.
 

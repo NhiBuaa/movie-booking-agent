@@ -43,7 +43,7 @@ thêm provider hoặc benchmark nhà cung cấp là bằng chứng chất lượ
 ## Consequences
 
 - Provider email được chọn tiếp là Resend tại [ADR-0018](0018-resend-for-transactional-email.md);
-  chính sách gửi lại/lỗi email và các kênh thông báo khác vẫn còn mở ở mô hình sản phẩm.
+  chính sách gửi lại/lỗi email và các kênh bổ sung ngoài email/hộp thông báo trong app vẫn còn mở ở mô hình sản phẩm.
 - SSE truyền text và event ứng dụng; sự kiện UI/giao dịch phải được tạo từ dữ liệu đã kiểm tra,
   không phụ thuộc model luôn trả schema đúng. Strict schema cho đúng GPT-OSS/endpoint chưa xác nhận.
 - Cần deadline, giới hạn concurrency/token, xử lý quota/429/thiếu capacity và phục hồi an toàn.

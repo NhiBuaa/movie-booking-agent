@@ -22,10 +22,12 @@ Core vẫn là nguồn thẩm quyền về ghế, giá, hold, thanh toán và v�
   LangChain hiện đại là monolith cũ. Adapter Workers AI vẫn cần kiểm chứng theo
   [ADR-0012](0012-cloudflare-workers-ai-and-gpt-oss-120b.md).
 - Dùng **`langgraph-checkpoint-postgres`**, `AsyncPostgresSaver` và **Psycopg 3** với
-  **`psycopg_pool.AsyncConnectionPool`**. Dùng cụm PostgreSQL đã chọn; lưu checkpoint tách khỏi
-  bảng nghiệp vụ Core và quản lý quyền truy cập riêng. Vị trí schema/database, migration/bootstrap,
-  cấu hình connection và phiên bản tương thích còn cần đặc tả.
-- Dùng **HTTPX `AsyncClient`** để gọi Cinema Core. Tái sử dụng client/connection pool theo lifecycle
+  **`psycopg_pool.AsyncConnectionPool`**. Lưu checkpoint trong **database PostgreSQL logic riêng của Agent**
+  theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md), không chỉ một bảng/schema chung Core.
+  Số cụm vật lý, migration/bootstrap, cấu hình connection và phiên bản tương thích còn cần đặc tả.
+- Dùng **HTTPX `AsyncClient`** cho truy vấn theo quyền tới Core/Catalog; Agent tạo đề xuất,
+  app/BFF thực thi lệnh giao dịch đã xác nhận theo thiết kế bảy service.
+  Tái sử dụng client/connection pool theo lifecycle
   của tiến trình; đóng client/response khi kết thúc. Thiết kế timeout connect/read/write/pool cùng
   deadline toàn thao tác và giới hạn connection; không tạo client mới cho mỗi bước trong hot loop.
 - Codegen hợp đồng không được chọn bởi ADR này; quyết định tiếp theo nằm tại
@@ -48,7 +50,8 @@ Core vẫn là nguồn thẩm quyền về ghế, giá, hold, thanh toán và v�
   Không giữ connection DB suốt thời gian chờ người dùng, model hoặc SSE. Bootstrap/migration cần
   thực hiện có kiểm soát; pin/check saver và yêu cầu autocommit/row factory của đúng phiên bản.
 - Checkpoint lưu tiến trình Agent, không thay trạng thái giao dịch Core. Resume/replay có thể chạy lại
-  node; cần operation ID/idempotency ở Core và tra cứu kết quả khi mất phản hồi. Không có transaction
+  node; app/BFF giữ operation ID/idempotency khi gửi lệnh tới Core và tra cứu kết quả khi mất phản hồi.
+  Không dùng graph replay làm quyền tự gửi lại giao dịch. Không có transaction
   phân tán checkpoint–Core hoặc bảo đảm tác dụng phụ đúng một lần chỉ nhờ checkpointer.
 - HTTPX transport retry tích hợp không xử lý mọi lỗi đọc/ghi hoặc HTTP 503. Không retry mù lệnh
   hold/payment/cancel: Core có thể đã commit. Kiểm lại quyền, giá và hold sau chờ; không reset TTL 300 giây.

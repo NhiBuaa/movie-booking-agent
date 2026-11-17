@@ -29,7 +29,9 @@ mọi lần đăng nhập phải qua OAuth/OIDC. Chưa có yêu cầu cho ứng 
   cấu hình plugin cụ thể vẫn cần thiết kế, không mặc định dùng các giá trị issuer/audience/TTL sẵn có.
 - Dùng khả năng tích hợp **Drizzle/PostgreSQL** cho dữ liệu xác thực. Giữ ranh giới sở hữu và quyền
   truy cập dữ liệu Auth/Core; cùng hạ tầng PostgreSQL không cho phép các dịch vụ ghi bảng của nhau.
-  Chưa chọn database/schema vật lý hoặc nơi chạy Better Auth cùng tiến trình hay dịch vụ riêng.
+  Theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md), **Identity & Access**
+  sở hữu Better Auth và database PostgreSQL logic riêng; không đặt bảng Auth trong Core hoặc SQL chéo service.
+  Cụm vật lý, schema/migration và cách tách tiến trình cụ thể vẫn cần đặc tả.
 - **Core tiếp tục kiểm tra quyền nghiệp vụ hiện hành** theo người dùng, hành động, rạp và tài nguyên.
   Chữ ký JWT hợp lệ không tự chứng minh quyền sở hữu đơn, quyền soát vé hoặc email đã xác minh hiện tại.
 - **Chưa chọn OAuth Provider, Organization/Teams hoặc một thư viện phân quyền riêng.** Một chuỗi rạp
@@ -59,12 +61,15 @@ Không chọn B cũng không loại khả năng bổ sung OAuth/SSO sau này khi
 - JWT plugin không tự cung cấp OAuth authorization server hoặc token exchange. A chưa dùng
   OAuth Provider nên không mặc định có OAuth scopes, refresh grant hay endpoint introspection của Provider.
   Claim và cách nhận biết loại token phải được đặc tả cho giao thức đã chọn.
-- Xác minh JWT cục bộ không tự biết phiên đã đăng xuất/tài khoản bị khóa. Cần chốt TTL, cách cấp lại,
-  cửa sổ thu hồi, kiểm tra trạng thái hiện hành và hành vi khi Auth/Redis gặp lỗi trước triển khai.
+- Xác minh JWT cục bộ không tự biết phiên đã đăng xuất/tài khoản bị khóa. TTL/cách cấp lại/token claims
+  cần đặc tả theo [quyết định quyền vận hành](../05-specs/004-service-decomposition/decisions.md):
+  mục tiêu soát thêm 60 phút, bằng chứng quyền 90 phút và làm mới chậm nhất mỗi 15 phút khi khỏe,
+  với đầy đủ điều kiện/giới hạn đã duyệt; không tự áp các mốc đó làm TTL mọi loại token/session.
   Không hứa thu hồi tức thì chỉ từ JWT hoặc dùng cache để bỏ bảo vệ đã chốt.
-- Chưa chọn cách Agent thực hiện công cụ thay mặt khách, chuyển tiếp token hoặc vị trí bộ thực thi.
-  Không cấp service token quyền giả danh mọi khách, tự sửa `sub` hoặc bỏ kiểm audience. Quy tắc
-  xác nhận của khách và chỉ trình bày vé sau kiểm chứng Core vẫn giữ nguyên.
+- Agent chỉ thực hiện truy vấn theo quyền và tạo đề xuất; app/BFF gửi lệnh giao dịch dưới danh tính khách
+  sau xác nhận đúng nội dung/phiên bản Core kiểm tra theo thiết kế bảy service. Không chuyển credential
+  giao dịch rộng vào Agent/model/checkpoint, tự sửa `sub` hoặc bỏ kiểm audience.
+  Hợp đồng quyền đọc riêng tư của Agent và token cụ thể vẫn cần đặc tả; chỉ hiển thị vé sau kiểm chứng Core.
 - Chưa pin Better Auth, adapter/plugin, Expo hoặc thư viện xác thực JWT phía NestJS. Cần kiểm chứng
   tổ hợp phiên bản và reconciliation contracts hiện tại; `AuthSessionDto` hiện có không tự chốt thiết kế mới.
 - Portfolio cần chứng minh đăng nhập/xác minh, token sai/hết hạn/sai audience, đăng xuất/khóa tài khoản,

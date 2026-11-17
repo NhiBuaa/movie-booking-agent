@@ -32,6 +32,8 @@ rõ để kiểm soát instruction, quota và khả năng tái tạo vector. Mod
   backend điều phối API, Typesense nhận external vectors. Owner được chọn tiếp tại
   [ADR-0035](0035-search-module-in-cinema-core.md): module Search trong Core và BullMQ indexing nền;
   cấu trúc adapter/worker và ngân sách từng tác vụ vẫn cần thiết kế.
+  Catalog sở hữu metadata nội dung phim theo [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md);
+  module Search chỉ nhận bản dẫn xuất qua hợp đồng, không SQL chéo database hoặc đổi snapshot phim của suất.
 - Không thêm model embedding dự phòng theo request. Groq của ADR-0028 chỉ dự phòng chat;
   cùng số chiều không làm hai encoder tương thích. Đổi encoder cần đánh giá, tạo lại vector liên quan
   và reindex/migrate profile có kiểm soát.

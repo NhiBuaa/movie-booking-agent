@@ -36,7 +36,7 @@ không từ một kết luận rằng MySQL yếu giao dịch hoặc chậm hơn
 2. **Redis có mặt từ bản đầu.** Vai trò được quyết định tiếp tại
    [ADR-0004](0004-redis-roles-and-seat-hold-coordination.md); thuật toán và cấu hình lưu bền/khôi phục cần thiết kế riêng.
 3. **Ban đầu chưa thêm database thứ ba hoặc chỉ mục tìm kiếm độc lập.** Quyết định bổ sung tại
-   ADR-0030 chọn Typesense làm chỉ mục tìm kiếm dẫn xuất; không thêm kho nghiệp vụ có thẩm quyền,
+   ADR-0030 chọn Typesense làm chỉ mục tìm kiếm dẫn xuất; không thêm công nghệ database nghiệp vụ khác,
    MongoDB, OpenSearch hoặc vector DB riêng. Embedding được chọn tiếp tại ADR-0032/0033,
    tích hợp/owner tại ADR-0034/0035; công thức và bằng chứng chất lượng vẫn cần đặc tả/kiểm chứng.
 
@@ -50,7 +50,9 @@ trạng thái giao dịch có thẩm quyền. Thiết kế phải bảo vệ đ�
 
 Cùng công nghệ PostgreSQL không đồng nghĩa các dịch vụ được tự do ghi vào bảng của nhau.
 Ranh giới sở hữu, database/schema vật lý, quyền truy cập, ORM, migration, phiên bản và nhà cung cấp
-triển khai chưa được quyết định ở ADR này. ORM Core được chọn tiếp tại
+triển khai chưa được quyết định ở lần duyệt ADR này. Sau đó [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md)
+chọn mỗi service một PostgreSQL database logic và credential/migration riêng; không JOIN/FK/SQL chéo,
+kể cả dùng chung cụm. Số cụm/backup/restore vật lý vẫn cần thiết kế. ORM Core được chọn tiếp tại
 [ADR-0005](0005-drizzle-orm-and-kit-for-cinema-core.md), checkpoint Agent tại
 [ADR-0013](0013-modular-agent-postgres-checkpoints-and-httpx.md); chi tiết sở hữu/schema/driver còn mở.
 Các chính sách `OPEN-*` của mô hình sản phẩm giữ nguyên.

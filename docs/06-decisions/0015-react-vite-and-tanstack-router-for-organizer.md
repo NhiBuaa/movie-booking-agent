@@ -4,15 +4,15 @@
 
 Accepted — ngày 2026-11-17, chủ sản phẩm xác nhận “tôi đồng ý với phương án B của bạn” trong
 hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`): React 19 + TypeScript + Vite +
-TanStack Router cho `apps/organizer`. Chỉ chọn stack; chưa scaffold, cài package, sửa ứng dụng,
+TanStack Router cho `apps/organizer-web`. Chỉ chọn stack; chưa scaffold, cài package, sửa ứng dụng,
 chọn hosting hoặc chạy runtime/benchmark.
 
 ## Context
 
 Organizer phục vụ quản trị viên toàn chuỗi và quản lý rạp: danh mục, phòng/ghế, lịch chiếu,
 quyền và báo cáo theo [mô hình sản phẩm](../03-product/use-cases.md).
-`apps/organizer` hiện chỉ có README; hướng Next.js App Router đã chọn trong
-[kiến trúc frontend](../02-architecture/frontend-architecture.md) áp dụng cho `apps/web`.
+`apps/organizer-web` hiện chỉ có README; hướng Next.js App Router đã chọn trong
+[kiến trúc frontend](../02-architecture/frontend-architecture.md) áp dụng cho `apps/customer-web`.
 Core độc lập giữ nghiệp vụ/phân quyền; chưa có nhu cầu RSC hoặc BFF riêng của Organizer được xác nhận.
 
 ## Decision

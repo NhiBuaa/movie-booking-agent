@@ -25,8 +25,11 @@ và phục hồi tìm kiếm cơ bản khi embedding lỗi. Việc chọn encode
   Typesense auto-embedding ở bản đầu. ADR-0035 phân công module Search trong Core và BullMQ indexing;
   không tự chốt topology/tiến trình worker.
 - Với phim, tạo vector metadata bằng đường xử lý nền cho nội dung đã commit/thay đổi;
+  Catalog vẫn sở hữu nội dung, Search nhận bản dẫn xuất qua hợp đồng và quyền truy cập phù hợp,
+  không đọc SQL database Catalog. HTTP snapshot Catalog→Core khi lập suất là đường riêng đã duyệt;
   với truy vấn, backend tạo query vector rồi gửi vào Typesense. Lớp ứng dụng vẫn giữ ranking,
-  Core/PostgreSQL kiểm visibility/điều kiện nghiệp vụ; chỉ mục không xác nhận giá/ghế/vé.
+  service nguồn kiểm visibility thuộc quyền mình, Core kiểm lịch/điều kiện giao dịch;
+  chỉ mục không xác nhận giá/ghế/vé hoặc thay các nguồn đó.
 - Dùng đúng đường query/instruction/document của Qwen3, quản lý template/preprocessing/version;
   kiểm shape/dimensions/norm trước khi sử dụng. Không tự coi tên model là bằng chứng tương thích runtime.
 - Backend chủ động quản lý deadline, budget/cache và retry có giới hạn; phân biệt indexing nền với

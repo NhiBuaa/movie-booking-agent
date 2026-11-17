@@ -8,6 +8,12 @@ Core là thành phần có thẩm quyền **bên trong** nền tảng, không ph
 Mọi thao tác kiểm tra lại quyền tài khoản và phạm vi rạp; biết mã đơn/QR không cấp quyền xem hồ sơ
 khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây không tự định nghĩa enum/API mới.
 
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) sở hữu phân chia trách nhiệm,
+dữ liệu và giao tiếp giữa bảy service nội bộ. Mô tả một kết quả sản phẩm dưới đây không hàm ý mọi bước
+cùng database/transaction hoặc Agent trực tiếp gửi lệnh giao dịch; app/BFF thực thi theo quyền khách.
+Xác nhận gắn với đúng nội dung/phiên bản Core đã kiểm tra; thay đổi quan trọng phải xác nhận lại.
+Timeout tra cứu mã thao tác cũ, không mặc định tạo lệnh mới. Token/bí mật không vào prompt/checkpoint.
+
 ## Tài khoản và khám phá
 
 ### D-01 — Khám phá phim, rạp và suất chiếu
@@ -135,7 +141,11 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Kết quả:** đơn/vé xác nhận đúng một lần; chưa đánh dấu ghế đã vào.
 - **Ngoại lệ:** giả/sai đơn/sai tiền: không phát vé; callback lặp: không phát/thu trùng; chưa rõ: kiểm tra tiếp; thu tiền sau khi ghế giải phóng: không tự đặt ghế khác, khởi tạo R-03 trả khoản thu, không yêu cầu khách xin hủy.
 - **Quy tắc:** BR-05…BR-08. Email lỗi không biến vé đã xác nhận thành chưa thanh toán. Thời hạn/ngoại lệ đối soát còn OPEN-03/OPEN-09.
-- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành, chưa chọn cơ chế đồng bộ/xử lý nền. L-06 diễn giải việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu để mô tả thứ tự gửi. Provider chọn Resend tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md); chính sách gửi lại/lỗi email vẫn OPEN-09.
+- **Ranh giới thông báo:** association với dịch vụ email thể hiện phối hợp gửi sau phát hành;
+  thiết kế service đã chọn Core phát sự kiện sau commit để Notification chuyển phát. L-06 diễn giải
+  việc khách xem thông báo và tra cứu trạng thái hiện hành; không tạo include/extend giữa hai mục tiêu
+  để mô tả thứ tự gửi. Resend đã được chọn tại [ADR-0018](../06-decisions/0018-resend-for-transactional-email.md);
+  tham số/ngoại lệ gửi lại còn theo OPEN-09. Chọn provider chưa xác nhận tích hợp runtime.
 
 ### B-07 — Xem đơn và vé
 
@@ -164,7 +174,7 @@ khách hoặc quyền vận hành. Các từ chỉ trạng thái dưới đây k
 - **Luồng:** chọn ghế/cặp → kiểm tra điều kiện → trình bày phạm vi và khoản hoàn theo chính sách nếu xác định được → khách xác nhận → ghi yêu cầu chờ xét, cung cấp cách theo dõi.
 - **Kết quả:** tiếp nhận yêu cầu; vé vẫn hiệu lực, chưa hủy/chưa hoàn.
 - **Ngoại lệ:** đã dùng/đã hủy, suất bắt đầu, thiếu nửa cặp hoặc yêu cầu trùng: không nhận lệnh sai; chính sách chưa chốt thì không bịa mức hoàn.
-- **Quy tắc:** BR-10…BR-11, BR-17; OPEN-01…OPEN-02. AI cần xác nhận rõ danh sách trước gửi.
+- **Quy tắc:** BR-10…BR-11, BR-17; OPEN-01…OPEN-02. Trong chat, AI lập đề xuất; app/BFF chỉ gửi sau khi khách xác nhận rõ đúng danh sách/phiên bản.
 
 ### R-02 — Xét duyệt yêu cầu hủy
 

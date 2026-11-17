@@ -11,7 +11,7 @@ Accepted — ngày 2026-11-16, chủ sản phẩm trả lời “tôi đồng ý
 [ADR-0004](0004-redis-roles-and-seat-hold-coordination.md) chọn Redis phục vụ cả hàng đợi tác vụ nền.
 Core cần phối hợp email/thông báo và công việc có thể thử lại mà không nhầm trạng thái gửi việc
 với trạng thái giao dịch đã xác nhận. NestJS đã được chọn tại
-[ADR-0002](0002-nestjs-fastify-for-cinema-core.md).
+[ADR-0036](0036-nestjs-fastify-for-cinema-core.md).
 
 Cần công cụ quản lý vòng đời job, worker, tác vụ chạy trễ và thử lại. Lựa chọn này theo độ phù hợp
 kỹ thuật, không dựa ưu tiên miễn phí; mục tiêu và chi phí được tách theo

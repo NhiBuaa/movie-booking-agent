@@ -18,6 +18,10 @@ Accepted architecture direction and explicitly identified implementation: compon
 ownership, runtime structure, data flow, and failure behavior. Read [CONTEXT](../CONTEXT.md)
 for implementation limits; a target architecture does not establish verified runtime.
 
+[Thiết kế microservices đích](05-specs/004-service-decomposition/spec.md) sở hữu phân chia 7 service;
+[bản ghi quyết định](05-specs/004-service-decomposition/decisions.md) giữ lý do và nguồn chấp thuận.
+Các trang kiến trúc phân biệt thiết kế đích với hiện trạng tại [CONTEXT](../CONTEXT.md).
+
 ## `03-product/`
 
 Durable product and domain knowledge: users, domain concepts, user flows, terminology, and product rules that are broader than one specification. For repositories with a user interface, visual identity and design tokens are owned by root `DESIGN.md`.
@@ -25,6 +29,11 @@ Durable product and domain knowledge: users, domain concepts, user flows, termin
 [Mô hình use case](03-product/use-cases.md) sở hữu actor, mục tiêu và BR/OPEN;
 [mô tả use case](03-product/use-case-descriptions.md) diễn giải tình huống và [GLOSSARY](../GLOSSARY.md)
 sở hữu thuật ngữ. Mô hình mục tiêu đã được duyệt không xác nhận code đã đáp ứng.
+
+Bối cảnh theo ứng dụng nằm ở [Customer Web](../apps/customer-web/PRODUCT.md),
+[Customer Mobile](../apps/customer-mobile/PRODUCT.md), [Organizer Web](../apps/organizer-web/PRODUCT.md)
+và [Organizer Mobile](../apps/organizer-mobile/PRODUCT.md). PRODUCT không sao chép quyền/BR/OPEN
+hoặc thiết kế chung; ranh giới bốn app theo [ADR-0002](06-decisions/0002-customer-organizer-app-boundaries.md).
 
 ## `04-standards/`
 
@@ -53,6 +62,9 @@ feature plans do not override those choices or prove they have been implemented.
 ## `07-guides/`
 
 Normal development or operational procedures.
+
+[Công cụ phát triển](07-guides/development-tools.md) hướng dẫn chọn bối cảnh Impeccable,
+phân biệt cấu hình live với kiểm chứng và dùng CodeGraph theo worktree.
 
 ## `08-runbooks/`
 

@@ -19,6 +19,8 @@ giữ hướng xử lý job/sự kiện. Cần provider và feedback gửi thư;
 
 - Chọn **Resend** làm nhà cung cấp email giao dịch; tích hợp từ server qua API/SDK Node.js phù hợp
   stack TypeScript. Credentials không xuất ra Web/Mobile/Organizer hoặc prompt/trace Agent.
+  **Notification Service** sở hữu tích hợp/chuyển phát theo
+  [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md), không đặt client gửi thư trong mọi service.
 - Tận dụng **idempotency key khi gửi**, kết hợp định danh/trạng thái email bền vững trong ứng dụng;
   cùng logical message giữ key/request ổn định. Phân biệt retry do lỗi mạng với yêu cầu gửi email mới.
   Cửa sổ chống trùng của provider là **24 giờ**, không phải bảo đảm giao thư đúng một lần vô thời hạn.
@@ -26,7 +28,10 @@ giữ hướng xử lý job/sự kiện. Cần provider và feedback gửi thư;
   trùng/không theo thứ tự và ghi nhận bền vững. API nhận yêu cầu, mail server nhận thư và người dùng
   đọc/thực hiện xác minh là các kết quả khác nhau.
 - Provider chỉ chuyển email; Auth/Core tạo và xác minh bằng chứng theo nghiệp vụ. Hook gửi email
-  của Better Auth và handoff sang worker cần đặc tả; không mặc định mọi loại thư có cùng deadline/retry.
+  của Better Auth tại Identity phải bảo toàn challenge–ý định gửi. Với email chứa mã bảo mật, dùng
+  Claim Check đã duyệt: owner giữ payload mã hóa ngắn hạn và outbox tham chiếu, Notification lấy qua HTTPS
+  xác thực; không plaintext mã/email/reset URL trong broker/DB queue/log/trace/DLQ. Không coi callback
+  Better Auth là đã có transaction chung với outbox; deadline/retry/crypto cụ thể cần đặc tả/kiểm chứng.
 - Chưa chọn gói dịch vụ, domain, region, template renderer, marketing/open-click tracking hoặc provider
   dự phòng. TTL/số chữ số mã, cooldown/quota gửi lại và ngoại lệ mất email còn theo OPEN-09/OPEN-06.
 
@@ -48,7 +53,8 @@ giữ hướng xử lý job/sự kiện. Cần provider và feedback gửi thư;
 - Gửi email vé lỗi không làm mất hiệu lực vé Core đã phát hành hoặc đổi trạng thái thanh toán.
   Người dùng tra cứu kết quả hiện hành ở Core. Webhook email không là bằng chứng thanh toán/soát vé.
 - Chỉ phần **nhà cung cấp email** của OPEN-09 được chốt tại đây; chính sách gửi lại/lỗi và kênh
-  ngoài email vẫn mở. Chọn provider không xác nhận tích hợp runtime, inbox placement hoặc production readiness.
+  bổ sung ngoài email và hộp thông báo trong app vẫn mở. Chọn provider không xác nhận tích hợp runtime,
+  inbox placement hoặc production readiness.
 
 ### Chi phí
 
