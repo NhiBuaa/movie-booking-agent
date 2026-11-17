@@ -5,7 +5,9 @@
 Accepted — chủ sản phẩm duyệt trong hội thoại ngày 2026-11-16, gồm cây bốn ứng dụng,
 chuyển trải nghiệm nhân viên sang Organizer Mobile và hỗ trợ cả iOS/Android với giao diện phù hợp từng hệ.
 Quyết định này thay phần phân chia ứng dụng của [ADR-0001](0001-monorepo-platform-and-microservices-boundaries.md);
-ranh giới Cinema Core, Agent Service và hợp đồng dữ liệu vẫn giữ nguyên.
+quyết định tách app không thay ranh giới backend vào thời điểm duyệt. Sau đó,
+[thiết kế microservices ngày 2026-11-17](../05-specs/004-service-decomposition/spec.md) mở rộng backend
+thành bảy service và làm rõ Agent đề xuất → app/BFF thực thi; bốn app trong ADR này vẫn giữ nguyên.
 
 ## Context
 

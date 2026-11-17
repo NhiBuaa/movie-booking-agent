@@ -16,6 +16,10 @@ Good fits include a glossary, repository map, system landscape, domain map, or h
 
 How the current system works: components, boundaries, ownership, runtime structure, data flow, and failure behavior.
 
+[Thiết kế microservices đích](05-specs/004-service-decomposition/spec.md) sở hữu phân chia 7 service;
+[bản ghi quyết định](05-specs/004-service-decomposition/decisions.md) giữ lý do và nguồn chấp thuận.
+Các trang kiến trúc phân biệt thiết kế đích với hiện trạng tại [CONTEXT](../CONTEXT.md).
+
 ## `03-product/`
 
 Durable product and domain knowledge: users, domain concepts, user flows, terminology, and product rules that are broader than one specification. For repositories with a user interface, visual identity and design tokens are owned by root `DESIGN.md`.

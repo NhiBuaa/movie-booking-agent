@@ -6,7 +6,12 @@ Accepted
 
 Phần phân chia ứng dụng trong quyết định này được thay bởi
 [ADR-0002](0002-customer-organizer-app-boundaries.md) ngày 2026-11-16.
-Nội dung bên dưới giữ ngữ cảnh quyết định ban đầu; các ranh giới dịch vụ vẫn có hiệu lực.
+Phần ranh giới backend được mở rộng và làm rõ bởi
+[thiết kế bảy service](../05-specs/004-service-decomposition/spec.md) và
+[quyết định đã duyệt ngày 2026-11-17](../05-specs/004-service-decomposition/decisions.md):
+Core giữ hạt nhân giao dịch; Agent đề xuất, app/BFF thực thi; thêm năm chủ dữ liệu độc lập.
+Mô hình nội bộ/ORM không dùng chung qua contracts. Nội dung bên dưới giữ nguyên ngữ cảnh quyết định
+ban đầu, không là danh sách đầy đủ service đích hoặc bằng chứng triển khai độc lập đã đạt.
 
 ## Context
 

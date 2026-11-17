@@ -43,6 +43,9 @@ Cinema Core quyết định ghế, giá, giữ ghế, thanh toán và phát hàn
 hợp lệ từ phản hồi/chữ ký Core được xác minh. QR lưu cục bộ và redirect từ cổng không thay bằng chứng này.
 Chỉ truy cập tài khoản/đơn/vé/điểm đúng quyền; không mở quyền vận hành từ app khách hàng.
 
+Theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md), Agent lập đề xuất;
+ứng dụng/lớp BFF gửi lệnh đã được khách xác nhận dưới quyền khách, không giao credential rộng cho Agent.
+
 ## Stack
 
 Chưa chốt framework triển khai. Các đề cập React Native/Expo trong tài liệu kỹ thuật cũ là định hướng

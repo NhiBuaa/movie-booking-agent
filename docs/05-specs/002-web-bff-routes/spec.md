@@ -1,5 +1,10 @@
 # Feature Specification: Web BFF Route Handlers
 
+> **Thiết kế backend mới hơn:** [bảy service](../004-service-decomposition/spec.md) phân định chủ dữ liệu
+> cho tích hợp tiếp theo: Catalog sở hữu nội dung phim, Core sở hữu rạp/lịch/giao dịch; BFF mỏng gọi
+> đúng chủ dữ liệu. Agent đề xuất, app/BFF thực thi lệnh dưới quyền khách. Adapter gộp/in-memory và
+> tiêu chí feature bên dưới không chứng minh đã đạt ranh giới, database hoặc quyền của thiết kế đích.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)

@@ -23,6 +23,10 @@ Các kênh được tổ chức thành bốn app theo
 nhân viên sang Organizer Mobile không đổi actor, mục tiêu hoặc BR/OPEN của mô hình.
 Web/Mobile là kênh tương tác, không phải actor. AI và Core không được vẽ thành actor của toàn nền tảng.
 
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) phân chia backend thành bảy
+service nội bộ; các nhóm use case dưới đây không phải ranh giới service. Thiết kế đó sở hữu giao tiếp,
+dữ liệu và cách ly lỗi, không thay danh mục actor hoặc quyền nghiệp vụ của mô hình này.
+
 Phạm vi gồm khám phá phim/rạp/suất chiếu; tài khoản; đặt vé trực tiếp và trong chat;
 combo và ưu đãi; thanh toán; vé điện tử; hỗ trợ hủy/hoàn tiền; soát vé; giao combo;
 đánh giá/yêu thích; hội viên/điểm/đổi voucher; quản trị chuỗi, vận hành rạp và báo cáo.
@@ -577,12 +581,17 @@ Các nhóm còn mở đã được giữ lại khi chủ sản phẩm xác nhậ
 | OPEN-06 | Xác minh ngoại lệ khi không nhận được email/mất quyền truy cập; mất mạng; thời gian cho vào rạp và yêu cầu kiểm tra độ tuổi. | O-01…O-03; không tự cho phép bỏ qua Core/mã xác nhận hoặc tự gán quy định pháp lý. |
 | OPEN-07 | Ai quản lý danh mục/giá combo, phạm vi cung cấp, bằng chứng nhận combo không có QR, giao từng phần và xử lý nhận nhầm. | B-03, O-04; vai trò giao combo đã chốt, quyền sửa danh mục chưa chốt. |
 | OPEN-08 | Nội dung/quy tắc kiểm duyệt chi tiết, khiếu nại nội dung bị ẩn; quyền lợi của người đi cùng nhưng không đứng tên đơn. | L-04…L-05; quyền viết hiện gắn với tài khoản có vé đã soát, không chứng minh từng người đã xem. |
-| OPEN-09 | Nhà cung cấp email, cơ chế gửi lại/lỗi giao email; dùng LLM nội bộ hay bên ngoài; các kênh thông báo ngoài email. | A-02/A-05/O-02/L-06 và AI; không mặc định SMS, push, Google login hoặc vendor LLM. |
+| OPEN-09 | Nhà cung cấp email, tham số/quy trình ngoại lệ gửi lại/lỗi giao email; dùng LLM nội bộ hay bên ngoài; các kênh bổ sung ngoài hai kênh đã chốt (email, hộp thông báo trong app). | A-02/A-05/O-02/L-06 và AI; Notification sở hữu chuyển phát/hộp thông báo theo thiết kế service, không mặc định SMS, push, Google login hoặc vendor LLM. |
 | OPEN-10 | Phạm vi chỉ số báo cáo, cách thể hiện doanh thu/hoàn tiền và dữ liệu cá nhân; quy trình sửa thông tin liên hệ, lưu trữ/xóa dữ liệu tài khoản. | M-07, A-04; không suy dữ liệu báo cáo mẫu thành định nghĩa đối soát. |
 
 Các yêu cầu an toàn đã chốt (xác thực chữ ký, phân quyền, chống dùng lặp, bảo toàn đơn khi chưa rõ
 thanh toán) vẫn bắt buộc; “còn mở” không cho phép bỏ qua chúng. Không tuyên bố sẵn sàng vận hành
 khi chính sách liên quan chưa được chốt và kiểm chứng.
+
+OPEN-05/06/09 vẫn giữ các chính sách còn thiếu; không mở lại ranh giới kiến trúc đã duyệt:
+hủy suất đã duyệt có hiệu lực tại Core trước xử lý nền từng đơn; soát cần Core online nhưng không
+gọi Identity đồng bộ mỗi lượt; Notification nhận sự kiện sau commit và email có mã bảo mật dùng
+Claim Check. Điều kiện và phần còn mở theo [thiết kế service](../05-specs/004-service-decomposition/spec.md).
 
 ## 7. Hiện trạng và chênh lệch so với mục tiêu
 
