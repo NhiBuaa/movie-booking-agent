@@ -46,10 +46,18 @@ Cinema Core quyết định ghế, giá, giữ ghế, thanh toán và phát hàn
 hợp lệ từ phản hồi/chữ ký Core được xác minh. QR lưu cục bộ và redirect từ cổng không thay bằng chứng này.
 Chỉ truy cập tài khoản/đơn/vé/điểm đúng quyền; không mở quyền vận hành từ app khách hàng.
 
+Theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md), Agent lập đề xuất;
+ứng dụng/lớp BFF gửi lệnh đã được khách xác nhận dưới quyền khách, không giao credential rộng cho Agent.
+
 ## Stack
 
-Chưa chốt framework triển khai. Các đề cập React Native/Expo trong tài liệu kỹ thuật cũ là định hướng
-trước [ADR-0002](../../docs/06-decisions/0002-customer-organizer-app-boundaries.md), không phải quyết định stack của lần này.
+React Native + Expo + TypeScript, Expo Router, development builds và SecureStore cho phiên theo
+[ADR-0016](../../docs/06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+Kho snapshot vé offline chọn MMKV mã hóa, SecureStore giữ khóa theo
+[ADR-0023](../../docs/06-decisions/0023-encrypted-mmkv-for-offline-mobile-tickets.md); không cho phép soát ngoại tuyến.
+TanStack Query/Zustand, React Hook Form/Zod và client SSE theo [README](README.md).
+Giữ component native riêng, không dùng primitive DOM React Aria như component native.
+Đây là lựa chọn công nghệ, chưa có scaffold/dependency/build hoặc runtime được kiểm chứng.
 
 ## Brand Commitments
 

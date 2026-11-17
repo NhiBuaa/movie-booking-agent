@@ -10,7 +10,16 @@ Tài liệu này diễn giải ràng buộc giao dịch để đặc tả từng
 
 - Cinema Core là nguồn có thẩm quyền về tồn kho, giá, hold, thanh toán, vé và ghi nhận sử dụng.
 - AI diễn giải ý định và điều phối; chỉ trình bày mua vé thành công sau xác minh phản hồi/chữ ký Core.
+- Theo [thiết kế microservices](004-service-decomposition/spec.md), Agent lập đề xuất; app/BFF gửi
+  lệnh đã được khách xác nhận dưới danh tính khách. Core kiểm lại điều kiện, dùng mã thao tác ổn định;
+  timeout phải tra cứu, không tạo một giao dịch mới mù quáng.
 - Client không tự suy thành công/thất bại từ redirect hoặc kết quả chưa rõ. Thiết bị soát vé cần kết nối Core.
+
+Catalog sở hữu nội dung phim; Core giữ snapshot phiên bản theo suất. Identity sở hữu danh tính/quyền;
+Notification sở hữu chuyển phát; Community sở hữu đánh giá/yêu thích; Reporting giữ bản sao tổng hợp.
+Hội viên, Ưu đãi/Voucher và Combo là module Core. Mỗi service sở hữu database riêng và giao tiếp qua
+hợp đồng, không SQL chéo. Quyền sở hữu, sự kiện và ba kênh tích hợp cụ thể do thiết kế trên sở hữu,
+không suy nhóm use case hoặc tên DTO thành service mới.
 
 ## 2. Phòng chiếu và giữ ghế
 
@@ -36,7 +45,7 @@ Theo BR-05–BR-07 và B-05/B-06:
 - Đã thu tiền sau khi ghế được giải phóng: xử lý hoàn khoản thu qua R-03, không tự đặt ghế thay thế.
 - Nhánh đơn 0đ hợp lệ theo BR-21: khách xác nhận riêng, Core kiểm ưu đãi/hold/quyền ghế rồi phát hành, không tạo giao dịch thu 0đ. Khoản có tiền chỉ mở kênh đáp ứng đúng số tiền theo BR-27.
 - Ưu đãi/phân bổ và bảo toàn phần còn lại theo BR-20…BR-22; dùng phân bổ lúc mua khi hoàn một phần, không tính lại đơn.
-- Email vé qua N-01/BR-33, lỗi không đảo kết quả mua; tự thử lại giới hạn/gửi lại có quyền, số lần/khoảng chờ/vendor còn OPEN-09.
+- Email vé qua N-01/BR-33, lỗi không đảo kết quả mua; tự thử lại giới hạn/gửi lại có quyền, số lần/khoảng chờ/gói còn OPEN-09; Resend đã chọn tại ADR-0018, Notification chuyển phát sau commit.
 
 ## 4. Đơn, quyền theo ghế và QR chung
 
@@ -75,12 +84,17 @@ Theo BR-10–BR-12 và R-01–R-07:
 Các enum `CUSTOMER`, `CINEMA_STAFF`, `ORGANIZER_ADMIN` hiện tại chưa cung cấp ánh xạ đầy đủ;
 đặc tả triển khai phải xác định quyền cụ thể, không ngầm cấp quyền giữa soát vé, giao combo và quản lý.
 
+Core kiểm bằng chứng quyền cục bộ cho soát/giao combo thường xuyên, áp dụng thu hồi đã biết;
+tác vụ rủi ro cao cần quyền hiện hành. Mục tiêu tiếp tục soát 60 phút khi Identity gián đoạn và các
+điều kiện/giới hạn theo [quyết định](004-service-decomposition/decisions.md), không phải soát ngoại tuyến.
+Webhook thanh toán và tra cứu công khai không phụ thuộc phiên khách hoặc gọi Identity mỗi lượt.
+
 Combo và sự cố giao theo M-08/M-09/O-04/O-07 và BR-23…BR-24. Chính sách hội viên/đổi điểm/sửa sai theo M-10/L-01/L-02/L-09/L-10, BR-28…BR-29; tỷ lệ/giá đã được chọn, không dùng fixture thay chính sách.
 Đánh giá/hậu kiểm/xét lại theo L-04/L-05/L-07/L-08, BR-16/BR-32; tác giả chủ động gửi, khác người ẩn xét, thời hạn 48 tiếng liên tục, phiên bản phải khớp.
-C-01/BR-34 xác định dữ liệu mô hình ngoài và hướng xử lý gián đoạn; L-06/N-01/BR-33 xác định hộp thông báo/email, không SMS/push.
+C-01/BR-34 xác định dữ liệu mô hình ngoài và hướng xử lý gián đoạn và điểm cần hòa giải OPEN-12; L-06/N-01/BR-33 xác định hộp thông báo/email, không SMS/push.
 A-04/A-05/BR-36 xác định đổi email/khôi phục, A-06…A-08/BR-37…BR-39 xác định không tự xóa chat theo kỳ, xóa chủ động/tài khoản và ngoại lệ; bảng lưu/xóa/pháp lý/tích hợp còn bắt buộc.
 Báo cáo tổng hợp M-07/BR-35 tách tiền/ghế/ngày sự kiện, không tự thành kế toán hoặc mở quyền đọc hồ sơ. Phụ thuộc còn lại tham chiếu
-[OPEN-01–OPEN-10](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.
+[OPEN-01–OPEN-12](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.
 
 ## 7. Hợp đồng hiện có và đặc tả tiếp theo
 

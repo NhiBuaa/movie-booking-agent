@@ -51,9 +51,26 @@ Cinema Core là nguồn thẩm quyền cho ghế, giá, giữ ghế, xác nhận
 Web và AI chỉ trình bày đơn đã xác nhận/vé hợp lệ khi có phản hồi Core được xác minh theo hợp đồng;
 không dùng lời chat hoặc trang chuyển hướng thanh toán làm bằng chứng thành công.
 
+Theo [thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md), Agent lập đề xuất;
+Web/BFF gửi lệnh đã được khách xác nhận dưới quyền khách. BFF không sở hữu giao dịch hoặc dữ liệu service.
+
 Các [OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên
 tại nguồn. Q173-A đã chốt cách hiểu chung và đồng bộ yêu cầu; phần nhà cung cấp/hợp đồng, bảng lưu/xóa,
 pháp lý và kiểm chứng triển khai vẫn phải hoàn tất trước vận hành. Không suy tài liệu thành chức năng đã chạy.
+
+## Stack
+
+Nền hiện có dùng Next.js 16 + React + TypeScript. Hướng đã chọn: TanStack Query cho dữ liệu API,
+Zustand có phạm vi cho UI draft theo
+[ADR-0017](../../docs/06-decisions/0017-tanstack-query-and-zustand-for-frontend-state.md);
+React Hook Form + resolvers + Zod 4 theo
+[ADR-0025](../../docs/06-decisions/0025-react-hook-form-and-zod-for-frontend-forms.md);
+React Aria Components cho nền tương tác Web theo
+[ADR-0026](../../docs/06-decisions/0026-react-aria-components-for-web-ui-primitives.md), giữ CSS modules/tokens.
+Client SSE dùng browser fetch + eventsource-parser theo
+[ADR-0024](../../docs/06-decisions/0024-fetch-and-eventsource-parser-for-sse-clients.md).
+Không coi các lựa chọn này là dependency đã cài hoặc chức năng runtime đã tích hợp; React local state
+vẫn là mặc định và dữ liệu/đường lệnh giao dịch thuộc Core.
 
 ## Brand Commitments
 

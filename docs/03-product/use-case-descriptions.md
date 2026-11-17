@@ -9,6 +9,12 @@ Actor phối hợp không đồng nghĩa có mọi quyền trong mọi nhánh. C
 Dịch vụ email ở N-01 sở hữu gửi/gửi lại thông báo sau các sự kiện; các luồng email chứng minh trực tiếp
 vẫn có ACT-MAIL riêng. ACT-LLM chỉ phối hợp C-01 qua Agent Service, không xem đầy đủ hồ sơ hoặc ký vé.
 
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) sở hữu phân chia trách nhiệm,
+dữ liệu và giao tiếp giữa bảy service nội bộ. Mô tả một kết quả sản phẩm dưới đây không hàm ý mọi bước
+cùng database/transaction hoặc Agent trực tiếp gửi lệnh giao dịch; app/BFF thực thi theo quyền khách.
+Xác nhận gắn với đúng nội dung/phiên bản Core đã kiểm tra; thay đổi quan trọng phải xác nhận lại.
+Timeout tra cứu mã thao tác cũ, không mặc định tạo lệnh mới. Token/bí mật không vào prompt/checkpoint.
+
 ## Tài khoản và khám phá
 
 ### D-01 — Khám phá phim, rạp và suất chiếu
@@ -20,6 +26,23 @@ vẫn có ACT-MAIL riêng. ACT-LLM chỉ phối hợp C-01 qua Agent Service, kh
 - **Ngoại lệ:** Không có kết quả hoặc nguồn gián đoạn thì nói rõ, không bịa suất. Chưa có bài thì ghi “Chưa có đánh giá”; bài che cốt truyện vẫn tính, nội dung chỉ mở khi người đọc chủ động chọn.
 - **Quy tắc:** BR-02, BR-16, BR-32; không suy đọc lịch là bảo đảm còn ghế.
 - **Nguồn quyết định:** Q1–Q4, Q22, Q139, Q144–Q145.
+
+- **Khám phá nâng cấp:** tìm tên/alias, không dấu/lỗi gõ và theo mô tả nội dung; kết hợp từ khóa/ngữ nghĩa.
+  Theo BR-43, hồ sơ dùng sở thích khai báo/yêu thích/đánh giá/mua đã xác nhận và lượt xem chi tiết/click/search;
+  không tự nhập toàn bộ chat. Khách chỉ theo phiên, tài khoản có hồ sơ lâu dài/xuyên thiết bị.
+  Không bắt đăng nhập hoặc hỏi sở thích lúc bắt đầu; người mới khám phá ngay theo danh mục/ngữ cảnh.
+- **Khi LLM/embedding gián đoạn:** giữ tìm kiếm từ khóa/bộ lọc/danh mục và dữ liệu hợp lệ có sẵn;
+  tìm kiếm trực tiếp không phụ thuộc hội thoại Agent theo
+  [ADR-0035](../06-decisions/0035-search-module-in-cinema-core.md). Cách suy giảm khi chính index lỗi cần đặc tả riêng.
+- **Thứ hạng đã chốt:** BR-42 ưu tiên truy vấn, tên phim/alias khớp chính xác đứng trước;
+  hồ sơ sở thích chỉ điều chỉnh giữa các kết quả có độ phù hợp tương đương. Trang khám phá có thể
+  cá nhân hóa mạnh hơn, vẫn giữ đúng bộ lọc. Công thức/trọng số và ngưỡng tương đương cần đặc tả/đánh giá.
+- **Kiểm soát cá nhân hóa đã chốt:** BR-40 cho bật/tắt học và dùng hồ sơ sở thích, đặt lại dữ liệu đã học;
+  tìm theo truy vấn/bộ lọc vẫn dùng được. Đặt lại không xóa đơn/vé; chưa thêm xem/xóa từng tương tác.
+  BR-41: khi đăng nhập, không nhập hành vi phiên khách; giữ hồ sơ tài khoản hiện có và học tiếp từ
+  tương tác sau đăng nhập khi cá nhân hóa được bật. Chấp nhận không chuyển tín hiệu khách vào hồ sơ lâu dài.
+  Retention, thời hạn phiên khách và xử lý tín hiệu cũ khi đặt lại/bật lại còn OPEN-11;
+  đây chưa là đặc tả đầy đủ luồng nâng cấp hoặc bằng chứng tracking đã triển khai.
 
 ### A-01 — Đăng ký tài khoản
 
@@ -421,6 +444,13 @@ vẫn có ACT-MAIL riêng. ACT-LLM chỉ phối hợp C-01 qua Agent Service, kh
 - **Quy tắc:** BR-01, BR-18, BR-31; xác minh hiệu lực quy định/danh mục giấy tờ còn OPEN-06.
 - **Nguồn quyết định:** Q7, Q32.
 
+- **Phạm vi media đã chốt:** hệ thống upload/lưu poster, banner và ảnh; trailer dùng URL/video nhúng
+  từ nguồn ngoài. Bản đầu không tự upload/lưu/phục vụ video trailer. Chủ sản phẩm chọn A ngày
+  2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`) để giữ trọng tâm
+  ở booking/Agent và kiến trúc phân tán. Storage/xử lý ảnh theo
+  [ADR-0019](../06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
+  nguồn video chưa chọn. Đây là phạm vi mục tiêu, chưa xác nhận tích hợp.
+
 ### M-02 — Quản lý giá vé và ưu đãi
 
 - **Actor/kích hoạt:** Quản trị viên toàn chuỗi. Mục tiêu: quản lý giá vé và ưu đãi.
@@ -527,10 +557,10 @@ vẫn có ACT-MAIL riêng. ACT-LLM chỉ phối hợp C-01 qua Agent Service, kh
 
 - **Actor/kích hoạt:** Khách chưa đăng nhập; Khách hàng; Dịch vụ mô hình AI. Mục tiêu: trò chuyện với buaa.
 - **Điều kiện trước:** Khách chưa đăng nhập có thể hỏi thông tin công khai; thao tác tài khoản/giao dịch phải xác thực và kiểm quyền tương ứng.
-- **Luồng chính:** Khách nhập nhu cầu → Agent Service lọc/tối thiểu hóa chat và dữ liệu trước gọi mô hình AI ngoài → diễn giải phản hồi, kiểm công cụ/quyền → truy vấn hoặc xin xác nhận rõ trước lệnh giao dịch được phép → trình bày kết quả đã xác minh từ Core và cách tiếp tục.
+- **Luồng chính:** Khách nhập nhu cầu → Agent Service lọc/tối thiểu hóa chat và dữ liệu trước gọi mô hình AI ngoài → diễn giải phản hồi, kiểm công cụ/quyền → truy vấn hoặc lập đề xuất để app/BFF thực thi sau xác nhận đúng phiên bản Core, dưới danh tính khách → trình bày kết quả đã xác minh từ Core và cách tiếp tục.
 - **Kết quả:** Có câu trả lời/hành trình đặt, đổi ghế hoặc hỗ trợ sau mua trong phạm vi kênh AI; mô hình không xác nhận tiền/vé hoặc phê duyệt hủy.
-- **Ngoại lệ:** Không gửi tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ ra mô hình. Lỗi/hết hạn mức báo Buaa gián đoạn, hướng màn hình trực tiếp khi Core còn hoạt động, chưa tự đổi mô hình/vendor; tra cứu giao dịch trước thử lại, không kéo TTL. Không tự xóa chat định kỳ; khách xóa qua A-06.
-- **Quy tắc:** BR-17, BR-34, BR-37, BR-39; ACT-LLM là dịch vụ ngoài, Agent Service/Core là nội bộ; vendor/mô hình/ngân sách/lọc dữ liệu còn OPEN-09.
+- **Ngoại lệ:** Không gửi tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ ra mô hình. Lỗi/hết hạn mức báo Buaa gián đoạn, hướng màn hình trực tiếp khi Core còn hoạt động, quan hệ tự chuyển provider theo Q153/ADR-0028 còn phải chốt OPEN-12; tra cứu giao dịch trước thử lại, không kéo TTL. Không tự xóa chat định kỳ; khách xóa qua A-06.
+- **Quy tắc:** BR-17, BR-34, BR-37, BR-39; ACT-LLM là dịch vụ ngoài, Agent Service/Core là nội bộ; vendor/model đã chọn ở ADR-0012/0028; cấu hình/ngân sách/lọc dữ liệu còn OPEN-09, hành vi fallback còn OPEN-12.
 - **Nguồn quyết định:** Q8, Q30, Q42, Q151–Q154.
 
 ### N-01 — Gửi và gửi lại thông báo dịch vụ
@@ -540,7 +570,7 @@ vẫn có ACT-MAIL riêng. ACT-LLM chỉ phối hợp C-01 qua Agent Service, kh
 - **Luồng chính:** Nhận sự kiện → tạo hộp thông báo đúng người → gửi email qua dịch vụ ngoài cho cấp/cập nhật vé/đổi ghế, tiếp nhận/quyết định/diễn biến hủy–hoàn/sự cố/cập nhật 24 tiếng, kiểm duyệt/xét lại, cấp/thu hồi voucher/thay hạng/sửa quyền lợi; cộng điểm thường chỉ vào tài khoản. Email lỗi tự thử lại giới hạn; khách yêu cầu gửi lại có chống spam → báo kết quả gửi thực tế.
 - **Kết quả:** Khách/vận hành nhận thông tin hoặc cảnh báo qua hộp thông báo/email; mở chi tiết để lấy dữ liệu Core. Cảnh báo Organizer đúng vai trò/phạm vi/trách nhiệm.
 - **Ngoại lệ:** Không gửi được cảnh báo vận hành và hướng tra cứu tài khoản; không hủy giao dịch/phát thêm vé, không gửi vé đã hủy như hiệu lực hoặc mã bảo mật hết hạn. Email gửi/đọc không tự tính tiếp nhận/giải quyết hồ sơ. Không SMS/push/quảng cáo/nhắc lịch.
-- **Quy tắc:** BR-33, BR-39; gửi do sự kiện không sinh include/extend với mỗi giao dịch; A-02/A-04/A-05/O-02/O-04 sở hữu tương tác email xác minh trực tiếp. Vendor/số lần/khoảng chờ/điều kiện dữ liệu còn OPEN-09.
+- **Quy tắc:** BR-33, BR-39; gửi do sự kiện không sinh include/extend với mỗi giao dịch; A-02/A-04/A-05/O-02/O-04 sở hữu tương tác email xác minh trực tiếp. Resend đã chọn theo ADR-0018, Notification sở hữu chuyển phát; số lần/khoảng chờ/gói/điều kiện dữ liệu còn OPEN-09.
 - **Nguồn quyết định:** Q147–Q150, Q154.
 
 ## Xóa chat, tài khoản và dữ liệu

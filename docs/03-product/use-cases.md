@@ -8,6 +8,13 @@ use case. Phê duyệt này không phải bằng chứng triển khai, kiểm th
 [mục 6.1](#61-quyết-định-đã-xác-nhận). General, ánh xạ, chi tiết, danh mục, BR và mô tả
 đã cập nhật theo các lựa chọn này. Đây là yêu cầu mục tiêu; khả năng tích hợp/pháp lý còn ở mục 6.2.
 
+Bổ sung ngày 2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`):
+chủ sản phẩm đồng ý phương án A cho quyền kiểm soát cá nhân hóa tại BR-40.
+Sau đó đồng ý phương án A cho chuyển từ phiên khách sang tài khoản tại BR-41.
+Tiếp đó đồng ý phương án A ưu tiên truy vấn trong thứ hạng tìm kiếm tại BR-42.
+Nguồn tín hiệu, phạm vi nhận diện và khám phá ngay không có bảng hỏi ban đầu được ghi tại BR-43.
+Đây là các quyết định mục tiêu của nâng cấp D-01; luồng chi tiết, API và các chính sách còn mở cần đặc tả.
+
 ## Cách đọc
 
 - Khi tạo hoặc cập nhật bộ sơ đồ, tuân theo [quy chuẩn phân tích và trình bày use case](../04-standards/use-case-modeling.md).
@@ -27,12 +34,22 @@ Các kênh được tổ chức thành bốn app theo
 nhân viên sang Organizer Mobile không đổi actor, mục tiêu hoặc BR/OPEN của mô hình.
 Web/Mobile là kênh tương tác, không phải actor. Buaa/Agent Service và Core không được vẽ thành actor của toàn nền tảng; ACT-LLM là dịch vụ ngoài khác với Buaa.
 
+[Thiết kế microservices](../05-specs/004-service-decomposition/spec.md) phân chia backend thành bảy
+service nội bộ; các nhóm use case dưới đây không phải ranh giới service. Thiết kế đó sở hữu giao tiếp,
+dữ liệu và cách ly lỗi, không thay danh mục actor hoặc quyền nghiệp vụ của mô hình này.
+
 Phạm vi gồm khám phá phim/rạp/suất chiếu; tài khoản; đặt vé trực tiếp và trong chat;
 combo và ưu đãi; thanh toán; vé điện tử; hỗ trợ hủy/hoàn tiền; soát vé; giao combo;
 đánh giá/yêu thích; hội viên/điểm/đổi voucher; quản trị chuỗi, vận hành rạp và báo cáo.
 
+D-01 bao gồm tìm theo tên/alias, không dấu/lỗi gõ và ý nghĩa nội dung; tìm kiếm kết hợp từ khóa/ngữ nghĩa
+và khám phá cá nhân hóa theo nội dung + hồ sơ phiên/tài khoản đã chọn tại
+[ADR-0030](../06-decisions/0030-typesense-for-movie-search-and-discovery.md) và
+[ADR-0031](../06-decisions/0031-content-based-and-profile-scoring-for-personalization.md).
+BR-40–43 quy định kiểm soát dữ liệu và thứ hạng; OPEN-11 giữ các chính sách dữ liệu còn thiếu.
+
 Không bổ sung bán vé tiền mặt tại quầy, quản lý kho nguyên liệu vật lý, sàn nhiều đơn vị rạp độc lập,
-soát vé ngoại tuyến hoặc thuật toán đề xuất phim phức tạp. Các mục này không được suy ra từ chữ
+soát vé ngoại tuyến hoặc collaborative filtering/mô hình đề xuất huấn luyện phức tạp ở bản đầu; cá nhân hóa theo nội dung/hồ sơ đã chọn vẫn thuộc D-01. Các mục này không được suy ra từ chữ
 “sản phẩm thực tế”. Đổi vị trí ghế trong cùng suất thuộc B-09 theo Q34–Q44; đổi sang suất khác vẫn ngoài phạm vi.
 
 ### Actor
@@ -46,14 +63,14 @@ soát vé ngoại tuyến hoặc thuật toán đề xuất phim phức tạp. C
 | ACT-MANAGER | Quản lý rạp | Phòng/ghế, lịch chiếu, quyền nhân viên và báo cáo của rạp được giao; xét yêu cầu hủy theo chính sách; đề nghị hủy suất; bật/tắt combo, lập hồ sơ lỗi dịch vụ, đề nghị sửa sai hội viên, giám sát nhận khách và duyệt ngoại lệ combo đúng phạm vi. |
 | ACT-ADMIN | Quản trị viên toàn chuỗi | Danh mục phim, giá/ưu đãi, quyền quản lý rạp, báo cáo toàn chuỗi, quản lý tổng thể; ngoại lệ hoàn tiền, duyệt hủy suất, kiểm duyệt/xét lại đánh giá, chính sách/sửa sai hội viên, danh mục combo, ngoại lệ xóa dữ liệu được giao. |
 | ACT-PAY | Cổng thanh toán | Thu tiền, cung cấp kết quả/đối soát và xử lý hoàn tiền; phạm vi là MoMo, VNPAY. |
-| ACT-MAIL | Dịch vụ email | Chuyển email xác minh, khôi phục, mã xác nhận và thông báo dịch vụ. Nhà cung cấp chưa chọn. |
-| ACT-LLM | Dịch vụ mô hình AI | API mô hình bên ngoài hỗ trợ hiểu/trả lời Buaa qua Agent Service; chỉ nhận dữ liệu tối thiểu đã lọc theo quyền. Chưa chọn nhà cung cấp/mô hình. |
+| ACT-MAIL | Dịch vụ email | Chuyển email xác minh, khôi phục, mã xác nhận và thông báo dịch vụ. Đã chọn Resend theo ADR-0018; chưa xác nhận tích hợp runtime. |
+| ACT-LLM | Dịch vụ mô hình AI | API mô hình bên ngoài hỗ trợ hiểu/trả lời Buaa qua Agent Service; chỉ nhận dữ liệu tối thiểu đã lọc theo quyền. Primary Workers AI GPT-OSS 120B theo ADR-0012; Groq Free dự phòng theo ADR-0028, quan hệ hành vi với Q153 còn OPEN-12. Chưa xác nhận runtime. |
 
 Actor là vai trò, không phải mỗi actor một con người hoặc một tài khoản bắt buộc.
 Một người có thể được cấp cả hai vai trò nhân viên. Không dùng kế thừa actor để ngầm cấp quyền
 soát vé/giao combo cho quản lý, hoặc quyền của khách hàng cho tài khoản vận hành.
 Q151–Q154 phân biệt Agent Service nội bộ với ACT-LLM bên ngoài. Vai trò dịch vụ ngoài không cấp
-quyền gọi Core trực tiếp, xem toàn hồ sơ hoặc xác nhận giao dịch. Nhà cung cấp còn là phụ thuộc đặc tả.
+quyền gọi Core trực tiếp, xem toàn hồ sơ hoặc xác nhận giao dịch. Nhà cung cấp đã chọn ở ADR-0012/0018/0028; gói/cấu hình/dữ liệu và kiểm chứng tích hợp còn mở. OPEN-12 giữ điểm cần hòa giải giữa Q153 và hướng fallback ADR-0028.
 
 ## 2. Sơ đồ use case: tổng quát đến chi tiết
 
@@ -552,7 +569,7 @@ flowchart LR
 
 | Mã | Mục tiêu | Actor trực tiếp chính/phối hợp | Quyết định |
 |---|---|---|---|
-| D-01 | Khám phá phim, rạp và suất chiếu | Khách chưa đăng nhập; Khách hàng | Q1–Q4, Q22, Q139, Q144–Q145 |
+| D-01 | Khám phá phim, rạp và suất chiếu | Khách chưa đăng nhập; Khách hàng | Q1–Q4, Q22, Q139, Q144–Q145; BR-40…BR-43 |
 | A-01 | Đăng ký tài khoản | Khách chưa đăng nhập | Q19, Q21, Q25 |
 | A-02 | Xác minh email | Khách hàng; Dịch vụ email | Q19, Q149, Q154 |
 | A-03 | Đăng nhập | Khách chưa đăng nhập | Q4, Q19, Q21, Q163 |
@@ -646,7 +663,7 @@ xác minh trước khi UI/Buaa trình bày thành công. Nhánh 0đ không tạo
 | BR-14 | Tự thành hội viên khi đăng ký; điểm thuộc tài khoản đặt, tính tiền vé thực trả sau ưu đãi đã soát, không tính combo. Hạng/tỷ lệ chốt lúc xác nhận đơn, chỉ cộng khi soát thật, không cộng lặp; vé 0đ không sinh điểm chi tiêu. | Q25, Q90, Q100–Q103 |
 | BR-15 | Đổi đủ điểm còn hạn lấy voucher đúng một lần; dùng phần hết hạn sớm nhất trước. Trừ điểm/cấp voucher nhất quán; không dùng điểm như tiền thanh toán, không tự đổi ngược voucher hợp lệ vì đổi ý. | Q24–Q25, Q109, Q112 |
 | BR-16 | Tài khoản đặt có vé phim đã soát được một đánh giá/phim, sửa/xóa đúng bài; đăng ngay, hậu kiểm. Điểm 1–5 sao nguyên bắt buộc, chữ tùy chọn. Không khẳng định chủ tài khoản đã trực tiếp xem hoặc cấp quyền riêng cho người cầm QR. | Q23, Q26, Q137, Q145 |
-| BR-17 | AI chỉ gửi lệnh giao dịch sau xác nhận cần thiết của khách, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30 |
+| BR-17 | AI lập đề xuất; app/BFF thực thi lệnh dưới danh tính khách sau xác nhận đúng nội dung/phiên bản Core đã kiểm tra. AI không trực tiếp gửi lệnh ghi, không phê duyệt hủy, không cam kết tiền hoàn hoặc bịa vé thành công. | Q8, Q30; quyết định service 2026-11-17 |
 | BR-18 | Không sửa phim/giờ/phòng/sơ đồ khi có hold còn hạn; đã có vé thì không sửa các thông tin đó, dùng hủy suất nếu không thể tổ chức. Ngừng hold mới từ T−5 phút; chỉ bắt đầu thanh toán trước T khi hold còn hạn. Khoảng đệm cùng phòng tối thiểu 20 phút, không mặc định quảng cáo. Ghế hủy chỉ bán lại sau vô hiệu quyền/giải phóng, còn mở bán và trước hạn. | Q32–Q33, Q45–Q51 |
 | BR-19 | B-09: cùng suất, giữ số lượng/loại, Sweetbox cả cặp; miễn phí, hạn T−30 phút, một lần thành công/vé gốc xuyên vé thay. Cho đổi một phần; chặn vé đang chờ hủy và suất chờ hủy. Core kiểm tra lúc xác nhận và đổi nguyên tử; lỗi giữ toàn vé cũ/không mất lượt, chưa rõ phải tra cứu. Giữ tiền/ưu đãi/combo/điểm, không tính lại đơn. | Q34–Q44, Q46 |
 | BR-20 | Tối đa một mã/đơn kể cả voucher đổi điểm, tối đa một ưu đãi tự động/phần. Core chọn phương án hợp lệ có lợi nhất có xét mã đã chọn; chỉ kết hợp nếu cho phép rõ: tự động trước, mã sau. Phân bổ giảm chung theo tỷ lệ giá trị ngay trước mỗi khoản giảm; làm xuống đến đồng, chia dư theo số lẻ lớn nhất/thứ tự cố định, giữ đúng tổng/trần và lưu lúc mua. Hủy một phần dùng phân bổ cũ. | Q74–Q76, Q78, Q81, Q171 |
@@ -663,12 +680,16 @@ xác minh trước khi UI/Buaa trình bày thành công. Nhánh 0đ không tạo
 | BR-31 | Hiển thị rõ phân loại/giới hạn giờ trẻ em/giấy tờ trước mua cả hai kênh; người đặt xác nhận cả nhóm, không khai tuổi từng người. Kiểm tra từng người ở cửa khi cần; ảnh chụp rời chưa đủ, xuất trình giấy tờ hợp lệ, chưa rõ nhờ quản lý; chưa thu/lưu ảnh/số giấy tờ. Sai tuổi hoặc thiếu giấy tờ phía khách sau thông báo đúng: không vào khi chưa đủ căn cứ, không thêm ngoại lệ hoàn tự nguyện sau hạn; xác minh kịp còn phim vẫn được vào. Giữ quyền bắt buộc theo luật và BR-26 lỗi thông tin phía rạp. | Q128–Q132 |
 | BR-32 | Chỉ ẩn vi phạm cộng đồng Q138, không ẩn vì chê/điểm thấp, không sửa lời. Cốt truyện che có cảnh báo, người đọc chủ động mở, quản trị thêm nhãn được. Tác giả lưu sửa rồi gửi xét lại; một hồ sơ đang mở/quyết định/phiên bản, mới sau xử lý cần sửa khắc phục/căn cứ mới. Quản trị khác người ẩn xét trong 48 tiếng liên tục; thiếu căn cứ ghi vướng mắc/thông báo và cập nhật mỗi 24 tiếng, quá hạn cảnh báo không tự khôi phục/bác. Thêm chứng cứ cùng phiên bản không reset hạn. Điểm trung bình cộng bài công khai/chưa xóa, kể cả che cốt truyện; hiển thị một số lẻ và số lượt, không có bài thì chưa có đánh giá. | Q138–Q146 |
 | BR-33 | Customer/Organizer có hộp thông báo và email, chưa SMS/push. Email các sự kiện quan trọng Q148, cộng điểm thường chỉ trong tài khoản. Tự thử lại giới hạn, khách gửi lại kiểm quyền/chống spam, đúng trạng thái hiện hành; lỗi không đảo giao dịch/phát vé mới, cảnh báo đúng người. Gửi email chưa là tiếp nhận/xử lý xong, các hạn tính từ phát cảnh báo. Không gửi lại mã bảo mật hết hạn. | Q147–Q150 |
-| BR-34 | Agent Service gọi API mô hình ngoài; chỉ gửi phim/rạp/suất/giá cần, chat đã lọc và kết quả tối thiểu đúng quyền. Không đính kèm tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ. Mô hình lỗi/hết hạn mức: báo gián đoạn và hướng màn hình trực tiếp, chưa tự đổi mô hình/vendor; tra cứu Core trước thử giao dịch, không gia hạn hold. | Q151–Q153 |
+| BR-34 | Agent Service gọi API mô hình ngoài; chỉ gửi phim/rạp/suất/giá cần, chat đã lọc và kết quả tối thiểu đúng quyền. Không đính kèm tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ. Mô hình lỗi/hết hạn mức: báo gián đoạn và hướng màn hình trực tiếp, chưa tự đổi mô hình/vendor; tra cứu Core trước thử giao dịch, không gia hạn hold. Quan hệ với lựa chọn provider dự phòng ADR-0028 cần chốt tại OPEN-12 trước routing. | Q151–Q153; OPEN-12 |
 | BR-35 | Báo cáo tổng hợp đúng phạm vi, không danh sách đơn/PII. Tách thực thu/đã hoàn/còn phải hoàn/bán ròng; ngày lịch giờ Việt Nam, theo sự kiện xác nhận, duyệt hủy giảm bán ròng, hoàn không giảm lại. Phải hoàn là số cuối kỳ, không cộng số dư ngày; thu thừa không thành bán. Tỷ lệ bán/soát riêng, hold không bán, Sweetbox hai ghế; suất hủy loại tử/mẫu nhưng báo riêng hủy/lịch sử soát, giữ số tiền. Tỷ lệ chính gồm suất kết thúc bình thường thuộc kỳ theo ngày bắt đầu niêm yết: cộng ghế rồi chia, không mẫu số thì chưa có dữ liệu; đang/chưa chiếu tạm tính riêng. | Q155–Q161 |
 | BR-36 | Đổi email: mật khẩu + xác minh cả email cũ/mới, email mới chưa thuộc tài khoản khác, giữ tài khoản/quyền cũ. Mất email: hướng khôi phục hộp thư, chưa bỏ xác minh hoặc thêm đường dự phòng; còn mật khẩu vẫn đăng nhập bằng địa chỉ cũ theo quyền. Mất cả mật khẩu/hộp thư không khôi phục được thì chưa có đường dự phòng. Quyền dữ liệu xét riêng, nhân viên không đổi email bằng QR/mã đơn/bằng chứng thanh toán. | Q162–Q163 |
 | BR-37 | Không tự xóa chat theo hạn thông thường. Khách xác minh chủ sở hữu, chọn/xác nhận xóa một cuộc hoặc toàn bộ trên Customer Web/Mobile; xóa phần đủ điều kiện, nêu đúng phần giữ/chờ và căn cứ. Không xóa đơn/vé/hoàn theo chat, không tự cấp quyền Buaa xóa hoặc hiểu thành giữ mọi dữ liệu vĩnh viễn. | Q164–Q165 |
 | BR-38 | Yêu cầu xóa tài khoản xác minh/xác nhận ý định và quyền còn lại; còn dịch vụ/hủy–hoàn thì chờ đóng, dừng mua/đổi điểm mới, giữ dùng/theo dõi đơn cũ, được rút khi chờ. Vẫn xóa dữ liệu đủ điều kiện; phần giữ có căn cứ/lý do/hạn, không giữ toàn hồ sơ vì một khoản hoàn. Hiển thị và xác nhận từ bỏ điểm/voucher gắn riêng chưa dùng, không quy tiền/chuyển hoặc xóa nghĩa vụ đơn cũ. Hoàn tất xóa đủ điều kiện/thu hồi phiên/báo kết quả. Ngoại lệ quản trị được giao xử lý tối thiểu; phản hồi có nội dung trong 24 tiếng liên tục, khác nhận tự động/xóa xong mọi bản sao. | Q166–Q169 |
-| BR-39 | Q154/Q170 để lựa chọn vendor/cấu hình và bảng lưu/xóa chi tiết, pháp lý/tích hợp thành phụ thuộc bắt buộc chưa đạt trước vận hành/xử lý dữ liệu thật. Q173 chỉ duyệt hiểu chung và đồng bộ docs; không bằng chứng triển khai, pháp lý, cài đặt hoặc công bố Git. | Q154, Q170, Q173 |
+| BR-39 | Vendor/model đã chọn theo ADR-0012/0018/0028, không chứng minh runtime; Q154/Q170 giữ cấu hình và bảng lưu/xóa chi tiết, pháp lý/tích hợp thành phụ thuộc bắt buộc chưa đạt trước vận hành/xử lý dữ liệu thật. Q173 chỉ duyệt hiểu chung và đồng bộ docs; không bằng chứng triển khai, pháp lý, cài đặt hoặc công bố Git. | Q154, Q170, Q173 |
+| BR-40 | Bản đầu cho người dùng bật/tắt cá nhân hóa và đặt lại dữ liệu đã học. Khi tắt, ngừng học và sử dụng hồ sơ sở thích; vẫn tìm theo truy vấn/bộ lọc. Đặt lại không xóa đơn hàng/vé. Chưa thêm xem lịch sử học và xóa từng tương tác. | Tech Stack 2026-11-17, phương án A |
+| BR-41 | Khi đăng nhập, không nhập hành vi đã thu thập ở phiên khách vào hồ sơ tài khoản. Giữ hồ sơ tài khoản hiện có, học tiếp từ tương tác sau đăng nhập khi cá nhân hóa được bật; không thêm bước hỏi gộp phiên ở bản đầu. Quyết định không tự quy định thời hạn lưu/xóa dữ liệu phiên khách. | Tech Stack 2026-11-17, phương án A về phiên khách |
+| BR-42 | Tìm kiếm ưu tiên độ khớp truy vấn: tên phim/alias khớp chính xác đứng trước; sở thích chỉ điều chỉnh giữa các kết quả có độ phù hợp tương đương. Trang khám phá có thể cá nhân hóa mạnh hơn. Cả hai phải giữ đúng bộ lọc đã chọn; công thức, ngưỡng tương đương và trọng số chưa chốt. | Tech Stack 2026-11-17, phương án A về thứ hạng |
+| BR-43 | Cá nhân hóa dùng sở thích khai báo, yêu thích, đánh giá, mua vé đã xác nhận, lượt xem chi tiết, click kết quả và lịch sử tìm kiếm; không tự nhập toàn bộ chat Agent. Khách chưa đăng nhập chỉ có hồ sơ theo phiên; hồ sơ lâu dài/xuyên thiết bị gắn tài khoản. Tìm/khám phá không bắt đăng nhập hoặc hỏi sở thích lúc bắt đầu; người mới khám phá danh mục/ngữ cảnh rồi học dần. | Tech Stack 2026-11-17: tín hiệu B, nhận diện A, người mới B |
 
 Các BR là bản chiếu của quyết định ở mục 6.1, không thay hợp đồng code/API. Phụ thuộc còn lại tại mục 6.2; hiện trạng có mốc riêng tại mục 7.
 
@@ -709,7 +730,7 @@ không gán nghĩa thời gian cho đường UML use case.
 
 ## 6. Các quyết định còn mở
 
-OPEN-01…OPEN-10 giữ mã truy vết nhóm ban đầu. **Các lựa chọn sản phẩm Q32–Q172 đã được xác nhận;
+OPEN-01…OPEN-10 giữ mã truy vết nhóm ban đầu; OPEN-11 giữ phần dữ liệu cá nhân hóa từ Tech Stack, OPEN-12 giữ hòa giải fallback AI. **Các lựa chọn sản phẩm Q32–Q172 đã được xác nhận;
 Q173-A duyệt cách hiểu chung và đồng bộ tài liệu.** Phần còn mở là đặc tả/kiểm chứng có nêu dưới đây,
 không phải yêu cầu hỏi lại các chính sách đã chọn. Chi tiết lịch sử lựa chọn giữ tại mục 6.1.
 
@@ -723,8 +744,10 @@ không phải yêu cầu hỏi lại các chính sách đã chọn. Chi tiết l
 | OPEN-06 | Mở/đóng thực tế, đến muộn, quay lại, tuổi/giấy tờ, lỗi cửa: O-01…O-06/R-08, BR-30…BR-31 | Rà soát danh mục giấy tờ/hiệu lực pháp lý, đặc tả và kiểm chứng online/quyền. Hai mốc 15 phút giữ cách tính khác nhau. |
 | OPEN-07 | Danh mục/cung cấp/giao/sự cố combo: M-08/M-09/O-04/O-07, BR-23…BR-24 | Hợp đồng thu thêm/hoàn chênh, kết quả chưa rõ, kênh/màn hình nhân viên quầy và kiểm chứng thực tế; không thêm kho/tiền mặt/giao nhiều lần tự nguyện. |
 | OPEN-08 | Đánh giá/hậu kiểm/cốt truyện/xét lại/điểm tổng hợp: L-04/L-05/L-07/L-08, BR-16/BR-32 | Phân quyền ít nhất hai quản trị viên khác nhau, phiên bản và kiểm chứng thời hạn/cảnh báo; không đổi thành tiền kiểm. |
-| OPEN-09 | Kênh Customer/Organizer, email/gửi lại, mô hình AI ngoài/dữ liệu tối thiểu/lỗi: C-01/L-06/N-01, ACT-LLM, BR-33…BR-34 | Nhà cung cấp/mô hình/ngân sách/cấu hình và điều kiện dữ liệu theo Q154; kiểm chứng lọc dữ liệu, chưa SMS/push. |
+| OPEN-09 | Kênh Customer/Organizer, email/gửi lại, mô hình AI ngoài/dữ liệu tối thiểu/lỗi: C-01/L-06/N-01, ACT-LLM, BR-33…BR-34 | Provider đã chọn tại ADR-0012/0018/0028; còn gói/cấu hình/ngân sách và điều kiện dữ liệu theo Q154; kiểm chứng lọc dữ liệu, chưa SMS/push. |
 | OPEN-10 | Báo cáo/email/xóa chat/tài khoản, ngoại lệ/phản hồi: M-07/A-04…A-08, BR-35…BR-39 | Bảng lưu/xóa chi tiết, pháp lý, bản sao/log/nhà cung cấp theo Q170 và đặc tả/kiểm chứng; không tự áp hạn lưu chung. |
+| OPEN-11 | Cách nhận diện/hết hạn phiên khách; thời hạn lưu tín hiệu thô và hồ sơ dẫn xuất; xử lý tín hiệu cũ khi đặt lại/bật lại cá nhân hóa; phạm vi dữ liệu gửi/log/trace ra ngoài. | D-01, BR-40–43; không tự lưu khách ẩn danh dài hạn, nhập chat, xóa chứng từ giao dịch hoặc quyết định cách dùng/replay tín hiệu cũ sau đặt lại. Chi tiết hợp đồng/công thức và hành vi khi index hỏng cần đặc tả/kiểm chứng riêng. |
+| OPEN-12 | Q153 chọn báo gián đoạn/chưa tự đổi provider; ADR-0028 chọn Groq Free dự phòng inference cho Workers AI. Giữ cả nguồn đã chấp thuận, chưa có xác nhận rõ ADR thay thế phạm vi Q153. | Cần chủ sản phẩm xác nhận quan hệ tiếp nối và phạm vi tự chuyển; không suy commit mới hơn là quyền tự thay chính sách. Chưa triển khai routing, không phát lại giao dịch/graph hoặc tự bật trả phí. |
 
 Không coi xác nhận sản phẩm hoặc đồng bộ UML là kiểm chứng runtime/pháp lý/tích hợp.
 Các phụ thuộc bắt buộc được tổng hợp ở mục 6.2.
@@ -956,7 +979,7 @@ không đồng nghĩa mọi chính sách trong nhóm vẫn chưa chốt.
 |---|---|
 | Thanh toán/hoàn (OPEN-03) | Hợp đồng merchant MoMo/VNPAY, số tiền thu đúng, khoản hoàn nhỏ, nhiều lần hoàn một giao dịch, thu thêm combo, thu muộn/chưa rõ, thử lại/đối soát và thời gian tiền về. Q114 là hạn bắt đầu nội bộ, Q116 là phản hồi lỗi, không phải cam kết tiền về. |
 | Đổi ghế (OPEN-05) | Đặc tả giữ ghế đích, chuyển quyền nguyên tử, bảo toàn vé cũ, QR chung và hợp đồng API; chưa chọn TTL mới. Không sửa thông tin suất đã có vé hoặc tự chuyển khách. |
-| Email/AI (OPEN-09, Q154) | Chọn nhà cung cấp/mô hình/ngân sách, cấu hình gửi lại có giới hạn, điều kiện xử lý/lưu trữ, kiểm chứng lọc dữ liệu; không gửi bí mật/QR/hồ sơ đầy đủ ra mô hình. |
+| Email/AI (OPEN-09, Q154) | Resend và Workers AI/Groq đã chọn theo ADR-0012/0018/0028; còn gói/ngân sách, cấu hình gửi lại có giới hạn, điều kiện xử lý/lưu trữ, kiểm chứng lọc dữ liệu; không gửi bí mật/QR/hồ sơ đầy đủ ra mô hình. |
 | Dữ liệu (OPEN-10, Q170) | Bảng theo từng nhóm: mục đích/căn cứ, giữ/xóa, hạn thực hiện/lưu/gia hạn, quyền, bản sao/log/nhà cung cấp và rà soát pháp lý. Không gán hạn 5/10 năm cho mọi dữ liệu, không coi Q164 là giữ mọi thứ vĩnh viễn. |
 | Nhận khách (OPEN-06) | Rà soát danh mục giấy tờ và hiệu lực quy định tuổi/giờ; đặc tả bằng chứng và quy trình online. Q134 tính T+15 phút; Q135 tính từ lúc rạp ghi nhận bị chặn hoặc phim kết thúc sớm hơn. |
 | Phân quyền/nhân sự | Ánh xạ role hiện có sang quyền mục tiêu; trực đáp ứng các mốc liên tục, ít nhất hai quản trị viên xét lại nội dung; truy cập hồ sơ xóa dữ liệu tối thiểu. Chưa có bằng chứng nhân sự hoặc runtime đáp ứng. |
@@ -967,6 +990,12 @@ Nguồn tham khảo, không thay quyết định sản phẩm hoặc kiểm ch�
 [tuổi/giấy tờ](../99-notes/cinema-admission-age-verification-research.md),
 [lưu/xóa dữ liệu](../99-notes/account-data-retention-research.md).
 Các ghi chú nêu giới hạn xác minh; không lấy chính sách rạp tham khảo thay luật hoặc phê duyệt của chủ sản phẩm.
+
+**Hòa giải với main khi chuẩn bị PR:** giữ bảy service và executor app/BFF theo thiết kế đã duyệt.
+Các lựa chọn provider tiếp nối Q154 ở ADR-0012/0018/0028 không đồng nghĩa tích hợp đã đạt.
+Q153 và ADR-0028 chưa có ghi nhận rõ quan hệ thay thế: OPEN-12 cần được chốt trước triển khai tự fallback.
+BR-40…BR-43 giữ đủ bốn quy tắc cá nhân hóa upstream, đổi mã từ BR-18…BR-21 để không trùng nghiệp vụ UML.
+OPEN-11 vẫn còn hạn phiên/retention/tín hiệu cũ, không bị Q173 của nhóm OPEN-01…10 đóng thay.
 
 ### 6.3. Bản tổng hợp trước khi đồng bộ UML
 
@@ -983,12 +1012,12 @@ chi tiết từng lựa chọn tại mục 6.1 vẫn có hiệu lực. Phạm vi
 | OPEN-06 — Nhận khách | Mở từ giờ niêm yết khi phòng sẵn sàng; khách muộn vẫn được vào khi phim chưa kết thúc và đủ điều kiện. Soát vẫn online, theo từng ghế. Nhận diện khi quay lại bằng thẻ/dấu tạm và đối chiếu; xác minh tuổi/giấy tờ và lỗi tại cửa giữ các điều kiện đã chốt. |
 | OPEN-07 — Combo | Quản trị quản lý danh mục/giá, quản lý rạp bật/tắt cung cấp, nhân viên quầy giao. Nhận toàn bộ một lần trong ca phục vụ; sửa ghi nhầm/giao bù/thay combo có phê duyệt, khách đồng ý, thu/hoàn chênh lệch theo Q88–Q89. |
 | OPEN-08 — Đánh giá | Tài khoản đặt có vé đã soát được đánh giá 1–5 sao; một bài/phim, đăng ngay/hậu kiểm. Không ẩn chỉ vì chê/điểm thấp; che cốt truyện khác ẩn vi phạm. Xét lại do quản trị viên khác người ẩn, hạn 48 tiếng; điểm chỉ tính bài công khai/chưa xóa. |
-| OPEN-09 — Thông báo và Buaa | Hộp thông báo/email cho Customer và Organizer theo quyền, chưa SMS/push. Buaa gọi mô hình AI ngoài, tối thiểu hóa dữ liệu, giữ thẩm quyền Core; mô hình lỗi thì hướng sang màn hình trực tiếp, chưa tự đổi mô hình/nhà cung cấp. |
+| OPEN-09 — Thông báo và Buaa | Hộp thông báo/email cho Customer và Organizer theo quyền, chưa SMS/push. Buaa gọi mô hình AI ngoài, tối thiểu hóa dữ liệu, giữ thẩm quyền Core; mô hình lỗi thì hướng sang màn hình trực tiếp, việc tự đổi mô hình/nhà cung cấp cần hòa giải OPEN-12. |
 | OPEN-10 — Báo cáo và tài khoản | Báo cáo tổng hợp, tách bốn chỉ số tiền và hai tỷ lệ ghế. Đổi email cần xác minh cũ/mới; chưa khôi phục dự phòng khi mất hộp thư. Chat không tự xóa theo kỳ; khách được chủ động xóa. Xóa tài khoản có chờ đóng để giữ quyền đơn cũ, vẫn xử lý phần dữ liệu đủ điều kiện; từ bỏ điểm/voucher chưa dùng phải xác nhận, ngoại lệ do quản trị viên được giao xử lý, phản hồi trong 24 tiếng. |
 
 **Các điều kiện chưa hoàn tất phải tiếp tục giữ rõ khi đồng bộ:**
 
-- Lựa chọn nhà cung cấp email/AI, mô hình, ngân sách, cấu hình gửi lại và điều kiện xử lý dữ liệu theo Q154.
+- Provider/model đã chọn theo ADR-0012/0018/0028; gói/ngân sách/cấu hình, điều kiện dữ liệu và OPEN-12 còn cần hoàn tất theo Q154.
 - Bảng lưu/xóa chi tiết, phân loại chứng từ/căn cứ/thời hạn, bản sao/log/nhà cung cấp và rà soát pháp lý theo Q170;
   danh mục giấy tờ/hiệu lực quy định tuổi cũng cần rà soát trước vận hành, không tự chọn chính sách trái quy định.
 - Hợp đồng Core, giữ ghế đích/QR khi đổi, giao dịch thu thêm combo, đối soát thu muộn/chưa rõ kết quả,
@@ -1055,6 +1084,11 @@ Xem CONTEXT và nguồn BFF khi chuẩn bị triển khai tiếp; không dùng n
 | Q164–Q170 | A-06…A-08, L-01/L-02; BR-37…BR-39 |
 | Q172 | R-08/R-02/R-03/O-03/O-07; BR-26, giữ phần đã cung cấp đúng và Q132/Q134/Q135 |
 | Q173 | Xác nhận tổng hợp mười nhóm, cho đồng bộ tài liệu; giữ phụ thuộc trước vận hành, không cấp quyền sửa code/cài đặt/công bố Git |
+| Tech Stack 2026-11-17 — khám phá | Nâng cấp tìm kiếm từ khóa/ngữ nghĩa/kết hợp; cá nhân hóa theo nội dung + hồ sơ. Tín hiệu B, nhận diện A và người mới B được chấp thuận; các chính sách chưa chốt giữ tại OPEN-11. | D-01, BR-43; ADR-0030/0031. Nguồn: hội thoại `01a1e2f4-4de8-75d2-a43e-efd7365dbd58`. |
+| Tech Stack 2026-11-17 | Đồng ý đề xuất A: bật/tắt cá nhân hóa và đặt lại dữ liệu đã học; giữ đơn hàng/vé. | BR-40; mô tả D-01. Nguồn: hội thoại `01a1e2f4-4de8-75d2-a43e-efd7365dbd58`. |
+| Tech Stack 2026-11-17 — phiên khách | Đồng ý đề xuất A: không nhập hành vi phiên khách khi đăng nhập, giữ hồ sơ tài khoản và học tiếp sau đăng nhập. Tránh trộn sở thích của người dùng chung thiết bị; chấp nhận không mang tín hiệu phiên khách sang hồ sơ lâu dài. | BR-41; mô tả D-01. Nguồn: cùng hội thoại Tech Stack nêu trên. |
+| Tech Stack 2026-11-17 — thứ hạng | Đồng ý đề xuất A: ưu tiên truy vấn, cá nhân hóa giữa các kết quả phù hợp tương đương; trang khám phá có thể cá nhân hóa mạnh hơn. Giữ khả năng tìm đúng phim, chấp nhận kết quả tìm kiếm ít khác biệt giữa người dùng hơn phương án trộn điểm truy vấn/sở thích. | BR-42; mô tả D-01. Nguồn: cùng hội thoại Tech Stack nêu trên. |
+| Hòa giải PR | BR-40…BR-43 bảo toàn chính sách cá nhân hóa upstream; OPEN-12 ghi khác biệt Q153/ADR-0028, không chọn chính sách thay người dùng | Mục 6.2; chưa có routing/runtime |
 
 ## 9. Nguồn và kiểm tra mô hình
 

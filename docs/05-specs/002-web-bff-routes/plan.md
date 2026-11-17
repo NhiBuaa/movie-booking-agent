@@ -1,5 +1,10 @@
 # Implementation Plan: Web BFF Route Handlers
 
+> **Thiết kế backend mới hơn:** [thiết kế bảy service](../004-service-decomposition/spec.md) sở hữu
+> việc phân chia dữ liệu, giao tiếp và thực thi lệnh Agent → app/BFF → Core. Kế hoạch/kiểm chứng
+> adapter dưới đây giữ phạm vi feature cũ; không phải kế hoạch triển khai hoặc bằng chứng tuân thủ
+> kiến trúc đích/hiến pháp mới. Tích hợp thật cần đặc tả và kiểm chứng riêng.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
@@ -9,6 +14,13 @@
 **Branch**: `feat/web-bff-routes` | **Date**: 2026-11-15 | **Last Updated**: 2026-11-16
 
 **Spec Reference**: [docs/05-specs/002-web-bff-routes/spec.md](spec.md)
+
+> **Quyết định tiếp nối — 2026-11-17:** [danh mục ADR](../../06-decisions/README.md) sở hữu quyết định;
+> [README Core](../../../services/cinema-core/README.md) tổng hợp stack mục tiêu đã chọn, gồm
+> backend/database/payment adapters và module Search. [Identity](../../../services/identity-service/README.md)
+> sở hữu auth, [Notification](../../../services/notification-service/README.md) sở hữu chuyển phát. Kế hoạch dưới đây giữ phạm vi BFF
+> in-memory ban đầu; chưa phải kế hoạch migration/triển khai stack mới đã được duyệt.
+> Giữ nguyên fixture, header mô phỏng, HMAC và bằng chứng kiểm thử của feature; xác minh code mới riêng.
 
 ---
 

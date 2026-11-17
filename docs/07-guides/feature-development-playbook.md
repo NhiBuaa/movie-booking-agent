@@ -8,6 +8,9 @@ Nếu bắt đầu với một ý tưởng chưa có dự án, xem [Playbook 1 �
 
 ### 1. Xem kiến trúc và code liên quan
 
+Với dự án này, đối chiếu [các ADR đã chốt](../06-decisions/README.md) và [CONTEXT](../../CONTEXT.md)
+trước khi lập kế hoạch; không chọn lại stack hoặc coi lựa chọn đã duyệt là runtime đã triển khai.
+
 - **Bạn làm:** Đọc System Architecture, **thiết kế dữ liệu tương ứng với database đang dùng** và code/test liên quan nếu đã có. Với tính năng đầu tiên, dựa trên thiết kế đã chốt ở Playbook 1.
 - **Agent giúp:** Chỉ ra thành phần nào xử lý tính năng và giải thích code hiện tại.
 - **Công cụ:** Với phần mã được hỗ trợ, agent dùng CodeGraph theo [quy tắc dự án](../../.agents/rules/codegraph.md)

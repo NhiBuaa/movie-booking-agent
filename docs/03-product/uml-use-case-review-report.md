@@ -1,7 +1,7 @@
 # Báo cáo review độc lập bộ UML Use Case — Movie Booking Platform
 
 > **Phạm vi lịch sử — bản Q1–Q31 ngày 2026-11-16.** Các số lượng 39 use case/8 actor,
-> findings và câu hỏi mở dưới đây thuộc lần review đó; không phải đánh giá bản Q173 hiện hành.
+> findings và câu hỏi mở dưới đây thuộc lần review đó; không phải đánh giá bản Q173 hoặc các ADR Tech Stack hiện hành.
 > Bản mới xem [mô hình và truy vết quyết định](use-cases.md), [mô tả](use-case-descriptions.md)
 > và [phụ thuộc còn lại sau Q173](use-cases.md#62-giới-hạn-và-phần-tiếp-tục-làm-rõ).
 > Các câu hỏi ở mục IV đã được trả lời qua Q68–Q73 (combo), Q133/Q163 (thiếu QR/email)

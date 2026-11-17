@@ -47,9 +47,18 @@ cảnh báo Organizer Web/Mobile theo đúng quyền; chưa tự chốt mọi m�
 nhà cung cấp/hợp đồng/nhân sự, bảng lưu/xóa, pháp lý và kiểm chứng; không hỏi lại chính sách đã được chọn.
 Ứng dụng không bổ sung soát ngoại tuyến hay cơ chế bỏ qua kiểm tra. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
 
+[Thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md) phân biệt Core còn online với
+Identity gián đoạn: phiên nhân viên sẵn sàng có thể tiếp tục soát bằng bằng chứng quyền cục bộ theo
+điều kiện/thời hạn đã duyệt. Quyền thu hồi đã biết phải bị từ chối; đây chưa phải khả năng đã kiểm chứng trên app.
+Quản trị nội dung, danh tính và báo cáo dùng service sở hữu tương ứng, không mặc định đều thuộc Core.
+
 ## Stack
 
-Chưa chốt framework Mobile; không tạo scaffold hoặc dependency trong lần tổ chức thư mục này.
+React Native + Expo + TypeScript, Expo Router, development builds, expo-camera và SecureStore theo
+[ADR-0016](../../docs/06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+TanStack Query/Zustand và React Hook Form/Zod theo [README](README.md); dùng component native riêng.
+Không có kho/hàng đợi soát ngoại tuyến; thiết bị nhân viên vẫn phải online tới Core.
+Đây là lựa chọn công nghệ, chưa tạo scaffold/dependency/build hoặc kiểm chứng runtime.
 
 ## Brand Commitments
 

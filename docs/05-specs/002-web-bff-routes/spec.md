@@ -1,5 +1,10 @@
 # Feature Specification: Web BFF Route Handlers
 
+> **Thiết kế backend mới hơn:** [bảy service](../004-service-decomposition/spec.md) phân định chủ dữ liệu
+> cho tích hợp tiếp theo: Catalog sở hữu nội dung phim, Core sở hữu rạp/lịch/giao dịch; BFF mỏng gọi
+> đúng chủ dữ liệu. Agent đề xuất, app/BFF thực thi lệnh dưới quyền khách. Adapter gộp/in-memory và
+> tiêu chí feature bên dưới không chứng minh đã đạt ranh giới, database hoặc quyền của thiết kế đích.
+
 > **Phạm vi đối chiếu:** nội dung bên dưới giữ phạm vi kỹ thuật của feature trên nhánh chính,
 > không xác nhận đã đáp ứng toàn bộ [mô hình UML mục tiêu](../../03-product/use-cases.md).
 > [Hiến pháp](../../../.specify/memory/constitution.md) và [đặc tả nghiệp vụ](../domain-context.md)
@@ -7,6 +12,14 @@
 > cần đặc tả thay đổi và kiểm chứng riêng; ghi chú này không sửa tiêu chí hay bằng chứng của feature.
 
 **Feature Branch**: `feat/web-bff-routes`
+
+> **Quyết định tiếp nối — 2026-11-17:** [Core mục tiêu](../../../services/cinema-core/README.md)
+> đã chọn NestJS/Fastify, PostgreSQL/Redis/Drizzle và adapter MoMo/VNPAY riêng;
+> Better Auth thuộc [Identity](../../../services/identity-service/README.md), Notification sở hữu chuyển phát.
+> [ADR-0014](../../06-decisions/0014-zod-json-schema-and-pydantic-contracts.md) chọn pipeline hợp đồng mới.
+> Tìm kiếm đích thuộc [module Search của Core](../../06-decisions/0035-search-module-in-cinema-core.md).
+> Maps, fixture, header `x-user-email` và HMAC mô phỏng bên dưới vẫn mô tả feature BFF gốc;
+> không phải tích hợp các lựa chọn mới. Cần đặc tả và kiểm chứng migration riêng theo [CONTEXT](../../../CONTEXT.md).
 
 **Created**: 2026-11-15 | **Last Updated**: 2026-11-16
 
