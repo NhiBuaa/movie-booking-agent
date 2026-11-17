@@ -67,6 +67,8 @@ use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation 
 - `.agents/references/` is non-normative support material.
 - If humans or the software must obey a rule too, prefer `docs/04-standards/`.
 - Do not create `.agents/commands/`, `.agents/hooks/`, or `.agents/skills/` unless the project has a concrete need for them.
+- The existing Spec Kit integration under `.agents/skills/speckit-*` is a justified exception;
+  when maintaining it, follow [the integration scope](.agents/README.md#spec-kit-integration).
 
 ## Selective Issue/PR Closeout
 

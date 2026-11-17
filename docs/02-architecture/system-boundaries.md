@@ -73,3 +73,10 @@ use case không tự chọn giao thức; giao thức đã chốt nằm trong thi
 [Đặc tả nghiệp vụ](../05-specs/domain-context.md) diễn giải ràng buộc,
 còn BR/OPEN vẫn do mô hình sản phẩm sở hữu;
 tài liệu này không xác nhận contracts hoặc runtime đã đáp ứng các trách nhiệm đó.
+
+## Ánh xạ nghiệp vụ Q173
+
+C-01/BR-34 giữ ranh giới dữ liệu model; N-01/BR-33 là mục tiêu gửi/gửi lại do Notification sở hữu.
+B-09 được phép qua chat nhưng app/BFF thực thi sau xác nhận, không trao lệnh ghi trực tiếp cho Agent.
+A-06…A-08/BR-37…BR-39 xử lý xóa chat/tài khoản và ngoại lệ theo dữ liệu tối thiểu; không xóa nghĩa vụ
+đơn đã mua. OPEN-12 giữ điểm cần hòa giải giữa Q153 và ADR-0028 trước triển khai fallback.

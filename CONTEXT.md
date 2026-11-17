@@ -77,7 +77,7 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - Logic chat hiện ở client theo quy tắc; Cloudflare Workers AI + GPT-OSS 120B đã được chọn tại
   [ADR-0012](docs/06-decisions/0012-cloudflare-workers-ai-and-gpt-oss-120b.md), chưa xác nhận tích hợp runtime.
   Resend đã được chọn cho Notification Service chuyển phát email tại [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md),
-  chưa xác nhận tích hợp; chính sách xử lý lỗi/gửi lại còn mở.
+  chưa xác nhận tích hợp; Q149 đã chốt chính sách lỗi/gửi lại, tham số/cấu hình còn mở.
 - R2 Standard và Cloudflare Images đã chọn cho ảnh danh mục tại
   [ADR-0019](docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
   Catalog sở hữu nội dung/metadata ảnh phim, Core giữ snapshot theo suất; chưa cấu hình upload/biến thể/cache hoặc xác nhận runtime. Trailer dùng URL/embed nguồn ngoài.
@@ -122,12 +122,12 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   Chưa triển khai profile/ranker/tracking; collaborative chỉ xem xét sau khi có dữ liệu/bằng chứng,
   LLM không là phụ thuộc bắt buộc. Model embedding theo ADR-0033; trọng số và chính sách dữ liệu còn mở.
   Quyền bật/tắt cá nhân hóa và đặt lại dữ liệu đã học được chọn tại
-  [BR-18](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất); không xóa đơn/vé.
+  [BR-40](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất); không xóa đơn/vé.
   Khi đăng nhập không nhập hành vi phiên khách vào hồ sơ tài khoản, giữ hồ sơ hiện có và học tiếp
-  sau đăng nhập khi cá nhân hóa được bật theo [BR-19](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  sau đăng nhập khi cá nhân hóa được bật theo [BR-41](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
   Chưa triển khai control/chuyển phiên hoặc chốt retention, thời hạn phiên khách và xử lý tín hiệu cũ khi đặt lại/bật lại.
   Thứ hạng tìm kiếm ưu tiên truy vấn và tên/alias chính xác; cá nhân hóa giữa kết quả phù hợp tương đương,
-  mạnh hơn ở trang khám phá nhưng giữ bộ lọc theo [BR-20](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  mạnh hơn ở trang khám phá nhưng giữ bộ lọc theo [BR-42](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
   Công thức/trọng số/ngưỡng và chất lượng thực tế chưa được xác minh.
 - Cloudflare Workers AI API đã chọn làm provider embedding tại
   [ADR-0032](docs/06-decisions/0032-cloudflare-workers-ai-for-managed-embeddings.md), trong allocation miễn phí
@@ -142,7 +142,7 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   Notification chuyển phát bất đồng bộ, email bảo mật dùng Claim Check theo mục 4 của thiết kế.
   Identity giữ Better Auth, Notification giữ Resend, Catalog giữ media phim; checkpoint thuộc database Agent. Các lựa chọn này chưa chứng minh đã tích hợp các ranh giới hoặc chọn framework cho năm service bổ trợ.
 - [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) được giữ nguyên;
-  OPEN-11 tập hợp chính sách dữ liệu cá nhân hóa còn mở sau các lựa chọn tại BR-18–21;
+  OPEN-11 tập hợp chính sách dữ liệu cá nhân hóa còn mở sau các lựa chọn tại BR-40–43;
   thiếu chính sách liên quan thì chưa được tuyên bố sẵn sàng vận hành chức năng đó.
 
 ## Canonical References
@@ -159,3 +159,10 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 - [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live
   và CodeGraph theo worktree. Cài công cụ/có index không xác nhận code hoặc giao dịch đã vận hành.
 - Quản lý công việc và bằng chứng kiểm chứng: GitHub Issues/PRs.
+
+## Chính sách UML đã đồng bộ
+
+Q32–Q172 và xác nhận Q173 đã được đồng bộ trong mô hình/mô tả/BR và PRODUCT. Các nhóm OPEN-01…10
+đã có lựa chọn sản phẩm; phần đặc tả/kiểm chứng vẫn giữ. OPEN-11 dữ liệu cá nhân hóa và OPEN-12 hòa giải
+Q153/ADR-0028 còn mở. BR-40…BR-43 là mã mới của bốn BR cá nhân hóa upstream, nội dung giữ nguyên.
+Chính sách email lỗi/gửi lại đã chọn ở Q149; tham số/tích hợp Resend còn chưa kiểm chứng.

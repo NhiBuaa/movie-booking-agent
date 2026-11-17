@@ -8,6 +8,11 @@ Bổ sung [ADR-0012](0012-cloudflare-workers-ai-and-gpt-oss-120b.md), giữ prim
 Chỉ chọn provider/tier và hướng suy giảm an toàn; chưa tạo tài khoản/key, gọi inference,
 cài SDK, viết routing hoặc xác nhận runtime. Không chấp thuận nâng gói/billing/chi tiêu.
 
+> **Đối chiếu nghiệp vụ khi hòa giải PR:** Q153 trong [mô hình sản phẩm](../03-product/use-cases.md#61-quyết-định-đã-xác-nhận)
+> chọn gián đoạn thì hướng màn hình trực tiếp, chưa tự đổi provider. Lựa chọn Groq Free dự phòng ở ADR này
+> được giữ nguyên, nhưng chưa có xác nhận rõ phạm vi thay thế Q153. OPEN-12 trong mô hình giữ điểm cần
+> chốt trước triển khai tự fallback; ghi chú không tự thay đổi một trong hai quyết định hoặc xác nhận routing đã chạy.
+
 ## Context
 
 Workers AI có quota/capacity hữu hạn. Mục tiêu portfolio online liên tục không tạo SLA cho model;

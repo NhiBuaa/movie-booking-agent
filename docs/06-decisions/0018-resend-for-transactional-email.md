@@ -81,3 +81,11 @@ Lựa chọn Resend dựa trên tích hợp/vòng đời gửi, không dựa và
 - [SES send/error semantics](https://docs.aws.amazon.com/ses/latest/dg/send-email-concepts-process.html).
 
 Nguồn/Context7 đối chiếu ngày 2026-11-17; chưa cài đặt, cấu hình domain/tài khoản hoặc gửi email kiểm chứng.
+
+### Đối chiếu chính sách sau Q173
+
+Q147–Q150 đã chọn hộp thông báo/email, chính sách thử lại có giới hạn/gửi lại theo quyền và cảnh báo;
+Q163 đã chốt không thêm khôi phục tài khoản dự phòng khi mất hộp thư. Các chỗ “còn mở” về chính sách
+ở bối cảnh nghiên cứu trước đây được đọc theo lựa chọn hiện hành tại mô hình sản phẩm; chỉ tham số,
+gói/cấu hình, dữ liệu/pháp lý và kiểm chứng tích hợp còn chưa hoàn tất. Provider đã chọn không có nghĩa
+đã gửi email/inference thành công. Quan hệ Q153 với fallback ADR-0028 giữ tại OPEN-12.

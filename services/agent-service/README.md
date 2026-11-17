@@ -64,5 +64,14 @@ Adapter/tool/stream và chất lượng tiếng Việt cần kiểm chứng; ch�
 thực thi lệnh và lỗi; [quyết định](../../docs/05-specs/004-service-decomposition/decisions.md) giữ lý do đã duyệt.
 Hội viên/đổi điểm, đánh giá và tài khoản dùng màn hình chuyên biệt. Phần LLM của OPEN-09 đã chốt
 tại ADR-0012; provider email chọn Resend theo [ADR-0018](../../docs/06-decisions/0018-resend-for-transactional-email.md).
-Notification sở hữu hộp thông báo/chuyển phát. Chính sách gửi lại/lỗi email và kênh bổ sung ngoài email/in-app còn mở;
+Notification sở hữu hộp thông báo/chuyển phát. Chính sách lỗi/gửi lại và hộp thông báo/email đã chốt theo Q147–Q150; tham số/tích hợp còn mở;
 không suy danh sách tool hiện có thành quyền thực thi trực tiếp hoặc phạm vi đã triển khai đầy đủ.
+
+## Bổ sung nghiệp vụ theo Q173
+
+B-09 cho đổi ghế cùng suất trong chat, xác nhận rõ cũ → mới; Agent lập đề xuất, app/BFF thực thi dưới
+quyền khách theo thiết kế bảy service. C-01/BR-34 tối thiểu hóa dữ liệu, không gửi PII/bí mật/QR/thẻ
+hoặc toàn bộ hồ sơ/đơn cho model. Q153 và hướng fallback ADR-0028 cần chốt quan hệ tại OPEN-12.
+Hội viên/đổi điểm, đánh giá/xét lại, tài khoản/xóa chat/xóa tài khoản và gửi lại email dùng màn hình riêng.
+Chat không tự xóa theo kỳ; khách xóa qua A-06, không xóa đơn/vé/hoàn. L-06/N-01/BR-33 đã chọn hộp
+thông báo và email, chưa SMS/push; tham số và kiểm chứng Resend còn OPEN-09, không phải toàn chính sách gửi lại chưa chốt.

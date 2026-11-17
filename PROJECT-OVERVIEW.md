@@ -88,7 +88,7 @@ Các nhóm phục vụ tổng quát:
 - **Testing Stack**: Vitest cho suite TypeScript mới, React Testing Library cho DOM; Jest/jest-expo/RNTL cho Mobile, pytest cho Agent; Playwright, Maestro, Testcontainers Node/Python và k6 theo [ADR-0021](docs/06-decisions/0021-layered-testing-stack-for-platform.md). Giữ suite `node:test` hiện có; chưa cài đặt, migrate hoặc xác nhận kiểm thử/runtime của stack mới.
 - **CI và Build Artifacts**: GitHub Actions standard GitHub-hosted Linux VM runners, Docker Buildx/BuildKit và GHCR theo [ADR-0022](docs/06-decisions/0022-github-actions-buildx-and-ghcr-for-ci.md). Kiểm PR và tạo image truy được commit/digest; publish từ nguồn tin cậy theo trigger cần đặc tả. Chưa tạo workflow/Dockerfile, chạy CI hoặc publish; hosting/CD vẫn hoãn đến lúc chuẩn bị deploy.
 - **Agent Streaming**: SSE + `sse-starlette` gửi text và sự kiện UI từ Agent về Web/Mobile theo [ADR-0011](docs/06-decisions/0011-sse-starlette-for-agent-streaming.md); lệnh/xác nhận dùng HTTP riêng. Client chọn browser fetch trên Web, expo/fetch trên Mobile và eventsource-parser chung theo [ADR-0024](docs/06-decisions/0024-fetch-and-eventsource-parser-for-sse-clients.md). Auth delivery, hợp đồng event, timeout và phục hồi sau mất kết nối cần thiết kế/kiểm chứng.
-- **Transactional Email**: Notification Service tích hợp Resend theo [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md); tích hợp server, idempotency 24 giờ và signed webhooks. Identity/Core vẫn phát hành/xác minh mã; email bảo mật dùng Claim Check, owner giữ payload mã hóa có hạn và Notification lấy qua HTTPS xác thực, không SQL chéo hoặc plaintext trong broker/log/trace/DLQ. Chưa chọn gói/domain/region, cấu hình tài khoản hoặc gửi email; chính sách gửi lại/hạn mã/lỗi vẫn còn mở theo mô hình sản phẩm.
+- **Transactional Email**: Notification Service tích hợp Resend theo [ADR-0018](docs/06-decisions/0018-resend-for-transactional-email.md); tích hợp server, idempotency 24 giờ và signed webhooks. Identity/Core vẫn phát hành/xác minh mã; email bảo mật dùng Claim Check, owner giữ payload mã hóa có hạn và Notification lấy qua HTTPS xác thực, không SQL chéo hoặc plaintext trong broker/log/trace/DLQ. Chưa chọn gói/domain/region, cấu hình tài khoản hoặc gửi email; chính sách lỗi/gửi lại theo Q147–Q150; hạn mã, tham số/cấu hình và kiểm chứng tích hợp còn mở theo mô hình sản phẩm.
 - **Catalog Image Delivery**: R2 Standard giữ ảnh gốc; Cloudflare Images remote transformations tối ưu/resize/crop và cache các biến thể theo [ADR-0019](docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md). Catalog giữ quyền xuất bản và metadata ảnh phim trong database riêng; Core giữ snapshot phiên bản phim cần cho suất, không sở hữu lại danh mục phim. Chưa chọn gói Images/domain, cấu hình upload/cache hoặc xác nhận runtime.
 - **Design System Authority**: `DESIGN.md` và `packages/design-tokens` là nguồn thẩm quyền duy nhất về màu sắc (Rosso Corsa, Carbone Nero, Notte Profonda), kiểu chữ và quy chuẩn bố cục.
 - **Application Boundaries**: Bốn app Customer/Organizer × Web/Mobile theo
@@ -172,7 +172,7 @@ sự hiện diện của màn hình/scaffold để khẳng định giao dịch, 
   Ngày 2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`),
   đã chọn **nguồn tín hiệu B**: sở thích khai báo, phim yêu thích, đánh giá, lịch sử mua vé đã xác nhận,
   cộng lượt xem chi tiết phim, click kết quả và lịch sử tìm kiếm. Không tự gộp toàn bộ hội thoại Agent.
-  Phạm vi nguồn tín hiệu/nhận diện/người mới được sở hữu bởi BR-21 của
+  Phạm vi nguồn tín hiệu/nhận diện/người mới được sở hữu bởi BR-43 của
   [mô hình sản phẩm](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
   Cùng ngày, đã chọn **phạm vi nhận diện A**: khách chưa đăng nhập cá nhân hóa theo phiên;
   hồ sơ lâu dài gắn với tài khoản đăng nhập, dùng xuyên các lần truy cập/thiết bị. Tìm/khám phá phim
@@ -181,14 +181,14 @@ sự hiện diện của màn hình/scaffold để khẳng định giao dịch, 
   dần điều chỉnh từ tương tác. Không tự thêm bước onboarding chọn thể loại/phim.
   Đã chọn **kiểm soát cá nhân hóa A**: bật/tắt học và dùng hồ sơ sở thích; đặt lại dữ liệu đã học,
   giữ đơn hàng/vé; chưa thêm xem/xóa từng tương tác theo
-  [BR-18](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  [BR-40](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
   Đã chọn **chuyển phiên khách A**: không nhập hành vi phiên khách vào hồ sơ khi đăng nhập;
   giữ hồ sơ tài khoản hiện có, học tiếp từ tương tác sau đăng nhập khi cá nhân hóa được bật theo
-  [BR-19](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất). Tránh trộn sở thích khi dùng chung thiết bị,
+  [BR-41](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất). Tránh trộn sở thích khi dùng chung thiết bị,
   chấp nhận không mang tín hiệu khách sang hồ sơ lâu dài; chưa quy định xóa ngay dữ liệu phiên khách.
   Đã chọn **thứ hạng A**: tìm kiếm ưu tiên truy vấn, tên phim/alias khớp chính xác đứng trước;
   sở thích chỉ sắp xếp các kết quả phù hợp tương đương, trang khám phá có thể cá nhân hóa mạnh hơn.
-  Giữ đúng bộ lọc theo [BR-20](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
+  Giữ đúng bộ lọc theo [BR-42](docs/03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
   Cách xác định/hết hạn phiên khách, retention và xử lý tín hiệu cũ khi đặt lại/bật lại giữ tại OPEN-11.
   Công thức/trọng số/ngưỡng xếp hạng, hợp đồng tracking và tiêu chí chất lượng cần đặc tả/kiểm chứng
   trước triển khai. Các quyết định mục tiêu này chưa cho phép triển khai thu thập dữ liệu.

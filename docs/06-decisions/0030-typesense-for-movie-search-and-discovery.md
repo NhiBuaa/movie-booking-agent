@@ -21,7 +21,7 @@ với BullMQ indexing nền; chi tiết adapter/module/worker và triển khai v
 Nhu cầu nâng cấp gồm tìm tên/alias, không dấu/lỗi gõ, gợi ý khi nhập, bộ lọc và tìm theo ý nghĩa;
 hướng cá nhân hóa cần nguồn ứng viên phù hợp trước khi xếp hạng theo phiên/tài khoản.
 D-01 trong [mô tả use case](../03-product/use-case-descriptions.md) đã bổ sung phạm vi nâng cấp;
-BR-18–21 của [mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất) sở hữu nguồn tín hiệu,
+BR-40–43 của [mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất) sở hữu nguồn tín hiệu,
 guest theo phiên/account lâu dài, người mới không hỏi sở thích và quyền kiểm soát/ranking.
 Chi tiết chính sách/thuật toán còn mở; code hiện tìm trên fixture, không chứng minh chất lượng search thực.
 
@@ -75,7 +75,7 @@ Chi tiết chính sách/thuật toán còn mở; code hiện tìm trên fixture,
   Model chat không tự làm embedding; allocation Free dùng chung và lexical fallback theo ADR-0032/0034,
   còn budget/TTL/quality gate cụ thể cần đặc tả.
 - Profile cá nhân không đưa vào public movie document; cache/subscription/results phải cách ly identity/scope.
-  BR-18/19 đã chọn bật/tắt/reset và không nhập guest history khi login; retention, guest expiry,
+  BR-40/19 đã chọn bật/tắt/reset và không nhập guest history khi login; retention, guest expiry,
   xử lý dữ liệu cũ khi reset/bật lại và dữ liệu gửi model còn OPEN-11. Không tự nhập toàn bộ chat.
 - Mô hình sản phẩm đã phân biệt content/profile scoring với collaborative training ngoài bản đầu;
   chi tiết feature/contracts và các chính sách còn mở vẫn cần đặc tả trước triển khai.

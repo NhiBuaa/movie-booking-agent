@@ -31,9 +31,9 @@ Cold start chọn hướng **không bắt onboarding sở thích**: catalog/ng�
 ở thời điểm nghiên cứu ban đầu loại thuật toán đề xuất phức tạp. Mô hình hiện hành đã chấp thuận
 content/profile scoring và giữ collaborative training ngoài bản đầu; nghiên cứu không tự sửa sản phẩm.
 Cinema Core tiếp tục quyết định lịch, giá, ghế/hold và quyền; ranker không xác nhận vé.
-Quyền bật/tắt cá nhân hóa và đặt lại dữ liệu đã học được chọn tiếp tại BR-18; BR-19 chọn không nhập
+Quyền bật/tắt cá nhân hóa và đặt lại dữ liệu đã học được chọn tiếp tại BR-40; BR-41 chọn không nhập
 hành vi phiên khách vào tài khoản khi đăng nhập; xem [mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
-BR-20 chọn ưu tiên truy vấn/tên chính xác, cá nhân hóa giữa các kết quả phù hợp tương đương;
+BR-42 chọn ưu tiên truy vấn/tên chính xác, cá nhân hóa giữa các kết quả phù hợp tương đương;
 trang khám phá có thể cá nhân hóa mạnh hơn, vẫn giữ đúng bộ lọc.
 Ngưỡng/công thức thứ hạng, retention, thời hạn phiên khách và xử lý tín hiệu cũ khi đặt lại/bật lại còn mở.
 Các mục phân tích phía dưới giữ bối cảnh nghiên cứu trước những quyết định này.
@@ -130,7 +130,7 @@ khác model/vector space/dimension thì query không tìm đúng index cũ dù r
 
 ## Dữ liệu cá nhân và bằng chứng cần có
 
-BR-18/19 đã chốt bật/tắt/reset và không nhập hành vi guest khi login; chưa thêm xem/xóa từng tương tác ở bản đầu.
+BR-40/19 đã chốt bật/tắt/reset và không nhập hành vi guest khi login; chưa thêm xem/xóa từng tương tác ở bản đầu.
 Retention raw/derived, guest expiry, xử lý dữ liệu cũ khi reset/bật lại, export/trace/log/cache và
 chi tiết đổi tài khoản/đa thiết bị còn cần đặc tả theo OPEN-11.
 Xóa signal phải xem xét rebuild/purge user vector/cache và chặn event/replay cũ tái tạo dữ liệu đã xóa;

@@ -1,11 +1,11 @@
 # Conversational Booking Specification (End-to-End Chat Booking)
 
-**Phạm vi:** đặc tả kênh chat theo sản phẩm mục tiêu, đồng bộ ranh giới service ngày 2026-11-17;
+**Phạm vi:** đặc tả kênh chat theo sản phẩm mục tiêu, đồng bộ ranh giới service và nghiệp vụ Q173 ngày 2026-11-17;
 không xác nhận code đã vận hành. [Thiết kế microservices](004-service-decomposition/spec.md) sở hữu
 ranh giới thực thi lệnh và [quyết định](004-service-decomposition/decisions.md) giữ nguồn chấp thuận.
 [Mô hình use case](../03-product/use-cases.md) sở hữu mục tiêu/BR/OPEN;
 [mô tả use case](../03-product/use-case-descriptions.md) sở hữu điều kiện, kết quả và ngoại lệ.
-CB-01–CB-06 là các bước hành trình, không phải mã use case thay thế B-01–B-08.
+CB-01–CB-06 là các bước hành trình, không phải mã use case thay thế B-01–B-09/C-01.
 
 **Lựa chọn kỹ thuật tiếp nối:** [Agent](../../services/agent-service/README.md) dùng Python/FastAPI/LangGraph,
 SSE/sse-starlette và Cloudflare Free → Groq Free; [Core](../../services/cinema-core/README.md) sở hữu giao dịch
@@ -21,8 +21,8 @@ Khách hàng có thể tìm phim, chọn suất chiếu, chọn ghế trên sơ 
 thanh toán và nhận vé điện tử ngay trong hành trình chat. Thanh toán có thể cần mở ứng dụng cổng rồi quay lại;
 không bắt khách khởi tạo lại đơn hoặc thời hạn giữ ghế khi chuyển kênh.
 
-Phạm vi còn gồm tra cứu đơn/vé, bỏ hold chưa thanh toán, gửi yêu cầu hủy vé đã mua và theo dõi hoàn tiền.
-Hội viên/đổi điểm, đánh giá và quản trị tài khoản dùng màn hình chuyên biệt; AI không được xét duyệt hủy,
+Phạm vi còn gồm tra cứu đơn/vé, bỏ hold chưa thanh toán, gửi yêu cầu hủy vé đã mua theo dõi hoàn tiền và đổi ghế trong cùng suất B-09.
+Hội viên/đổi điểm, đánh giá/xét lại, tài khoản/xóa chat/xóa tài khoản và gửi lại email dùng màn hình chuyên biệt; AI không được xét duyệt hủy,
 soát vé, giao combo hoặc quản trị vận hành. Xem bảng phạm vi kênh AI trong mô hình, không suy chat có mọi quyền.
 
 ---
@@ -37,6 +37,7 @@ soát vé, giao combo hoặc quản trị vận hành. Xem bảng phạm vi kên
 | **Cinema Core (`services/cinema-core`)** | Xác thực tồn kho ghế, tạo lệnh Hold có thời hạn (TTL), tạo booking, kiểm tra thanh toán và phát hành vé điện tử có chữ ký số. |
 | **Catalog** | Cung cấp nội dung phim; lịch/giá/ghế của suất và snapshot phục vụ giao dịch thuộc Core. |
 | **Notification** | Nhận sự kiện sau commit để chuyển phát email vé; không quyết định vé đã phát hành hay thay Core xác minh giao dịch. |
+| **Dịch vụ mô hình AI ngoài (ACT-LLM)** | Agent Service gọi API với ngữ cảnh tối thiểu đã lọc theo C-01/BR-34; không bí mật/QR/PII/toàn hồ sơ. Quan hệ Q153/ADR-0028 cần hòa giải OPEN-12 trước routing. |
 | **Cổng thanh toán** | Xử lý giao dịch MoMo/VNPAY và cung cấp kết quả để Cinema Core xác minh/đối soát. |
 
 ---
@@ -106,7 +107,7 @@ sequenceDiagram
   - Hỗ trợ nút mở rộng "Xem toàn màn hình" khi người dùng cần không gian thao tác lớn hơn.
 - **CB-04 — Tóm tắt đơn hàng & Kích hoạt Hold**: Hiển thị chi tiết vé, rạp, phòng chiếu, tổng tiền và bộ đếm ngược thời gian giữ chỗ (Hold Countdown TTL 5 phút).
 - **CB-05 — Thanh toán bảo mật**: Hiển thị tùy chọn và thông tin/link thanh toán do adapter MoMo/VNPAY cung cấp; chỉ hiện QR khi operation thực tế hỗ trợ.
-- **CB-06 — Vé điện tử E-Ticket QR**: Chỉ hiển thị sau khi Cinema Core xác thực thanh toán thành công. Mã QR chứa payload JSON có chữ ký bảo mật xác thực tại cổng vào rạp.
+- **CB-06 — Vé điện tử E-Ticket QR**: Chỉ hiển thị sau xác minh Core đã xác nhận/phát hành, gồm nhánh 0đ hợp lệ không gọi cổng. QR/chữ ký theo hợp đồng Core; đổi ghế chưa chọn cách mã hóa/đổi QR.
 
 Sơ đồ trên chỉ minh họa luồng thành công. Callback lặp, kết quả chưa rõ hoặc thu tiền sau khi ghế
 được giải phóng phải theo B-06/R-03; AI không xác nhận từ redirect hay tự đổi ghế.
@@ -129,9 +130,24 @@ không suy lời gọi trong sơ đồ thành quyền đại diện khách khôn
 | Thanh toán và kết quả (CB-05–CB-06) | B-05–B-06 | Khách xác nhận; cổng/Core xác minh, xử lý lặp; client/AI kiểm tra phản hồi/chữ ký trước hiển thị vé. |
 | Tra cứu lịch sử/chi tiết đơn và vé | B-07 | Chỉ đúng chủ/quyền truy cập; không dùng vé mẫu thay dữ liệu chưa rõ. |
 | Bỏ hold chưa mua | B-08 | Xác nhận trạng thái Core, không hủy mù một khoản đã thu. |
+| Đổi ghế cùng suất | B-09 | Miễn phí, T−30 phút, cùng số lượng/loại, Sweetbox cả cặp, một lần/vé gốc; xác nhận cũ → mới, nguyên tử và giữ vé cũ khi lỗi. |
 | Gửi yêu cầu hủy một phần/toàn bộ | R-01 | Khách xác nhận ghế/cặp Sweetbox; tiếp nhận chưa phải duyệt hoặc hoàn tiền. |
 | Theo dõi yêu cầu/quyết định và hoàn tiền | R-04 | Phân biệt đã duyệt, đang xử lý và đã hoàn; AI không hứa ngày tiền về. |
 
 B-06 xử lý callback/đối soát do cổng cung cấp, không phải lệnh AI tự xác nhận thanh toán.
 R-02/R-03/R-06 là thẩm quyền/quá trình vận hành theo quyền, không được suy từ khả năng theo dõi trong chat.
 Các chính sách hủy, hoàn, phân bổ ưu đãi và sự cố vẫn tham chiếu OPEN hiện có.
+
+## Quy tắc bổ sung theo Q173 và phụ thuộc
+
+B-01/BR-18 dừng hold mới T−5 phút; B-05 chỉ khởi tạo trước T với hold còn hạn. Trước mua hiển thị
+rõ tuổi/giờ/giấy tờ và người đặt xác nhận cả nhóm. BR-20 giữ phân bổ ưu đãi đến đồng lúc mua;
+BR-21: đơn 0đ cần khách xác nhận và Core kiểm ưu đãi/hold/quyền ghế, không tạo giao dịch thu tiền giả.
+N-01/BR-33: hộp thông báo và email, tự thử lại giới hạn/gửi lại kiểm quyền/chống spam/trạng thái hiện hành;
+email lỗi không hủy vé. Q149 đã chọn chính sách, còn tham số và tích hợp Resend chưa kiểm chứng.
+Chat không tự xóa theo kỳ; khách chủ động xóa A-06, độc lập đơn/vé/hoàn. Các hành vi nghiệp vụ
+khác theo Q32–Q172, không lấy phần OPEN làm lý do hỏi lại lựa chọn đã chốt.
+
+Q153 chọn gián đoạn thì hướng màn hình trực tiếp và chưa tự đổi provider; ADR-0028 chọn Groq Free
+dự phòng inference cho Workers AI. OPEN-12 giữ quan hệ cần xác nhận trước khi triển khai tự fallback;
+chưa chọn thay người dùng hoặc phát lại toàn graph/giao dịch. Cấu hình và kiểm chứng runtime vẫn còn mở.

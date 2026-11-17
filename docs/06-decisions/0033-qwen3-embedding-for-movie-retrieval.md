@@ -56,9 +56,9 @@ rõ để kiểm soát instruction, quota và khả năng tái tạo vector. Mod
   đo relevance, latency p50/p95, neurons/query/index và tỷ lệ fallback. Benchmark upstream không
   thay kết quả của dự án; không âm thầm hạ quality gate nếu model không đạt.
 - Quyền bật/tắt và đặt lại cá nhân hóa được chọn tiếp tại
-  [BR-18](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất); retention, xử lý tín hiệu cũ,
+  [BR-40](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất); retention, xử lý tín hiệu cũ,
   profile formula, weights và công thức/ngưỡng ranking còn mở. Nguyên tắc thứ hạng đã chọn tiếp tại
-  [BR-20](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất): ưu tiên truy vấn, cá nhân hóa giữa các
+  [BR-42](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất): ưu tiên truy vấn, cá nhân hóa giữa các
   kết quả phù hợp tương đương, trang khám phá có thể cá nhân hóa mạnh hơn; giữ đúng bộ lọc.
   Core vẫn quyết định visibility/lịch/giá/ghế và giao dịch; vector không là bằng chứng còn ghế/vé.
 

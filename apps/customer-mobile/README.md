@@ -46,4 +46,5 @@ stack đã chọn ở trên, thư mục hiện chưa có code hoặc build Mobil
 
 Actor, mục tiêu và giới hạn theo [mô hình use case](../../docs/03-product/use-cases.md) và
 [mô tả use case](../../docs/03-product/use-case-descriptions.md). Tài liệu này không mở rộng sang
-Apple Pay/Google Pay hoặc soát ngoại tuyến; chính sách ngoại lệ không có QR vẫn giữ ở OPEN-06.
+Apple Pay/Google Pay hoặc soát ngoại tuyến. Xác minh khi thiếu QR đã chốt ở O-02/BR-09 và Q133/Q163;
+OPEN-06 giữ các phụ thuộc đặc tả/kiểm chứng, không mở đường bỏ xác minh.

@@ -55,7 +55,7 @@ và phục hồi tìm kiếm cơ bản khi embedding lỗi. Việc chọn encode
 - Cần kiểm native query/doc contract, vector count/dimension/finite values/norm, Unicode/batch limits,
   timeout/429, stale jobs/unpublish, cache isolation, lexical fallback và migration. Đánh giá relevance
   Việt/Anh cùng latency đầu cuối và tài nguyên/quota; chưa gọi API hoặc chạy Typesense để kiểm chứng.
-- Giữ nguyên nguyên tắc ranking tại BR-20 của mô hình sản phẩm; tách nơi tạo vector không tự chọn
+- Giữ nguyên nguyên tắc ranking tại BR-42 của mô hình sản phẩm; tách nơi tạo vector không tự chọn
   công thức xếp hạng, retention hoặc quyền thu thập thêm hành vi.
 
 ### Chi phí

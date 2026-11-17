@@ -27,7 +27,7 @@ không yêu cầu migrate hàng loạt. Chưa scaffold/cài package, chọn host
 ## Responsibilities
 
 - Danh mục phim/trailer, giá vé/ưu đãi, phòng và sơ đồ ghế riêng, lịch chiếu, cấp/thu hồi quyền,
-  báo cáo vận hành/doanh thu theo M-01–M-07 và phạm vi actor đã chốt.
+  báo cáo vận hành/doanh thu theo M-01–M-10 và phạm vi actor đã chốt.
 - Media M-01: upload/lưu poster, banner và ảnh; trailer dùng URL/video nhúng từ nguồn ngoài.
   Catalog giữ metadata/quyền xuất bản; R2 Standard giữ ảnh gốc, Cloudflare Images xử lý ảnh theo
   [ADR-0019](../../docs/06-decisions/0019-r2-and-cloudflare-images-for-catalog-media.md);
@@ -40,3 +40,10 @@ không yêu cầu migrate hàng loạt. Chưa scaffold/cài package, chọn host
 [mô tả use case](../../docs/03-product/use-case-descriptions.md) sở hữu điều kiện và ngoại lệ.
 Quyền quản lý danh mục/giá combo, cách xử lý hoàn và chỉ số báo cáo còn theo OPEN-01–OPEN-10;
 không coi dữ liệu mẫu hay vai trò “movie distributor” là yêu cầu được duyệt.
+
+## Bổ sung nghiệp vụ theo Q173
+
+M-08/M-09/M-10 quản lý danh mục combo/cung cấp tại rạp/chính sách hội viên; R-08 hồ sơ lỗi dịch vụ,
+O-06/O-07 vận hành nhận khách/sự cố combo; L-07/L-08 xét lại đánh giá, L-09/L-10 sửa sai quyền lợi,
+A-08 ngoại lệ xóa dữ liệu theo đúng vai trò. L-06/N-01 sở hữu hộp thông báo/chuyển phát theo quyền.
+Chính sách đã chọn theo mô hình; không dùng OPEN để mở lại quyền combo/hoàn/báo cáo đã chốt.

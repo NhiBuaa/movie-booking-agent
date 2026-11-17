@@ -16,10 +16,10 @@ Chỉ đọc/ghi ghi chú này; không cài, chạy benchmark/inference, tạo t
 Đã xác nhận tín hiệu: sở thích khai báo, yêu thích, đánh giá, mua vé **đã xác nhận**, cùng detail views/click/search history;
 không tự lấy toàn bộ hội thoại Agent. Guest chỉ theo phiên; tài khoản có hồ sơ lâu dài/xuyên thiết bị.
 Người mới được khám phá ngay theo danh mục/ngữ cảnh rồi học dần, không bắt onboarding chọn sở thích.
-Quyền bật/tắt và đặt lại dữ liệu đã học được chọn tiếp tại BR-18; BR-19 chọn không nhập hành vi guest
+Quyền bật/tắt và đặt lại dữ liệu đã học được chọn tiếp tại BR-40; BR-41 chọn không nhập hành vi guest
 khi login, giữ hồ sơ tài khoản và học tiếp sau đăng nhập khi cá nhân hóa được bật; xem
 [mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
-BR-20 chọn tìm kiếm ưu tiên truy vấn/tên chính xác, cá nhân hóa giữa các kết quả phù hợp tương đương;
+BR-42 chọn tìm kiếm ưu tiên truy vấn/tên chính xác, cá nhân hóa giữa các kết quả phù hợp tương đương;
 trang khám phá có thể cá nhân hóa mạnh hơn, vẫn giữ bộ lọc.
 Retention, thời hạn phiên khách, xử lý tín hiệu cũ khi đặt lại/bật lại và công thức/ngưỡng thứ hạng còn mở.
 Các mục phân tích phía dưới giữ bối cảnh nghiên cứu trước những quyết định này.
@@ -93,7 +93,7 @@ Do đó cần thử trường tiếng Việt có dấu và trường folded phù
 [Typesense locale guide](https://typesense.org/docs/guide/locale.html).
 Test tên chính xác/alias, prefix ngắn, lỗi gõ/đảo chữ, không dấu, `d/đ`, emoji/punctuation và tên nhiều ngôn ngữ.
 Ví dụ đánh giá: “Đất rừng phương Nam”/“dat rung phuong nam”, “phim du hành thời gian nhẹ nhàng”, tên sequel số tương tự.
-Đề xuất ưu tiên exact-title sau đó được chốt tại BR-20: truy vấn/tên/alias chính xác đứng trước,
+Đề xuất ưu tiên exact-title sau đó được chốt tại BR-42: truy vấn/tên/alias chính xác đứng trước,
 cá nhân hóa giữa kết quả phù hợp tương đương; công thức/ngưỡng tương đương vẫn cần đặc tả.
 Không dùng semantic similarity để bịa metadata/độ tuổi hoặc tự nới cinema/date/time mà khách đã chọn.
 
@@ -124,7 +124,7 @@ Có thể bắt đầu content/feature-based reranking theo hồ sơ đã xác n
 Guest theo phiên; account lâu dài/xuyên thiết bị; cold start catalogue/context, không tự thêm onboarding sở thích.
 Mỗi user có profile/context khác không bảo đảm mọi lần ra danh sách khác; cần tiêu chí chất lượng/diversity thay “có vector”.
 Cache key phải bao gồm scope identity/context/filter phù hợp; không dùng cache cá nhân A trả cho B.
-BR-18/19 đã chọn bật/tắt/reset và không nhập guest history khi login; không thêm xem/xóa từng tương tác ở bản đầu.
+BR-40/19 đã chọn bật/tắt/reset và không nhập guest history khi login; không thêm xem/xóa từng tương tác ở bản đầu.
 Retention, thời hạn phiên và xử lý dữ liệu cũ khi reset/bật lại giữ OPEN-11; note không tự đặt quyền mới.
 Quy tắc xóa phải lan tới raw events/profile/vector/index/cache khi áp dụng; không tự nhập chat hoặc gửi lịch sử mua thô ra model ngoài.
 Freetext search có thể chứa dữ liệu cá nhân: provider/data-sharing cho query embedding cần xem xét khi chọn model và chính sách.

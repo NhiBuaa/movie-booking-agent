@@ -23,7 +23,7 @@ Module Search nhận nguồn qua hợp đồng/API/sự kiện, không SQL chéo
 Portfolio chưa có bằng chứng dữ liệu tương tác người thật đủ độ phủ để học quan hệ cộng đồng.
 Cần cá nhân hóa từng người và xử lý người/phim mới, không phụ thuộc số đông đã tương tác.
 
-Các quyết định nguồn tín hiệu, nhận diện và người mới được sở hữu bởi BR-21 của
+Các quyết định nguồn tín hiệu, nhận diện và người mới được sở hữu bởi BR-43 của
 [mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất): chủ động khai báo/yêu thích/đánh giá/
 mua đã xác nhận cộng detail views/click/search; guest theo phiên, account lâu dài đa thiết bị;
 khám phá ngay, không hỏi sở thích ban đầu. Không tự nhập toàn bộ hội thoại Agent.
@@ -61,14 +61,14 @@ khám phá ngay, không hỏi sở thích ban đầu. Không tự nhập toàn b
   Mô hình sản phẩm đã ghi các quyết định nguồn tín hiệu/nhận diện/kiểm soát/thứ hạng;
   luồng chi tiết/contracts cần đặc tả trước triển khai. Chưa chọn giao diện,
   profile centroid/công thức, weights/decay, dimensions thực tế hoặc thư viện ML.
-  Mức can thiệp thứ hạng được chọn tiếp tại [BR-20](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất):
+  Mức can thiệp thứ hạng được chọn tiếp tại [BR-42](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất):
   ưu tiên truy vấn và tên/alias chính xác, cá nhân hóa giữa kết quả phù hợp tương đương;
   trang khám phá có thể cá nhân hóa mạnh hơn, vẫn giữ bộ lọc. Ngưỡng tương đương chưa được chốt.
 - Quyền bật/tắt học và dùng hồ sơ, đặt lại dữ liệu đã học được chọn tiếp tại
-  [BR-18 của mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất);
+  [BR-40 của mô hình sản phẩm](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất);
   chưa thêm xem/xóa từng tương tác ở bản đầu. Retention raw/derived, xử lý tín hiệu cũ khi đặt lại/bật lại,
   thời hạn phiên guest còn mở. Việc chuyển phiên đã chọn tại
-  [BR-19](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất): không nhập hành vi guest khi login;
+  [BR-41](../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất): không nhập hành vi guest khi login;
   giữ hồ sơ tài khoản và học tiếp sau đăng nhập khi cá nhân hóa được bật.
   Không dùng phương pháp này làm quyền tracking/mở rộng dữ liệu; xóa profile cần xét cache/
   vector/replay để không tái tạo dữ liệu đã xóa, không tự xóa chứng từ giao dịch.

@@ -120,3 +120,10 @@ email có mã nhạy cảm dùng Claim Check qua luồng riêng theo thiết k�
 [CONTEXT](../../CONTEXT.md) và [đối chiếu hiện trạng](../../docs/03-product/use-cases.md#7-hiện-trạng-và-chênh-lệch-so-với-mục-tiêu)
 phân biệt scaffold/BFF mô phỏng với yêu cầu mục tiêu. Hợp đồng hiện tại chưa đủ cho toàn bộ
 quyền theo ghế và vai trò vận hành; cần đặc tả/kiểm thử tiếp, giữ nguyên OPEN liên quan.
+
+## Bổ sung nghiệp vụ theo Q173
+
+B-09/BR-19 đổi ghế cùng suất nguyên tử, giữ quyền cũ khi lỗi. BR-21 xác nhận đơn 0đ hợp lệ không gọi
+cổng thu tiền giả. BR-20…BR-29 giữ phân bổ thực trả, quyền combo/voucher, điều kiện hủy/hoàn, hạng/điểm
+và sửa sai; chọn công nghệ không chứng minh khả năng merchant với khoản nhỏ/thu thêm/nhiều lần hoàn.
+A-06…A-08/BR-37…BR-39 bảo toàn quyền đơn cũ/nghĩa vụ hoàn khi xóa tài khoản, bảng lưu/xóa vẫn chưa hoàn tất.
