@@ -38,7 +38,7 @@ hoặc thiết kế chung; ranh giới bốn app theo [ADR-0002](06-decisions/00
 ## `04-standards/`
 
 Normative engineering and modeling rules shared by humans and agents, including
-[use case modeling](04-standards/use-case-modeling.md) and UI quality (`ui-quality.md`).
+[use case modeling](04-standards/use-case-modeling.md), [chuẩn chất lượng UI](04-standards/ui-quality.md) và [chuẩn thiết kế chuyển động](04-standards/motion-design.md).
 
 Agent-only working rules belong under `.agents/rules/`, not here.
 

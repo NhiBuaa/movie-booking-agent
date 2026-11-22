@@ -156,8 +156,8 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   và [đặc tả nghiệp vụ](docs/05-specs/domain-context.md).
 - [Kiến trúc microservices](docs/05-specs/004-service-decomposition/spec.md) và
   [nguồn chấp thuận/lý do](docs/05-specs/004-service-decomposition/decisions.md).
-- [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md)
-  và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
+- [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md),
+  [chuẩn chuyển động](docs/04-standards/motion-design.md) và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
 - [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live
   và CodeGraph theo worktree. Cài công cụ/có index không xác nhận code hoặc giao dịch đã vận hành.
 - Quản lý công việc và bằng chứng kiểm chứng: GitHub Issues/PRs.
