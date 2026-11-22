@@ -1,7 +1,7 @@
 ﻿---
 name: movie-booking-design-system
-version: 1.0.0
-description: "Production-grade design system for Movie Booking Platform based on Ferrari Dark Cinema style."
+version: 2.0.0
+description: "Production-grade design system for Movie Booking Platform based on Ferrari Dark Cinema — Cinematic Kinetic Editorial direction."
 
 colors:
   primary: "#da291c"
@@ -15,380 +15,249 @@ colors:
   semantic-warning: "#d97706"
   semantic-danger: "#da291c"
 ---
-# Ferrari â€” Style Reference
-> cavallino rampante on black marble. Black voids punctuated by singular Ferrari red, white uppercase tracking, and full-bleed cinematic photography.
-
-**Theme:** dark
-
-Source measurements are normalized; roles and recommendations are interpreted. Font summary lists are independent, not paired by position. HTML examples are reconstructions, not source components.
-
-Ferrari.com speaks in a restrained editorial whisper over cinematic darkness: a predominantly black canvas broken by full-bleed photography and a single signal red that interrupts only when something demands attention. Typography is set in uppercase with wide tracking, small sizes, and tight weights â€” the type behaves as captions and labels, never as decoration. Layout favors negative space, centered compositions, and vertical scrolling over chrome â€” the cars and content breathe in full-viewport panels while navigation sits flat and borderless, signaled by color shifts rather than rules. Every element is reduced to its essential geometry: square corners, hairline dividers, flat surfaces, no rounded buttons.
-
-## Tokens â€” Colors
-
-| Name | Value | Token | Role |
-|------|-------|-------|------|
-| Rosso Corsa | `#da291c` | `--color-rosso-corsa` | Supporting palette color for small decorative accents when the core palette needs contrast. Do not promote it to the primary CTA color |
-| Rosso Scuro | `#9d2211` | `--color-rosso-scuro` | Supporting palette color for small decorative accents when the core palette needs contrast. Do not promote it to the primary CTA color |
-| Bianco Ferrari | `#ffffff` | `--color-bianco-ferrari` | Canvas, primary text on dark surfaces, iconography, and link color â€” the dominant tone across the entire interface |
-| Carbone Nero | `#000000` | `--color-carbone-nero` | Full-bleed dark backgrounds, hero panels, and overlay surfaces â€” creates the cinematic void behind photography |
-| Notte Profonda | `#181818` | `--color-notte-profonda` | Footer and secondary dark surfaces â€” one step softer than pure black to break the infinite void |
-| Grafite | `#303030` | `--color-grafite` | Borders, dividers, and muted surface treatments â€” thin structural separation between dark layers |
-| Fumo | `#8f8f8f` | `--color-fumo` | Muted body text, caption labels, and secondary metadata on light surfaces |
-| Piombo | `#666666` | `--color-piombo` | Supporting body text and quieter label treatments |
-| Argento Chiaro | `#d2d2d2` | `--color-argento-chiaro` | Light surface dividers and disabled borders on white backgrounds |
-| Velo di Luce | `#f7f7f7` | `--color-velo-di-luce` | Lightest surface wash â€” subtle background tonal shifts on white sections |
-| Cemento | `#ebebeb` | `--color-cemento` | Section backgrounds on light areas â€” the only chromatic step in the white canvas |
-
-### Semantic Functional Tokens (Tráº¡ng thÃ¡i giao dá»‹ch & Pháº£n há»“i há»‡ thá»‘ng)
-
-> [!NOTE]
-> Ãp dá»¥ng cho cÃ¡c pháº£n há»“i giao dá»‹ch vÃ  tráº¡ng thÃ¡i nghiá»‡p vá»¥ (Success, Warning, Error) theo quyáº¿t Ä‘á»‹nh ngÃ y 08/11/2026. KhÃ´ng dÃ¹ng lÃ m mÃ u thÆ°Æ¡ng hiá»‡u hoáº·c mÃ u ná»n card/CTA chÃ­nh.
-
-| Name | Value | Token | Role |
-|------|-------|-------|------|
-| Verde Semantic | `#2e7d5b` | `--color-success` | Muted Emerald â€” dÃ¹ng cho biá»ƒu tÆ°á»£ng xÃ¡c nháº­n thÃ nh cÃ´ng (`circle-check`), nhÃ£n `CONFIRMED`/`ISSUED` vÃ  cá»™t má»‘c hoÃ n táº¥t |
-| Verde Profondo | `#0d281e` | `--color-success-bg` | Ná»n wash tá»‘i cÃ³ Ä‘á»™ chÃ¬m cao cho badge tráº¡ng thÃ¡i thÃ nh cÃ´ng |
-| Ambra Avviso | `#d97706` | `--color-warning` | Cáº£nh bÃ¡o thá»i gian giá»¯ vÃ© sáº¯p háº¿t háº¡n (Hold countdown), chÃº Ã½ giao dá»‹ch |
-| Rosso Corsa | `#da291c` | `--color-error` | Tháº¥t báº¡i thanh toÃ¡n (Payment Failed), lá»—i há»‡ thá»‘ng, thao tÃ¡c há»§y vÃ© |
 
-## Tokens â€” Typography
-
-### Body-Font â€” Body-Font â€” detected in extracted data but not described by AI Â· `--font-body-font`
-- **Weights:** 400
-- **Sizes:** 9px, 11px, 12px, 13px
-- **Line height:** 1.27, 1.5, 1.78, 2
-- **Letter spacing:** 0.015, 0.022, 0.028, 0.083, 0.091
-- **Role:** Body-Font â€” detected in extracted data but not described by AI
-
-### FerrariSans â€” Primary display and interface typeface â€” custom sans used across all copy Â· `--font-ferrarisans`
-- **Substitute:** Inter, Helvetica Neue, Arial Narrow
-- **Weights:** 400-500
-- **Sizes:**
-- **Line height:** 1.27-2.0
-- **Letter spacing:** 0.005em to 0.091em depending on size â€” tracking widens as type shrinks
-- **OpenType features:** `"ss01" on`
-- **Role:** Primary display and interface typeface â€” custom sans used across all copy
-
-### Type Scale
-
-| Role | Family | Weight | Size | Line Height | Letter Spacing | Token |
-|------|--------|--------|------|-------------|----------------|-------|
-| caption | â€” | â€” | 11px | 1.78 | â€” | `--text-caption` |
-| body-sm | â€” | â€” | 12px | 1.78 | â€” | `--text-body-sm` |
-| body | â€” | â€” | 13px | 1.78 | â€” | `--text-body` |
-
-## Tokens â€” Spacing & Shapes
-
-**Density:** comfortable
-
-### Spacing Scale
-
-| Name | Value | Token |
-|------|-------|-------|
-| 4 | 4px | `--spacing-4` |
-| 5 | 5px | `--spacing-5` |
-| 6 | 6px | `--spacing-6` |
-| 10 | 10px | `--spacing-10` |
-| 15 | 15px | `--spacing-15` |
-| 16 | 16px | `--spacing-16` |
-| 20 | 20px | `--spacing-20` |
-| 24 | 24px | `--spacing-24` |
-| 25 | 25px | `--spacing-25` |
-| 30 | 30px | `--spacing-30` |
-| 32 | 32px | `--spacing-32` |
-| 44 | 44px | `--spacing-44` |
-| 50 | 50px | `--spacing-50` |
-| 54 | 54px | `--spacing-54` |
-| 60 | 60px | `--spacing-60` |
-| 123 | 123px | `--spacing-123` |
-
-### Border Radius
-
-| Element | Value |
-|---------|-------|
-| full | 9999px |
-| tags | 0px |
-| cards | 0px |
-| buttons | 0px |
-
-### Layout
-
-- **Page max-width:** 1440px
-- **Section gap:** 64-96px
-- **Card padding:** 24-32px
-- **Element gap:** 10-16px
-
-## Components
-
-### Ghost Navigation Link
-**Role:** Primary nav element
-
-Transparent background, white uppercase text at 11-12px with 0.083-0.091em tracking, zero border-radius, 5px vertical padding. No fill, no border â€” relies on color shift to white on hover. The nav itself is a flat bar without background, floating over hero imagery.
-
-### Dark Cinematic Hero Panel
-**Role:** Full-viewport section
-
-Full-bleed #000000 or #181818 background with centered or overlaid display type at 16px weight 500. Display headlines rendered in uppercase, tightly tracked, centered. Car photography fills the viewport edge-to-edge with no padding or frame â€” the image IS the layout.
-
-### Section Label Button
-**Role:** Categorical navigation chip
-
-Transparent background, white uppercase 12px Body-Font with 0.083em tracking, 5px vertical padding, 0px radius, 1px bottom border that appears on hover. No fill, no rounded corners â€” text-only with underline state.
-
-### Carousel Indicator Dot
-**Role:** Scroll position indicator
-
-8-10px circles at 0px radius, inactive state #8f8f8f, active state #ffffff or #da291c. No labels â€” purely geometric position markers below full-bleed hero panels.
-
-### Footer Block
-**Role:** Site footer
-
-#181818 background extending edge-to-edge, white text at 11-12px uppercase with wide tracking, no borders between columns â€” only vertical white space separates groups. Social icons are white outlined, 16px square, no fill.
-
-### Featured Content Card
-**Role:** Editorial card
-
-Flat rectangular block on #181818 or #000000 background, 0px corner radius, no shadow, no border. Headline set in 16px weight 500 uppercase FerrariSans with tight tracking. Body copy at 11-13px. Photography bleeds to card edges with no inset.
-
-### Utility Icon Button
-**Role:** Functional icon control
-
-Search and close icons rendered as white SVG strokes at 16px, transparent background, 0px radius. No background fill, no border â€” icon alone signals function. 10px padding all sides.
-
-### Category Pill (Full Radius)
-**Role:** Filter or tag label
-
-The single rounded element in the system: 9999px radius pill for filter tags or status labels on body copy contexts. Transparent background with 1px hairline white border, uppercase 9-11px text.
-
-### Hairline Divider
-**Role:** Structural separator
-
-1px solid line in #303030 on dark surfaces or #d2d2d2 on light surfaces. No double rules, no decorative spacing â€” minimal structural geometry between content blocks.
-
-### Full-Bleed Photography Frame
-**Role:** Imagery container
-
-Edge-to-edge image presentation with 0px radius, no padding, no border, no caption overlay chrome. The image speaks for itself against the black void.
-
-### Body Text Link
-**Role:** Inline text link
-
-White #ffffff text with no underline by default, uppercase tracking matching surrounding copy. Color shifts to #da291c on hover â€” the only chromatic moment in body copy.
-
-### CTA Arrow Link
-**Role:** Action prompt with directional indicator
-
-Uppercase 11-12px text in white with a right-pointing arrow (â†’) glyph appended. Transparent background, no border, no radius. The arrow IS the affordance â€” no button chrome surrounds the action.
-
-## Do's and Don'ts
-
-### Do
-- Set all display copy in uppercase with tracking between 0.083em and 0.091em â€” the wide letter-spacing is the system's voice
-- Use #000000 and #181818 as full-bleed section backgrounds; let photography and white type carry the visual weight without competing surfaces
-- Use #da291c exclusively for interactive hover, focus, and active states â€” never as a background fill, never as decorative color
-- Keep all corner radii at 0px except for the single 9999px pill â€” sharp geometry is the signature
-- Set type at 11-13px for all interface copy; reserve 16px only for section titles and hero headlines
-- Let images bleed to viewport edges with no padding, frames, or rounding â€” the photograph is the layout
-- Use hairline 1px #303030 or #d2d2d2 dividers for structural separation â€” never card shadows or elevated panels
-
-### Don't
-- Do not introduce rounded corners on buttons, cards, or panels â€” the system is zero-radius by design
-- Do not use #da291c as a filled background or decorative wash â€” it signals action only
-- Do not set body copy below 11px without uppercase treatment; the tracking depends on the size relationship
-- Do not add card shadows, elevation, or floating panels â€” surfaces sit flush on the black void
-- Do not use colored type for anything other than #ffffff, #8f8f8f, or #da291c hover states
-- Do not introduce gradients as backgrounds â€” the CSS tokens define gradient behavior for specific component states, not page-level decoration
-- Do not add padding or margins around full-bleed hero photography â€” the image must reach every edge
-
-## Surfaces
-
-| Level | Name | Value | Purpose |
-|-------|------|-------|---------|
-| 0 | Void Black | `#000000` | Full-bleed hero panels and cinematic section backgrounds |
-| 1 | Night Surface | `#181818` | Footer and secondary dark surfaces â€” one tonal step softer than void |
-| 2 | Graphite Edge | `#303030` | Hairline borders and subtle dividers on dark surfaces |
-| 3 | Canvas White | `#ffffff` | Light section backgrounds and primary text color |
-| 4 | Smoke Wash | `#f7f7f7` | Tonal shifts on white sections â€” almost imperceptible warmth |
-| 5 | Concrete | `#ebebeb` | Lightest background step for alternating sections |
-
-## Imagery
-
-Imagery is full-bleed cinematic photography: vehicles shot against dark or studio environments, filling the viewport edge-to-edge with no inset, frame, or rounding. Photography occupies 70-90% of each viewport section. No lifestyle context, no people-centric shots â€” the car is always the subject, isolated and hero-prominent. Color treatment is high-contrast with deep shadows and vivid reds or metallic paint catching light. No illustrations, no abstract graphics, no product screenshots â€” pure photographic storytelling. Iconography is minimal white outlined SVG at 16px stroke weight, used only for functional navigation (search, social, close).
-
-## Layout
-
-Full-bleed vertical scroll with no max-width constraint â€” sections extend edge-to-edge at 100vw. Each viewport-height section is either a full-bleed photograph with centered white type overlay or a dark void with minimal copy. Hero pattern: first screen is a cinematic car photograph with a centered headline beneath or overlaid, followed by vertically scrolling full-bleed panels. Navigation sits as a flat transparent bar over the hero â€” no sticky background, no border. Content rhythm alternates between massive image-driven panels and quiet dark sections with centered uppercase typography. No sidebar, no multi-column grids in the fold â€” composition is single-column and centered throughout. Card grids appear only in secondary content areas (collections, editorial) and remain flat with 0px radius against dark backgrounds. Section transitions are seamless â€” no dividers, no alternating color bands â€” only the photography itself marks the shift.
-
-## Agent Prompt Guide
-
-Quick Color Reference:
-- text: #ffffff (primary), #8f8f8f (muted), #da291c (interactive hover)
-- background: #000000 (hero void), #181818 (footer/secondary), #ffffff (light sections)
-- border: #303030 (dark hairlines), #d2d2d2 (light hairlines)
-- accent: #da291c (Rosso Corsa â€” hover, focus, active states only)
-- primary action: no distinct CTA color
-
-3-5 Example Component Prompts:
-
-1. Full-bleed hero section: #000000 background extending 100vw. Centered headline at 16px FerrariSans weight 500, uppercase, #ffffff, letter-spacing 0.005em. Body subtitle at 13px weight 400, #8f8f8f, uppercase, letter-spacing 0.015em. Photography fills the viewport with 0px radius and no inset. Zero padding around the image.
-
-2. Ghost navigation link: transparent background, 12px Body-Font weight 400, uppercase, #ffffff, letter-spacing 0.083em, 5px vertical padding, 0px border-radius. On hover, color shifts to #da291c. No fill, no border, no underline.
-
-3. Editorial content card: #181818 background, 0px border-radius, no shadow, no border. Headline at 16px FerrariSans weight 500, uppercase, #ffffff, letter-spacing 0.005em. Body at 11px weight 400, #ffffff, uppercase, letter-spacing 0.091em. Image bleeds to card edges with no padding or rounding.
-
-No distinct primary action color was observed; use the extracted neutral button treatments instead of inventing a filled CTA color.
-
-5. Footer block: #181818 background, full-width. Column headers at 12px uppercase #ffffff letter-spacing 0.083em. Link list at 11px uppercase #ffffff letter-spacing 0.091em. 1px #303030 top border. Social icons at 16px white outlined SVG, transparent background.
-
-## Typography Philosophy
-
-The entire type system speaks in a whisper: uppercase, widely tracked, and small. There is no display-weight shouting â€” the maximum weight is 500 at 16px. Letter-spacing widens inversely with size: 16px headings get 0.005em tracking while 9px micro-copy gets 0.091em. This inverted tracking-size relationship is the signature â€” type never crowds itself, even at its smallest. All text is uppercase in interface contexts (nav, buttons, links, labels) while body paragraphs may use mixed case at 13px. The custom FerrariSans family handles this gracefully with proportions designed for tight tracking at display sizes and generous breathing at caption sizes. Font-feature-settings 'ss01' should be enabled for alternate glyph forms that define the brand voice.
-
-## Elevation Philosophy
-
-Ferrari.com uses zero elevation. No box-shadows on cards, buttons, or panels â€” the CSS shadow token (--f-shadow-small) exists for utility but is not applied to core interface elements. Depth is achieved exclusively through: (1) tonal layering of the four-step dark surface stack (#000000 â†’ #181818 â†’ #303030 â†’ #ffffff), (2) full-bleed photography that creates visual depth without UI chrome, and (3) generous negative space that lets dark sections feel cavernous rather than flat. This flat-on-black approach is deliberate: the products (cars) are the three-dimensional elements; the interface recedes.
-
-## Similar Brands
-
-- **Aston Martin** â€” Same dark cinematic full-bleed photography approach with centered uppercase tracked typography and a single restrained accent color
-- **Porsche** â€” Black-dominant editorial layout with sharp 0px geometry, hairline dividers, and photography that bleeds to viewport edges
-- **Lamborghini** â€” Dark void backgrounds with full-bleed vehicle photography, uppercase tracked display type, and zero-radius sharp UI elements
-- **McLaren** â€” Monochromatic dark UI with cinematic hero panels, minimal navigation chrome, and uppercase widely-tracked micro-copy as the typographic voice
-- **Bugatti** â€” Full-bleed dark editorial sections with centered white display type and a single brand color used only for interactive states
-
-## Quick Start
-
-### CSS Custom Properties
-
-```css
-:root {
-  /* Colors */
-  --color-rosso-corsa: #da291c;
-  --color-rosso-scuro: #9d2211;
-  --color-bianco-ferrari: #ffffff;
-  --color-carbone-nero: #000000;
-  --color-notte-profonda: #181818;
-  --color-grafite: #303030;
-  --color-fumo: #8f8f8f;
-  --color-piombo: #666666;
-  --color-argento-chiaro: #d2d2d2;
-  --color-velo-di-luce: #f7f7f7;
-  --color-cemento: #ebebeb;
-
-  /* Typography â€” Font Families */
-  --font-body-font: 'Body-Font', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-ferrarisans: 'FerrariSans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  /* Typography â€” Scale */
-  --text-caption: 11px;
-  --leading-caption: 1.78;
-  --text-body-sm: 12px;
-  --leading-body-sm: 1.78;
-  --text-body: 13px;
-  --leading-body: 1.78;
-
-  /* Typography â€” Weights */
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-
-  /* Spacing */
-  --spacing-4: 4px;
-  --spacing-5: 5px;
-  --spacing-6: 6px;
-  --spacing-10: 10px;
-  --spacing-15: 15px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-25: 25px;
-  --spacing-30: 30px;
-  --spacing-32: 32px;
-  --spacing-44: 44px;
-  --spacing-50: 50px;
-  --spacing-54: 54px;
-  --spacing-60: 60px;
-  --spacing-123: 123px;
-
-  /* Layout */
-  --page-max-width: 1440px;
-  --section-gap: 64-96px;
-  --card-padding: 24-32px;
-  --element-gap: 10-16px;
-
-  /* Border Radius */
-  --radius-full: 9999px;
-
-  /* Named Radii */
-  --radius-full: 9999px;
-  --radius-tags: 0px;
-  --radius-cards: 0px;
-  --radius-buttons: 0px;
-
-  /* Surfaces */
-  --surface-void-black: #000000;
-  --surface-night-surface: #181818;
-  --surface-graphite-edge: #303030;
-  --surface-canvas-white: #ffffff;
-  --surface-smoke-wash: #f7f7f7;
-  --surface-concrete: #ebebeb;
-}
+# Movie Booking Platform — Design System & Visual Authority
+
+> **Design Statement:**  
+> *"A premium cinematic booking experience that combines editorial minimalism, spatial choreography, immersive storytelling and intentional motion. Every visual element should feel purposefully directed, while transactional interactions remain clear, accessible and reliable."*
+
+**Định hướng thẩm mỹ:** **CINEMATIC KINETIC EDITORIAL (Motion-Led Cinema Experience)**  
+**Nền tảng nhận diện:** **Ferrari Dark Cinema**  
+**Quyền sở hữu (Canonical Owner):** Tệp tài liệu này là nguồn thẩm quyền tối cao (Single Source of Truth) về bản sắc thị giác, bảng màu, thang đo kiểu chữ, hình học và quy chuẩn bố cục cho toàn bộ hệ sinh thái Movie Booking Platform, bao gồm bốn ứng dụng Customer Web, Customer Mobile, Organizer Web và Organizer Mobile theo [ADR-0002](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
+
+---
+
+## 1. Bản Sắc Cốt Lõi (Core Aesthetic DNA & Personality)
+
+### 1.1 7 Trụ Cột Thẩm Mỹ (Core Aesthetic DNA)
+1. **Editorial Minimalism (Tối giản Biên tập):** Typography có phân cấp mạnh mẽ, khoảng trắng âm tính (negative space) rộng lớn, bố cục giàu tính tạp chí điện ảnh sang trọng.
+2. **Cinematic Storytelling (Kể chuyện Điện ảnh):** Hình ảnh poster, trailer và nội dung được tổ chức thành các phân cảnh (scenes) có nhịp điệu, dẫn dắt cảm xúc người xem từ tò mò đến hào hứng đặt vé.
+3. **Kinetic Typography (Chữ Chuyển động):** Chữ không chỉ là khối văn bản tĩnh mà tham gia trực tiếp vào nhịp điệu thị giác với các hiệu ứng hé lộ dòng (staggered reveal) dứt khoát.
+4. **Spatial Choreography (Dàn dựng Không gian):** Các phần tử nội dung di chuyển và biến đổi vị trí trong không gian tọa độ có chủ đích, tạo sự liền mạch thị giác qua các bước duyệt phim.
+5. **Premium Product Showcase (Tôn vinh Sản phẩm Điện ảnh):** Poster phim, khung hình tĩnh (still frame), phòng chiếu cao cấp và chiếc vé điện tử QR được đặt vào vị trí tâm điểm tuyệt đối của bố cục.
+6. **Layered Minimalism (Tối giản Đa tầng):** Giao diện phẳng, tinh giản nhưng sở hữu chiều sâu quang học thông qua xếp tầng tông màu tối (#000000 -> #181818 -> #303030) và các đường viền hairline 1px, tuyệt đối không dùng bóng đổ giả (no drop-shadows).
+7. **Purposeful Micro-interactions (Tương tác Vi mô Có chủ đích):** Mọi thao tác chạm, hover, bấm chọn ghế hay thanh toán đều mang phản hồi cơ học tức thời, sắc bén và tin cậy.
+
+### 1.2 Tính Cách Thương Hiệu (Personality)
+- **Premium, không phô trương:** Sang trọng, đĩnh đạc, thể hiện đẳng cấp qua tỷ lệ và khoảng trắng thay vì chi tiết trang trí rườm rà.
+- **Cinematic, không lạm dụng hiệu ứng:** Mọi chuyển động mang nhịp thở của một bộ phim điện ảnh kinh điển; không có chuyển động thừa.
+- **Expressive nhưng có kiểm soát:** Sống động ở các trang khám phá (Discovery/Hero), nhưng lập tức thu gọn nghiêm cẩn khi bước vào luồng giao dịch.
+- **Sharp thay vì soft/rounded:** Duy trì triệt để hình học góc nhọn `0px border-radius` làm nhận diện cốt lõi; cấm bo tròn mềm yếu làm mất chất điện ảnh.
+- **Immersive nhưng không gây rối:** Đắm chìm trong hình ảnh nhưng cấu trúc phân cấp thông tin luôn sáng rõ, dễ đọc.
+- **Art-directed, không giống generic SaaS:** Mang dấu ấn dàn dựng mỹ thuật độc bản, tách biệt hoàn toàn khỏi các mẫu dashboard hành chính cứng nhắc.
+- **Dynamic nhưng ổn định trong giao dịch:** Chuyển động dẫn dắt cảm xúc, nhưng các luồng chọn ghế, đếm ngược giữ vé và thanh toán luôn tĩnh tại, minh bạch, chính xác tuyệt đối.
+
+### 1.3 Quy Tắc Nghiêm Cấm Tuyệt Đối (Anti-Slop & Anti-Gimmick Rules)
+- ❌ **CẤM** phong cách AI-generated generic: Không dùng ảnh minh họa 3D cartoon, không dùng các khối shape trôi nổi vô nghĩa.
+- ❌ **CẤM** bố cục SaaS rập khuôn: Không áp dụng máy móc lưới dashboard nhiều cột vụn vặt cho các trang trải nghiệm phim.
+- ❌ **CẤM** lưới card lặp lại vô hồn: Lưới phim phải có nhịp điệu biên tập (xen kẽ card lớn tiêu điểm, ô mosaic hoặc dải ngang).
+- ❌ **CẤM** dải màu gradient tím/xanh: Chỉ sử dụng các tông màu đơn sắc đen, xám, trắng và đỏ Rosso Corsa.
+- ❌ **CẤM** hiệu ứng kính mờ đại trà (generic glassmorphism) và viền phát sáng neon/cyberpunk lòe loẹt.
+- ❌ **CẤM** cướp quyền cuộn chuột (Scroll Hijacking) và các hiệu ứng parallax quá đà gây say chuyển động.
+- ❌ **CẤM** chữ quá nhỏ (<11px) trên các màn hình thanh toán, chọn ghế hoặc thông tin vé.
+- ❌ **CẤM** hy sinh khả năng tiếp cận (Accessibility WCAG AA) và độ tương phản chữ chỉ để lấy hiệu ứng thị giác.
+
+---
+
+## 2. Bảng Màu Chuẩn (Color System & Tokens)
+
+Hệ thống màu sắc kế thừa nguyên vẹn bản sắc **Ferrari Dark Cinema** với nền đen Carbone Nero chủ đạo và sắc đỏ Rosso Corsa làm điểm ngắt thị giác:
+
+### 2.1 Bảng Màu Nhận Diện & Bề Mặt
+
+| Tên màu | Giá trị Hex | Token CSS | Vai trò trong hệ sinh thái |
+|---|---|---|---|
+| **Rosso Corsa** | `#da291c` | `--color-rosso-corsa` | Màu đỏ tín hiệu biểu tượng. Dùng cho trạng thái Hover, Focus visible, Active của nút CTA, ghế đang chọn, hoặc viền tiêu điểm. **Tuyệt đối không dùng làm màu nền tràn lan**. |
+| **Rosso Scuro** | `#9d2211` | `--color-rosso-scuro` | Đỏ thẫm hỗ trợ cho trạng thái Active/Pressed sâu hoặc viền cảnh báo phụ. |
+| **Bianco Ferrari**| `#ffffff` | `--color-bianco-ferrari`| Màu chữ chính trên nền tối, biểu tượng, đường kẻ tương phản cao, và mã QR vé điện tử. |
+| **Carbone Nero** | `#000000` | `--color-carbone-nero` | Nền canvas chính, khoảng không điện ảnh vô tận phía sau hình ảnh và video. |
+| **Notte Profonda**| `#181818` | `--color-notte-profonda`| Nền bề mặt tầng 1: Thẻ nội dung, thanh điều hướng nổi, footer và khung modal. |
+| **Grafite** | `#303030` | `--color-grafite` | Nền bề mặt tầng 2 và đường viền phân tách mỏng (hairline divider 1px). |
+| **Fumo** | `#8f8f8f` | `--color-fumo` | Màu chữ phụ, nhãn phụ đề, thông tin thời lượng và thể loại phim. |
+| **Piombo** | `#666666` | `--color-piombo` | Chữ gợi ý mờ (placeholder), đường kẻ thứ cấp, trạng thái vô hiệu hóa (disabled). |
+| **Argento Chiaro**| `#d2d2d2` | `--color-argento-chiaro`| Đường viền sáng hoặc trạng thái hover trên các bề mặt xám nhạt. |
+| **Velo di Luce** | `#f7f7f7` | `--color-velo-di-luce` | Vệt sáng rất nhẹ trên bề mặt sáng (khi có nhu cầu tương phản đặc biệt). |
+| **Cemento** | `#ebebeb` | `--color-cemento` | Nền tương phản nhẹ cho các tài liệu hoặc hóa đơn in ấn. |
+
+### 2.2 Bảng Màu Chức Năng Nghiệp Vụ (Semantic Functional Tokens)
+
+Áp dụng nghiêm ngặt cho các phản hồi giao dịch và trạng thái nghiệp vụ (Success, Warning, Error) theo quyết định ngày 08/11/2026. Không dùng làm màu thương hiệu trang trí:
+
+| Trạng thái | Tên màu | Giá trị Hex | Token CSS | Ứng dụng nghiệp vụ cụ thể |
+|---|---|---|---|---|
+| **Success** | Verde Semantic | `#2e7d5b` | `--color-success` | Biểu tượng xác nhận thành công, nhãn `CONFIRMED`/`ISSUED`, ghế đã đặt của tôi. |
+| **Success Bg**| Verde Profondo | `#0d281e` | `--color-success-bg`| Nền chìm cho badge trạng thái vé thành công hoặc thông báo hoàn tất. |
+| **Warning** | Ambra Avviso | `#d97706` | `--color-warning` | Cảnh báo thời gian giữ vé sắp hết (<2 phút), lưu ý suất chiếu đặc biệt. |
+| **Error** | Rosso Corsa | `#da291c` | `--color-error` | Thất bại thanh toán (Payment Failed), lỗi hệ thống, vé bị hủy hoặc hết hạn. |
+
+---
+
+## 3. Hệ Thống Kiểu Chữ Biên Tập 8 Tầng (8-Level Typography Architecture)
+
+Hệ thống kiểu chữ được nâng cấp toàn diện từ giới hạn ban đầu (vốn chỉ có 11-13px cho body và 16px cho headline từ bản scrape tham khảo Ferrari). Hệ thống mới tách bạch rõ ràng giữa **Typography mang tính nhận diện biên tập** và **Typography phục vụ giao dịch**:
+
+```
+[Level 1] Brand / Editorial Display (48px - 64px) — Kinetic & Showpiece
+[Level 2] Hero Headline (32px - 40px) — Scene Title
+[Level 3] Section Heading (20px - 24px) — Curated Collections
+[Level 4] Movie Title (16px - 18px) — Card & Catalog Typography
+[Level 5] Functional UI Heading (14px - 16px) — Dialogs & Steppers
+[Level 6] Body Copy (13px - 14px) — Synopses & Editorial Prose
+[Level 7] Metadata / Caption (11px - 12px) — Uppercase Tracked Labels
+[Level 8] Form Labels & Micro-copy (11px - 12px) — Input Fields & Notes
 ```
 
-### Tailwind v4
+### 3.1 Bảng Phân Cấp Typography Chi Tiết
 
-Ví dụ ánh xạ token để tham khảo khi dùng Tailwind; không phải công nghệ đã chọn hoặc đã cài.
-Web/Organizer giữ CSS modules và design tokens theo
-[ADR-0026](docs/06-decisions/0026-react-aria-components-for-web-ui-primitives.md);
-Mobile dùng cách biểu diễn native tương ứng, giữ cùng bản sắc.
+| Tầng cấp | Vai trò | Cỡ chữ (Size) | Line Height | Tracking (Letter Spacing) | Weight | Case | Phông chữ áp dụng |
+|---|---|---|---|---|---|---|---|
+| **Level 1** | **Brand / Editorial Display** | 48px – 64px | 1.05 – 1.15 | -0.02em đến 0.0em | 700 / 800 | Uppercase hoặc Title Case | Roboto Slab / Display Sans |
+| **Level 2** | **Hero Headline** | 32px – 40px | 1.15 – 1.25 | -0.01em đến 0.02em | 600 / 700 | Title Case | Inter / Display Sans |
+| **Level 3** | **Section Heading** | 20px – 24px | 1.25 – 1.35 | 0.02em đến 0.04em | 600 | Title Case / Uppercase | Inter |
+| **Level 4** | **Movie Title** | 16px – 18px | 1.30 – 1.40 | 0.02em | 600 | Title Case | Inter |
+| **Level 5** | **Functional UI Heading** | 14px – 16px | 1.40 | 0.04em | 500 / 600 | Uppercase hoặc Sentence Case | Inter |
+| **Level 6** | **Body Copy** | 13px – 14px | 1.60 – 1.78 | 0.015em | 400 | Sentence Case | Inter |
+| **Level 7** | **Metadata / Caption** | 11px – 12px | 1.50 – 1.78 | 0.08em đến 0.091em | 400 / 500 | **Uppercase toàn bộ** | Inter |
+| **Level 8** | **Form Labels & Micro** | 11px – 12px | 1.40 | 0.05em | 500 | Uppercase hoặc Sentence Case | Inter |
 
-```css
-@theme {
-  /* Colors */
-  --color-rosso-corsa: #da291c;
-  --color-rosso-scuro: #9d2211;
-  --color-bianco-ferrari: #ffffff;
-  --color-carbone-nero: #000000;
-  --color-notte-profonda: #181818;
-  --color-grafite: #303030;
-  --color-fumo: #8f8f8f;
-  --color-piombo: #666666;
-  --color-argento-chiaro: #d2d2d2;
-  --color-velo-di-luce: #f7f7f7;
-  --color-cemento: #ebebeb;
+### 3.2 Triết Lý Typography (Typography Philosophy)
+- **Quy tắc Tracking nghịch đảo (Inverted Tracking Rule):** Cỡ chữ càng nhỏ, khoảng cách giữa các ký tự (letter-spacing) càng phải nới rộng. Các nhãn 11px–12px bắt buộc sử dụng chữ in hoa (uppercase) kèm tracking rộng (`0.08em – 0.091em`) để tạo độ thở và giọng nói nhận diện đặc trưng.
+- **Tính toàn vẹn tiếng Việt (Vietnamese Diacritics Integrity):** Phông chữ hệ thống bắt buộc sử dụng bộ glyph hỗ trợ tiếng Việt đầy đủ (dấu thanh, mũ sắc gọn, không bị lỗi dính dấu vào dòng trên). Inter và Roboto Slab đáp ứng hoàn hảo tiêu chuẩn này.
+- **Độ tương phản đọc (Readability Invariant):** Không bao giờ dùng màu xám quá tối (<`#8f8f8f`) cho văn bản nội dung trên nền đen. Body text luôn duy trì độ tương phản >= 4.5:1 đạt chuẩn WCAG AA.
 
-  /* Typography */
-  --font-body-font: 'Body-Font', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-ferrarisans: 'FerrariSans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+---
 
-  /* Typography â€” Scale */
-  --text-caption: 11px;
-  --leading-caption: 1.78;
-  --text-body-sm: 12px;
-  --leading-body-sm: 1.78;
-  --text-body: 13px;
-  --leading-body: 1.78;
+## 4. Bố Cục Biên Tập & Nhịp Điệu Thị Giác (Editorial Layout & Pacing)
 
-  /* Spacing */
-  --spacing-4: 4px;
-  --spacing-5: 5px;
-  --spacing-6: 6px;
-  --spacing-10: 10px;
-  --spacing-15: 15px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-25: 25px;
-  --spacing-30: 30px;
-  --spacing-32: 32px;
-  --spacing-44: 44px;
-  --spacing-50: 50px;
-  --spacing-54: 54px;
-  --spacing-60: 60px;
-  --spacing-123: 123px;
+### 4.1 Hệ Thống Khung Bố Cục (Layout Canvas)
+- **Độ rộng khung nhìn tiêu chuẩn:**
+  - Khung nội dung tập trung (Contained Frame): `--page-max-width: 1440px` — dành cho các trang quản lý tài khoản, form thanh toán, hoặc bảng quản trị Organizer.
+  - Khung điện ảnh mở rộng (Wide Cinema Canvas): `--page-max-width: 1760px` — dành cho trang chủ khám phá (S01), phòng tranh mosaic (S22B) và thư viện phim.
+  - Phân đoạn tràn viền (Full-Bleed 100vw): Các banner Hero, ảnh nền phòng chiếu và dải phân cách điện ảnh vươn tới tận 2 mép màn hình.
+- **Khoảng đệm trang (Page Padding):**
+  - Desktop (>1024px): `48px` (hoặc `64px` trên màn hình siêu rộng).
+  - Tablet (768px – 1023px): `32px`.
+  - Mobile (<768px): `16px` đến `20px`.
 
-  /* Border Radius */
-  --radius-full: 9999px;
-}
+### 4.2 Nguyên Tắc Cân Bằng Bất Đối Xứng (Asymmetric Composition)
+- Không rải đều các card phim thành các ô vuông bằng chằn chặn.
+- Sử dụng bố cục tạp chí: 1 phim tiêu điểm lớn bên trái chiếm 60% chiều ngang, kết hợp danh sách suất chiếu hoặc phim liên quan chiếm 40% bên phải.
+- Điểm neo thị giác (Focal Points): Luôn có một tâm điểm thị giác dẫn dắt ánh nhìn trong mỗi khung cuộn màn hình.
+
+### 4.3 Mật Độ Thông Tin Theo Màn Hình (Density by Screen Type)
+- **Expressive Density (Thoáng đãng, nhiều khoảng trắng):** Trang chủ (S01), Chi tiết phim (S06), Bộ sưu tập rạp (S18).
+- **Functional Density (Vừa phải, tập trung):** Sơ đồ chọn ghế (S08), Buaa AI Workspace (S03), Trang cá nhân (S27).
+- **High-Compact Density (Đậm đặc, tối ưu thao tác):** Màn hình thanh toán (S11), Cổng quản trị rạp Organizer Web & Mobile.
+
+---
+
+## 5. Xử Lý Hình Ảnh Điện Ảnh (Cinematic Imagery Standards)
+
+Đã chuyển hóa toàn bộ các mô tả tham khảo ban đầu (vốn chỉ nói về hình ảnh siêu xe trong tài liệu tham khảo Ferrari) thành các tiêu chuẩn ảnh phục vụ chuyên biệt cho nền tảng điện ảnh:
+
+```
++---------------------------------------------------------------+
+| 1. Hero Backdrop: 100vw Full-bleed, tỷ lệ 21:9 hoặc 16:9      |
++---------------------------------------------------------------+
+| 2. Movie Poster: Tỷ lệ chuẩn 2:3, Sharp 0px corners           |
++---------------------------------------------------------------+
+| 3. Cinematic Still / BTS: Tỷ lệ 16:9, độ tương phản cao       |
++---------------------------------------------------------------+
+| 4. Cinema Hall Architecture: Không gian rạp IMAX/Gold Class   |
++---------------------------------------------------------------+
+| 5. Digital E-Ticket: Nền Carbone Nero, QR Code trắng tương phản|
++---------------------------------------------------------------+
 ```
 
+1. **Poster Phim (Movie Posters):** Tỷ lệ chuẩn 2:3. Hiển thị sắc cạnh với `0px border-radius`, viền hairline `1px solid #303030`. Khi hover hoặc active, viền chuyển đỏ `#da291c`. Tuyệt đối không bo góc tròn poster.
+2. **Khung hình Điện ảnh (Cinematic Stills & Stills Gallery):** Tỷ lệ 16:9 hoặc 2.39:1 (Cinemascope). Xử lý ánh sáng tương phản cao, vùng tối sâu, màu sắc sống động. Bố trí theo dạng mosaic 5 cột bất đối xứng (S22B).
+3. **Ảnh nền Hero (Hero Backdrops):** Tràn viền 100vw, sử dụng kỹ thuật phủ lớp chuyển màu tối từ đáy và 2 cạnh (`linear-gradient(to top, #000000 15%, transparent 85%)`) để hòa tan hình ảnh vào nền Carbone Nero vô tận, giúp chữ đè lên luôn đọc rõ.
+4. **Hình ảnh Rạp chiếu (Cinema Imagery):** Ảnh chụp kiến trúc sảnh rạp sang trọng, phòng chiếu ghế bọc da đẳng cấp, màn hình vòm IMAX choáng ngợp; không chụp cảnh người chen chúc xô bồ.
+5. **Vé Điện Tử & Mã QR (Digital Ticket & QR):** Thiết kế phẳng như một tấm thẻ đen kim loại sang trọng. Mã QR vé luôn render với độ tương phản tuyệt đối (mã trắng trên nền đen hoặc mã đen trên nền trắng có viền bảo vệ), bảo đảm máy quét tại rạp đọc được ngay lập tức.
+6. **Khối gợi ý Buaa AI (AI Recommendation Visuals):** Thumbnail phim kèm nhãn gợi ý nhỏ gọn, hiển thị mượt mà ngay trong dòng hội thoại chat.
+
+---
+
+## 6. Hình Khối & Triết Lý Chiều Sâu (Shape & Elevation Philosophy)
+
+### 6.1 Hình Học Góc Nhọn (Sharp 0px Geometry Signature)
+- **Nguyên tắc cốt lõi:** Mọi nút bấm (buttons), thẻ (cards), khung nhập liệu (inputs), khung modal, ảnh poster và vách ngăn đều sử dụng **`border-radius: 0px`**.
+- **Ngoại lệ duy nhất được kiểm soát:**
+  1. `border-radius: 4px`: Chỉ dùng cho các nhãn trạng thái nghiệp vụ siêu nhỏ (status badges: `CONFIRMED`, `PENDING`, `EXPIRED`) để tăng tính thân thiện và dễ nhận biết.
+  2. `border-radius: 9999px`: Chỉ dùng cho các chip lọc danh mục hình viên thuốc (Filter Pills) nhằm phân biệt hình học giữa nút hành động vuông sắc và nhãn lọc mềm mại.
+
+### 6.2 Triết Lý Chiều Sâu Không Bóng Đổ (Zero Drop-Shadows)
+Nền tảng sử dụng **zero elevation**:
+- **KHÔNG sử dụng `box-shadow`** trên thẻ, nút bấm hay thanh điều hướng.
+- Chiều sâu không gian được kiến tạo độc quyền qua 3 kỹ thuật:
+  1. **Xếp tầng tông màu tối (Dark Surface Ladder):**
+     - Mức 0 (Sâu nhất): `#000000` (Nền canvas chính).
+     - Mức 1 (Nổi lên): `#181818` (Thẻ nội dung, thanh menu).
+     - Mức 2 (Đường viền/Tiêu điểm): `#303030` (Hairline borders và vách ngăn).
+  2. **Đường viền Hairline 1px:** Mỏng, sắc sảo, tách biệt cấu trúc mà không tạo cảm giác nặng nề.
+  3. **Khoảng trắng âm tính (Negative Space):** Khoảng đen rộng lớn tạo cảm giác mênh mông, giúp đối tượng chính nổi bật tự nhiên.
+
+---
+
+## 7. Triết Lý & Ngôn Ngữ Chuyển Động (Motion Philosophy Overview)
+
+Toàn bộ quy chuẩn chi tiết về chuyển động được sở hữu bởi chuẩn chất lượng [`docs/04-standards/motion-design.md`](docs/04-standards/motion-design.md).
+
+Tóm lược các nguyên tắc bất biến:
+- **3 Cấp độ cường độ:**
+  - *Expressive (400ms – 700ms):* Dành riêng cho Discovery, Hero và Gallery.
+  - *Restrained (200ms – 350ms):* Dành cho Showtimes, Seat Selection, Chat Workspace.
+  - *Minimal (100ms – 200ms):* Dành cho Checkout, Payment, Security, Admin Grids.
+- **10 Motion Patterns chuẩn:** Scroll-linked Reveal, Mask/Clip Reveal, Parallax Layering, Object Choreography, Scale-Focus Transition, Kinetic Typography, Spatial Transition, Contextual Micro-interaction, Staggered Reveal, Ambient Motion.
+- **Kỷ luật kỹ thuật:** Chỉ chạy trên thuộc tính GPU `transform` và `opacity`. Đạt ngân sách 60fps.
+- **Bắt buộc hỗ trợ `prefers-reduced-motion`:** Cung cấp phương án thay thế tức thời khi người dùng bật chế độ giảm chuyển động.
+
+---
+
+## 8. Sổ Xung Đột & Trạng Thái Đồng Bộ (Conflict Ledger)
+
+Bảng dưới đây tổng hợp các xung đột được phát hiện giữa bản scrape tham khảo Ferrari ban đầu, mã nguồn hiện hữu, và định hướng nâng cấp mới:
+
+| Điểm xung đột | Nguồn tài liệu & Hiện trạng code | Tác động thực tế | Thẩm quyền sở hữu (Canonical Owner) | Phương án giải quyết (Proposed Resolution) | Trạng thái quyết định |
+|---|---|---|---|---|---|
+| **Giới hạn cỡ chữ Headline** | `DESIGN.md` cũ giới hạn headline tối đa 16px; thực tế code và yêu cầu biên tập cần tiêu đề lớn 32px–64px | Giao diện bị bí bách, thiếu chất điện ảnh, không thể hiện được tính Kinetic Editorial | `DESIGN.md` (Mục 3) | Nâng cấp thành hệ thống 8 tầng chữ: Tách riêng Brand/Hero Display (32px–64px) cho trang khám phá; giữ chữ 14px–16px cho UI nghiệp vụ | **Accepted (Đã phê duyệt)** |
+| **Độ rộng trang (Page Max-Width)** | `DESIGN.md` cũ ghi 1440px; `tokens.css` dùng 1760px; một số section dùng 100vw | Bố cục không nhất quán giữa màn hình rộng và khung đọc nội dung | `DESIGN.md` (Mục 4) & `tokens.css` | Chuẩn hóa: 1760px cho Wide Cinema Canvas (Discovery/Gallery); 1440px cho Contained Frame (Checkout/Account/Admin); 100vw cho Hero | **Accepted (Đã phê duyệt)** |
+| **Hình học góc bo (Border Radius)** | `DESIGN.md` cũ ghi 0px tuyệt đối; `ui-quality.md` có ngoại lệ 4px; `tokens.css` có pill 9999px | Tiềm ẩn nguy cơ tùy tiện bo tròn nút bấm làm hỏng nhận diện Ferrari | `DESIGN.md` (Mục 6) | Giữ 0px làm nhận diện cốt lõi cho mọi nút và thẻ; chính thức ghi nhận ngoại lệ 4px chỉ cho status badge nhỏ và 9999px cho filter pill | **Accepted (Đã phê duyệt)** |
+| **Màu đỏ Rosso Corsa (`#da291c`)** | `DESIGN.md` cũ cấm dùng làm nền CTA; trong khi code dùng cho error và hover nút | Hiểu nhầm rằng hệ thống không có màu CTA hoặc màu đỏ bị lạm dụng | `DESIGN.md` (Mục 2) | Khẳng định: Rosso Corsa là màu tín hiệu tương tác (Hover, Focus, Active border) và Semantic Error; không dùng làm mảng nền lớn tràn lan | **Accepted (Đã phê duyệt)** |
+| **Hình ảnh tham khảo xe hơi vs Điện ảnh** | `DESIGN.md` cũ chứa nhiều đoạn miêu tả xe Ferrari ("car photography", "vehicles shot in studio") | Gây khó hiểu cho lập trình viên và designer khi phát triển sản phẩm rạp phim | `DESIGN.md` (Mục 5) | Điều chỉnh toàn bộ mô tả sang chuyên ngành điện ảnh (poster 2:3, still 16:9, rạp IMAX, vé QR); lưu giữ giá trị tham khảo lịch sử | **Accepted (Đã phê duyệt)** |
+| **Motion Tokens & Thư viện** | Code hiện chỉ có 150ms/200ms trong `tokens.css`; chưa có chuẩn đường cong gia tốc và quy tắc pattern | Animation dễ bị lộn xộn, thiếu nhịp điệu và có nguy cơ kéo thêm thư viện ngoài | `docs/04-standards/motion-design.md` | Định nghĩa 10 patterns chuẩn và bộ token đề xuất (`--motion-*`); duy trì zero unapproved dependencies | **Proposed (Chờ kiểm chứng prototype)** |
+
+---
+
+## 9. Hướng Dẫn Kỹ Sư & Agent (Agent Prompt Guide)
+
+### 9.1 Bảng Tra Cứu Nhanh Màu Sắc & Bề Mặt
+- Chữ chính: `#ffffff` (Bianco Ferrari)
+- Chữ phụ / nhãn: `#8f8f8f` (Fumo)
+- Nền trang chính: `#000000` (Carbone Nero)
+- Nền thẻ / modal: `#181818` (Notte Profonda)
+- Đường viền hairline: `#303030` (Grafite)
+- Điểm nhấn tương tác / Focus: `#da291c` (Rosso Corsa)
+- Xác nhận thành công: `#2e7d5b` (Verde Semantic)
+- Cảnh báo thời gian giữ vé: `#d97706` (Ambra Avviso)
+
+### 9.2 Mẫu Prompt Thành Phần Giao Diện Tiêu Chuẩn
+
+1. **Thẻ Poster Phim Biên Tập (Editorial Movie Card):**
+   > *"Tạo component thẻ phim: Nền #181818, border-radius 0px, viền hairline 1px solid #303030. Ảnh poster tỷ lệ 2:3 sắc cạnh, không bo góc. Tiêu đề phim 16px Inter weight 600 Title Case màu #ffffff. Nhãn thể loại và thời lượng 11px uppercase letter-spacing 0.08em màu #8f8f8f. Khi hover, thẻ tăng nhẹ scale(1.025) và viền chuyển sang #da291c trong 180ms cubic-bezier(0.2, 0, 0, 1)."*
+
+2. **Nút Hành Động Sắc Cạnh (Sharp Action Button):**
+   > *"Tạo nút CTA Đặt vé: Nền trong suốt hoặc #da291c có kiểm soát, border-radius 0px, chữ 12px uppercase letter-spacing 0.083em weight 500 màu #ffffff. Padding 12px 24px. Khi hover: nền chuyển sáng hơn hoặc xuất hiện viền đỏ #da291c. Khi active/press: scale(0.98) trong 80ms. Focus-visible: outline 2px solid #da291c với outline-offset 2px."*
+
+3. **Thẻ Vé Điện Tử QR (E-Ticket QR Card):**
+   > *"Tạo khối vé điện tử: Nền #181818, viền hairline 1px solid #303030, góc nhọn 0px. Mã QR hiển thị nổi bật trên nền trắng hoặc tương phản cao với viền bảo vệ. Tiêu đề phim 20px Roboto Slab hoặc Inter 700. Thông tin phòng chiếu, hàng ghế và giờ chiếu hiển thị dạng 2 cột rõ ràng, nhãn 11px uppercase #8f8f8f, giá trị 14px #ffffff. Badge trạng thái 'CONFIRMED' màu xanh #2e7d5b với nền wash #0d281e, border-radius 4px."*
+
+---
+
+## 10. Liên Kết Tài Liệu Kỹ Thuật
+
+- [Ngôn ngữ thiết kế chuyển động chuẩn (Motion Design Standard)](docs/04-standards/motion-design.md)
+- [Chuẩn chất lượng UI & Trợ năng (UI Quality & a11y Standards)](docs/04-standards/ui-quality.md)
+- [Quy trình phối hợp thiết kế & chuyển giao (UI Design & Motion Handoff)](docs/07-guides/ui-design-motion-workflow.md)
+- [Điều phối skill giao diện của Agent (UI Skill Routing Rules)](.agents/rules/ui-skill-routing.md)
+- [Phân tích 5 Video tham khảo sáng tạo (Creative Reference Analysis)](.agents/references/motion-references-analysis.md)

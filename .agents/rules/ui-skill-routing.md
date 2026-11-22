@@ -2,7 +2,7 @@
 
 This scoped rule governs how AI coding agents select and execute UI/UX-related skills in this repository.
 
-**Core Invariant:** All UI implementations MUST adhere strictly to the visual identity in root `DESIGN.md` and the normative quality standards in `docs/04-standards/ui-quality.md`. Skills are execution aids; they NEVER override repository design authority.
+**Core Invariant:** All UI implementations MUST adhere strictly to the visual identity in root `DESIGN.md`, the normative quality standards in `docs/04-standards/ui-quality.md`, and the motion design standards in `docs/04-standards/motion-design.md`. The design and handoff workflow is detailed in `docs/07-guides/ui-design-motion-workflow.md`. Skills are execution aids; they NEVER override repository design authority.
 
 ## Bối cảnh và quy trình thiết kế ứng dụng
 
