@@ -11,7 +11,6 @@ Tài liệu này xác định tiêu chuẩn chất lượng kỹ thuật mang t�
 Tham chiếu các thẩm quyền liên quan:
 - Bản sắc thị giác, kiểu chữ và bố cục: root [`DESIGN.md`](../../DESIGN.md).
 - Ngôn ngữ thiết kế chuyển động (Motion Design Language): [`docs/04-standards/motion-design.md`](motion-design.md).
-- Quy trình phối hợp và bàn giao: [`docs/07-guides/ui-design-motion-workflow.md`](../07-guides/ui-design-motion-workflow.md).
 - Điều phối skill của Agent: [`.agents/rules/ui-skill-routing.md`](../../.agents/rules/ui-skill-routing.md).
 
 ---

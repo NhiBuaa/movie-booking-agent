@@ -323,18 +323,9 @@ Bảng đối chiếu cụ thể giữa mã màn hình (Figma/Code IDs), hướn
 
 ---
 
-## 9. Đánh Giá Thư Viện Kỹ Thuật (Zero Unapproved Dependencies)
+## 9. Kỷ Luật Phụ Thuộc (Zero Unapproved Dependencies)
 
-Theo quy định tại mục 2.3 của [`.agents/rules/ui-skill-routing.md`](../../.agents/rules/ui-skill-routing.md), **tuyệt đối không được tự ý cài đặt thêm thư viện** (Framer Motion, Motion, GSAP, Lenis, Three.js, Lucide...) mà không có sự phê duyệt rõ ràng từ chủ sản phẩm.
-
-Các giải pháp kỹ thuật được xem xét cho giai đoạn tiếp theo dưới dạng đề xuất kỹ thuật cần đánh giá:
-
-| Giải pháp ứng cử | Ưu điểm | Nhược điểm / Đánh đổi | Trạng thái hiện tại |
-|---|---|---|---|
-| **Thuần CSS Animations & Transitions** | Không tăng bundle size; chạy trực tiếp trên GPU compositor thread; tương thích SSR hoàn hảo. | Khó dàn dựng các chuỗi chuyển động phức tạp phụ thuộc trạng thái; không hỗ trợ spring physics tự nhiên. | **Giải pháp mặc định hiện tại** (Đang dùng trong code) |
-| **Web Animations API (WAAPI)** | Tích hợp sẵn trong trình duyệt; hiệu năng cao; điều khiển play/pause/cancel bằng JS mà không kéo thư viện. | Cú pháp viết dài hơn; cần bọc helper để tái sử dụng thuận tiện. | **Đề xuất ưu tiên thử nghiệm** cho Web |
-| **Motion (Framer Motion kế thừa)** | Cú pháp React Declarative cực đẹp; hỗ trợ layout animations (FLIP) và shared-element transitions rất mạnh. | Tăng dung lượng bundle (khoảng 25–35KB min+gzip); cần cấu hình cẩn thận khi kết hợp Next.js React Server Components. | **Đề xuất kỹ thuật chờ duyệt** (Chưa được cài đặt) |
-| **Lenis (Smooth Scroll)** | Cuộn mượt đồng bộ cho các trải nghiệm biên tập sang trọng; tích hợp tốt với scroll animations. | Dễ dẫn tới cảm giác scroll-lag nếu cấu hình sai; có thể ảnh hưởng thao tác cuộn tự nhiên trên trackpad/mobile. | **Không khuyến nghị áp dụng** (Ưu tiên cuộn tự nhiên của hệ điều hành) |
+Theo quy định tại mục 2.3 của [`.agents/rules/ui-skill-routing.md`](../../.agents/rules/ui-skill-routing.md), **tuyệt đối không được tự ý cài đặt thêm thư viện animation** (Framer Motion, Motion, GSAP, Lenis...) nếu chưa có phê duyệt chính thức từ Chủ sản phẩm. Hệ thống ưu tiên tối đa việc sử dụng thuần CSS `@keyframes` / transitions và API chuyển động bản địa của từng nền tảng nhằm giữ bundle size nhẹ và bảo đảm hiệu năng 60fps.
 
 ---
 
@@ -347,4 +338,3 @@ Trước khi nghiệm thu bất kỳ giao diện nào có chuyển động, ph�
 - [ ] Hoạt động trơn tru khi người dùng bật `prefers-reduced-motion: reduce`.
 - [ ] Không làm trễ hoặc che khuất các thông tin giao dịch, chọn ghế, hold timer và thanh toán.
 - [ ] Điều hướng bàn phím qua Tab/Enter phản hồi ngay lập tức, tiêu điểm nhìn thấy rõ ràng.
-- [ ] Không phát sinh lỗi rò rỉ bộ nhớ (memory leak) hoặc listener tồn đọng.
