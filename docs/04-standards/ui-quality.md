@@ -13,6 +13,9 @@ Tham chiếu các thẩm quyền liên quan:
 - Ngôn ngữ thiết kế chuyển động (Motion Design Language): [`docs/04-standards/motion-design.md`](motion-design.md).
 - Điều phối skill của Agent: [`.agents/rules/ui-skill-routing.md`](../../.agents/rules/ui-skill-routing.md).
 
+Phạm vi và điều kiện nghiệm thu demo theo [NFR hiệu năng](../05-specs/nfr/performance.md) và
+[NFR trợ năng](../05-specs/nfr/accessibility.md).
+
 ---
 
 ## 1. Bản sắc thị giác & Design Tokens (Ferrari Dark Cinema)
@@ -43,7 +46,7 @@ Mọi màn hình hoặc thành phần UI mới phải trải qua 4 giai đoạn 
 - Thao tác chạm tối thiểu: Web 44×44 CSS px; iOS 44×44 pt; Android 48×48 dp.
 
 ### Giai đoạn 3 — Khả năng tiếp cận & Render thực tế (a11y & Render Verification)
-- Độ tương phản chữ và nền đạt chuẩn WCAG AA (tối thiểu 4.5:1 cho body copy thông thường, 3:1 cho tiêu đề lớn).
+- Độ tương phản chữ và nền tối thiểu 4.5:1 cho body copy thông thường, 3:1 cho tiêu đề lớn. Web theo WCAG 2.2 AA và app native áp dụng các tiêu chí phù hợp theo NFR trợ năng.
 - Hai app Web hỗ trợ hoàn toàn điều hướng bàn phím (Tab, Shift+Tab, Enter, Space, Escape, phím mũi tên).
 - App iOS/Android hỗ trợ trình đọc màn hình (VoiceOver, TalkBack), cỡ chữ hệ thống linh hoạt (Dynamic Type), vùng an toàn màn hình (Safe Area) và cử chỉ vuốt quay lại bản địa.
 

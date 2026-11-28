@@ -49,13 +49,14 @@ LangSmith và Langfuse; lựa chọn theo độ phù hợp LangGraph và khả n
 
 ## Consequences
 
-- Trước gửi dữ liệu cần chọn vùng/endpoint, quyền truy cập, môi trường, retention, sampling,
-  giới hạn usage và quy tắc xuất/xóa dữ liệu. Chưa chọn giá trị mặc định thay cho các quyết định này.
+- Áp dụng danh sách trường, hạn lưu và phạm vi truy cập đã duyệt theo [NFR dữ liệu chẩn đoán](../05-specs/nfr/privacy-and-audit.md).
+  Trước khi gửi dữ liệu cần xác minh cấu hình vùng/endpoint, quyền, retention/xóa, sampling và giới hạn usage.
 - SDK và tracing phải kiểm chứng không rò dữ liệu, overhead, flush khi shutdown, mất kết nối và
   lỗi quota. Chưa có runtime hoặc số đo chứng minh tracing hoạt động hoặc Agent đạt production.
 - Tracing không thay metrics/alert của dịch vụ, PostgreSQL, Redis, Kafka hoặc truy vết xuyên hệ thống.
   Công cụ quan sát nền tảng đã chọn tại [ADR-0020](0020-opentelemetry-alloy-and-grafana-cloud.md).
-  Bộ dữ liệu/evaluator, tiêu chí chất lượng tiếng Việt/tool calls và cấu hình tích hợp còn cần thiết kế.
+  Bộ hội thoại mẫu và tiêu chí chấm đã duyệt tại [NFR chất lượng AI](../05-specs/nfr/ai-agent.md).
+  Cấu hình evaluator, dữ liệu thực thi và kiểm chứng tích hợp còn mở.
 
 ### Chi phí
 

@@ -80,6 +80,9 @@ không chứng minh tích hợp thật hoặc chất lượng của app Mobile. 
 
 ## Accessibility & Inclusion
 
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Mobile](../../docs/05-specs/nfr/performance.md).
+
 Theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md), hỗ trợ chữ theo cỡ hệ thống,
 trình đọc màn hình, vùng chạm và thao tác điều hướng phù hợp từng hệ. Kiểm chứng trên simulator/emulator
 hoặc thiết bị khi có app; tài liệu này chưa phải bằng chứng đạt khả năng tiếp cận.

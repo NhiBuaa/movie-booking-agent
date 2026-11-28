@@ -8,10 +8,9 @@ Bổ sung [ADR-0012](0012-cloudflare-workers-ai-and-gpt-oss-120b.md), giữ prim
 Chỉ chọn provider/tier và hướng suy giảm an toàn; chưa tạo tài khoản/key, gọi inference,
 cài SDK, viết routing hoặc xác nhận runtime. Không chấp thuận nâng gói/billing/chi tiêu.
 
-> **Đối chiếu nghiệp vụ khi hòa giải PR:** Q153 trong [mô hình sản phẩm](../03-product/use-cases.md#61-quyết-định-đã-xác-nhận)
-> chọn gián đoạn thì hướng màn hình trực tiếp, chưa tự đổi provider. Lựa chọn Groq Free dự phòng ở ADR này
-> được giữ nguyên, nhưng chưa có xác nhận rõ phạm vi thay thế Q153. OPEN-12 trong mô hình giữ điểm cần
-> chốt trước triển khai tự fallback; ghi chú không tự thay đổi một trong hai quyết định hoặc xác nhận routing đã chạy.
+> **Đối chiếu nghiệp vụ ngày 2026-11-20:** [NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) ghi xác nhận của chủ sản phẩm
+> về phạm vi cập nhật Q153 tại OPEN-12. ADR này sở hữu lựa chọn provider/tier. NFR quy định khi nào
+> được chuyển dự phòng inference và các giới hạn theo lượt. Cấu hình và kiểm chứng routing còn mở.
 
 ## Context
 
@@ -29,8 +28,8 @@ Chủ sản phẩm chọn miễn phí trong quota, chấp nhận Agent tạm ng�
   lệnh đã được khách xác nhận đúng nội dung/phiên bản dưới danh tính khách theo
   [thiết kế bảy service](../05-specs/004-service-decomposition/spec.md). Không dùng agent runner
   của provider để tự điều phối giao dịch. Adapter/package/version cụ thể cần pin và kiểm tương thích.
-- Fallback ở bước inference có kiểm soát, không phát lại toàn graph. Retry/deadline/concurrency,
-  giới hạn history/output/tool rounds và circuit breaker phải đặc tả; quota ngày hết không retry liên tục.
+- Fallback ở bước inference có kiểm soát, không phát lại toàn graph. Theo [NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider), retry, deadline và đồng thời theo tài khoản đã có chính sách.
+  Chi tiết history/output/tool rounds, timeout call và circuit breaker còn cần thiết kế.
   Lỗi cấu hình/quyền/schema cần báo đúng nguyên nhân, không mặc định retry mọi provider.
 - Chỉ thực thi tool từ kết quả hoàn chỉnh đã kiểm; không thực thi tool arguments đang stream dở.
   Nếu đã gửi text một phần, không nối tiếp im lặng bằng provider khác như cùng một generation;
@@ -59,10 +58,11 @@ Chủ sản phẩm chọn miễn phí trong quota, chấp nhận Agent tạm ng�
 - Operation ID/idempotency bền và tra cứu Core sau timeout vẫn bắt buộc. Checkpoint không làm
   side effect đúng một lần; model fallback không tạo lại hold/payment/hoàn tiền đã có kết quả chưa rõ.
 - Groq là nơi nhận dữ liệu bổ sung: giảm PII, không gửi secrets/token, che trace LangSmith;
-  retention/ZDR và cấu hình tài khoản cần xác minh, không mặc định chính sách giống Cloudflare.
+  [NFR-PRIV-02](../05-specs/nfr/privacy-and-audit.md#961-nfr-priv-02---xóa-lịch-sử-chat-và-checkpoint-theo-yêu-cầu) yêu cầu xác minh Groq ZDR và cấu hình hạn chế lưu nội dung
+  ở cả hai nguồn trước khi gửi chat thật.
 - Kiểm quota/429/5xx, timeout, partial tool args, đổi provider sau text dở, resume/concurrent replicas,
   Core đã commit nhưng timeout, cả hai lỗi và booking trực tiếp. Đo usage/phiên, chất lượng và độ trễ;
-  chưa có acceptance thresholds hoặc bằng chứng tích hợp.
+  mục tiêu và bộ ca đã duyệt xem [NFR của Agent](../05-specs/nfr/ai-agent.md). Cỡ mẫu độ trễ và bằng chứng tích hợp còn mở.
 
 ### Chi phí và giới hạn
 

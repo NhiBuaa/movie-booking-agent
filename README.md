@@ -113,6 +113,7 @@ Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinem
   `Accepted` ghi lựa chọn thiết kế, chưa xác nhận đã cài đặt/tích hợp hoặc đạt hiệu năng.
   Hosting/provider, topology máy và CD giữ hoãn đến lúc chuẩn bị deploy.
 - [Kiến trúc microservices và các luồng quan trọng](docs/05-specs/004-service-decomposition/spec.md).
+- [Mục tiêu chất lượng và cách nghiệm thu demo portfolio](docs/05-specs/nfr/README.md).
 - [UML use case: General → ánh xạ → chi tiết](docs/03-product/use-cases.md),
   [mô tả use case](docs/03-product/use-case-descriptions.md) và [thuật ngữ](GLOSSARY.md).
 - [Quy chuẩn phân tích/vẽ UML](docs/04-standards/use-case-modeling.md) và [bản đồ docs](docs/README.md).
