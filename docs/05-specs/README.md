@@ -41,6 +41,7 @@ Store each feature's `spec.md`, `plan.md`, and related Spec Kit artifacts togeth
 | Web BFF routes | [Specification](002-web-bff-routes/spec.md) | [Plan](002-web-bff-routes/plan.md) |
 | App boundaries | [Accepted design (ADR-0002)](../06-decisions/0002-customer-organizer-app-boundaries.md) | [Migration plan](003-app-boundaries/plan.md) |
 | Service decomposition | [Bản kiến trúc 7 service](004-service-decomposition/spec.md), [quyết định và lý do đã xác nhận](004-service-decomposition/decisions.md); bản tổng hợp chờ chủ sản phẩm đọc lại | Chỉ phân tích/thiết kế, chưa lập kế hoạch triển khai |
+| Data design | [Đặc tả thiết kế dữ liệu 7 service](005-data-design/spec.md), bản đã qua review độc lập và chờ nghiệm thu | [Kế hoạch thiết kế tài liệu](005-data-design/plan.md) |
 
 Before running Spec Kit for a feature, set its directory explicitly from the repository root. For example:
 

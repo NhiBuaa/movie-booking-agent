@@ -50,6 +50,9 @@ Các ranh giới service/dữ liệu/giao tiếp đã chốt được sở hữu
 Bản tổng hợp vẫn chờ chủ sản phẩm đọc lại; việc đồng bộ tài liệu không thay trạng thái chấp thuận đó.
 Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
 phải được thiết kế/kiểm thử theo workflow Spec Kit, không suy ra là đã thực hiện từ lần đồng bộ docs.
+[Thiết kế dữ liệu Feature 005](docs/05-specs/005-data-design/spec.md) đã có ERD, từ điển dữ liệu cho
+7 database logic, luồng giao dịch và cấu trúc kho hỗ trợ. Xem Mục 1 và 7 của đặc tả để biết phạm vi đã
+review, các quyết định kỹ thuật đã duyệt và phần còn chờ nghiệm thu. Migration và kiểm chứng vận hành thuộc giai đoạn triển khai.
 
 ## BFF hiện tại và nguồn đối chiếu mới hơn
 
@@ -165,6 +168,8 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 ## Chính sách UML đã đồng bộ
 
 Q32–Q172 và xác nhận Q173 đã được đồng bộ trong mô hình/mô tả/BR và PRODUCT. Các nhóm OPEN-01…10
-đã có lựa chọn sản phẩm; phần đặc tả/kiểm chứng vẫn giữ. OPEN-11 dữ liệu cá nhân hóa và OPEN-12 hòa giải
-Q153/ADR-0028 còn mở. BR-40…BR-43 là mã mới của bốn BR cá nhân hóa upstream, nội dung giữ nguyên.
+đã có lựa chọn sản phẩm; phần đặc tả/kiểm chứng vẫn giữ. OPEN-11 về chính sách dữ liệu cá nhân hóa còn mở.
+OPEN-12 đã có quyết định tiếp nối cho chuyển dự phòng inference có kiểm soát, nêu tại Mục 6 của
+[thiết kế dữ liệu](docs/05-specs/005-data-design/spec.md). Cấu hình và kiểm chứng routing còn mở.
+BR-40…BR-43 là mã mới của bốn BR cá nhân hóa upstream, nội dung giữ nguyên.
 Chính sách email lỗi/gửi lại đã chọn ở Q149; tham số/tích hợp Resend còn chưa kiểm chứng.
