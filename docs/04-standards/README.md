@@ -4,6 +4,7 @@
 
 - [Quy chuẩn phân tích và trình bày UML use case](use-case-modeling.md).
 - [Chuẩn chất lượng UI/UX](ui-quality.md).
+- [Chính sách mật khẩu dùng chung](password-policy.md) — nguồn PWD-001…PWD-007 cho các feature xác thực; phạm vi và trạng thái theo tài liệu.
 
 This directory contains normative engineering and modeling rules shared by humans and agents.
 
