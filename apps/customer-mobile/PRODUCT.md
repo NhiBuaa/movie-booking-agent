@@ -61,7 +61,7 @@ Giữ component native riêng, không dùng primitive DOM React Aria như compon
 
 ## Brand Commitments
 
-Kế thừa tên Movie Booking Platform, trợ lý Buaa AI và bản sắc tại [DESIGN.md](../../DESIGN.md).
+Kế thừa tên Movie Booking Platform, trợ lý Buaa AI và bản sắc Ferrari Dark Cinema — Cinematic Kinetic Editorial tại [DESIGN.md](../../DESIGN.md).
 Chuyển bản sắc chung sang điều hướng, tương tác và khả năng tiếp cận phù hợp iOS/Android;
 không sao chép nguyên bố cục Web thành trải nghiệm native.
 
