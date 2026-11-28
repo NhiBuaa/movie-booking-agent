@@ -337,6 +337,11 @@ Ferrari.com uses zero elevation. No box-shadows on cards, buttons, or panels â�
 
 ### Tailwind v4
 
+Ví dụ ánh xạ token để tham khảo khi dùng Tailwind; không phải công nghệ đã chọn hoặc đã cài.
+Web/Organizer giữ CSS modules và design tokens theo
+[ADR-0026](docs/06-decisions/0026-react-aria-components-for-web-ui-primitives.md);
+Mobile dùng cách biểu diễn native tương ứng, giữ cùng bản sắc.
+
 ```css
 @theme {
   /* Colors */

@@ -5,7 +5,9 @@
 Accepted — chủ sản phẩm duyệt trong hội thoại ngày 2026-11-16, gồm cây bốn ứng dụng,
 chuyển trải nghiệm nhân viên sang Organizer Mobile và hỗ trợ cả iOS/Android với giao diện phù hợp từng hệ.
 Quyết định này thay phần phân chia ứng dụng của [ADR-0001](0001-monorepo-platform-and-microservices-boundaries.md);
-ranh giới Cinema Core, Agent Service và hợp đồng dữ liệu vẫn giữ nguyên.
+quyết định tách app không thay ranh giới backend vào thời điểm duyệt. Sau đó,
+[thiết kế microservices ngày 2026-11-17](../05-specs/004-service-decomposition/spec.md) mở rộng backend
+thành bảy service và làm rõ Agent đề xuất → app/BFF thực thi; bốn app trong ADR này vẫn giữ nguyên.
 
 ## Context
 
@@ -32,6 +34,12 @@ Chuyển kênh của nhân viên không sửa quyền actor, rạp được giao
 Quản lý/quản trị không tự nhận quyền soát vé, giao combo. Kênh/màn hình giao combo và ma trận
 tính năng quản trị trên Mobile cần đặc tả riêng trước triển khai; không mặc định parity mọi màn hình Web.
 Công nghệ Mobile, framework Organizer Web và cơ chế xác thực triển khai chưa được chọn trong quyết định này.
+
+Lựa chọn công nghệ tiếp nối thuộc [ADR-0015](0015-react-vite-and-tanstack-router-for-organizer.md)
+(Organizer Web React/Vite/TanStack Router), [ADR-0016](0016-expo-router-and-mobile-native-foundation.md)
+(nền Expo/React Native/Expo Router cho hai app Mobile) và
+[ADR-0008](0008-better-auth-with-direct-login.md) (Better Auth do Identity sở hữu).
+Các lựa chọn đó không chốt parity màn hình hoặc cấp quyền mới; chưa có runtime cho ba app scaffold.
 
 ## Alternatives Considered
 

@@ -8,6 +8,7 @@ Build and maintain the comprehensive Movie Booking Platform featuring a Next.js 
 
 - `PROJECT-OVERVIEW.md` — project foundation, scope, architecture direction, and explicit open questions.
 - `CONTEXT.md` — current project-state projection and boundary conditions.
+- [Service architecture](docs/05-specs/004-service-decomposition/spec.md) and its [decisions](docs/05-specs/004-service-decomposition/decisions.md) — target service ownership, integration and failure boundaries; not runtime evidence.
 - `DESIGN.md` — canonical visual identity and design system (Ferrari Dark Cinema).
 - `apps/*/PRODUCT.md` — app-specific users, jobs, platform and constraints; shared product rules remain in the product model.
 - `docs/` — durable project knowledge (architecture, standards, specs, decisions, guides).
@@ -30,6 +31,9 @@ For meaningful work:
 5. Read only the relevant numbered `docs/` areas (e.g., `docs/04-standards/ui-quality.md` when working on UI implementation and verification).
 6. Read applicable `.agents/rules/` or `.agents/references/` when useful.
 7. Inspect implementation and tests.
+
+Before designing service integrations, persistence ownership or Agent transaction flows, read the
+service architecture above; reconcile older Core/Agent-only descriptions with its approved decisions.
 
 Before non-trivial implementation, debugging or code review, use CodeGraph when it supports the
 affected language/area, following [the scoped CodeGraph rules](.agents/rules/codegraph.md).
@@ -63,6 +67,8 @@ use [GLOSSARY.md](GLOSSARY.md) for domain terms. Confirm current implementation 
 - `.agents/references/` is non-normative support material.
 - If humans or the software must obey a rule too, prefer `docs/04-standards/`.
 - Do not create `.agents/commands/`, `.agents/hooks/`, or `.agents/skills/` unless the project has a concrete need for them.
+- The existing Spec Kit integration under `.agents/skills/speckit-*` is a justified exception;
+  when maintaining it, follow [the integration scope](.agents/README.md#spec-kit-integration).
 
 ## Selective Issue/PR Closeout
 

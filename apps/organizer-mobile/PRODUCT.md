@@ -33,7 +33,7 @@ và hỗ trợ nhân viên tra cứu/soát quyền ghế tại rạp. Bối cả
 ## Capabilities and Constraints
 
 Phạm vi mục tiêu gồm quản trị/vận hành theo M-* và R-* được cấp, cùng soát vé/tra cứu hỗ trợ O-01–O-03,
-kiểm tra quyền ghế O-05 theo [mô hình use case](../../docs/03-product/use-cases.md) và
+kiểm tra quyền ghế O-05 và cập nhật vận hành nhận khách O-06 theo [mô hình use case](../../docs/03-product/use-cases.md) và
 [mô tả](../../docs/03-product/use-case-descriptions.md).
 
 QR chung của lượt đặt tra cứu quyền theo ghế; một lần quét không dùng hết đơn.
@@ -41,13 +41,24 @@ Thiếu QR phải theo luồng xác minh đã chốt; tên/số điện thoại/
 Nhân viên không tự duyệt hoàn; quản lý không tự nhận quyền soát/giao combo. Core kiểm tra quyền,
 trạng thái và ghi nhận giao dịch; app không tự xác nhận soát thành công từ QR cục bộ.
 
-[OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) giữ nguyên,
-gồm ngoại lệ không nhận email/mất mạng, thời gian vào rạp, giao combo, hoàn tiền và báo cáo.
+Q173-A bổ sung yêu cầu về xét lại nội dung, sửa sai hội viên, sự cố combo, ngoại lệ xóa dữ liệu và
+cảnh báo Organizer Web/Mobile theo đúng quyền; chưa tự chốt mọi màn hình quản trị Mobile hoặc kênh giao combo.
+[OPEN-01–OPEN-10](../../docs/03-product/use-cases.md#6-các-quyết-định-còn-mở) giữ phần phụ thuộc
+nhà cung cấp/hợp đồng/nhân sự, bảng lưu/xóa, pháp lý và kiểm chứng; không hỏi lại chính sách đã được chọn.
 Ứng dụng không bổ sung soát ngoại tuyến hay cơ chế bỏ qua kiểm tra. Thuật ngữ theo [GLOSSARY](../../GLOSSARY.md).
+
+[Thiết kế service](../../docs/05-specs/004-service-decomposition/spec.md) phân biệt Core còn online với
+Identity gián đoạn: phiên nhân viên sẵn sàng có thể tiếp tục soát bằng bằng chứng quyền cục bộ theo
+điều kiện/thời hạn đã duyệt. Quyền thu hồi đã biết phải bị từ chối; đây chưa phải khả năng đã kiểm chứng trên app.
+Quản trị nội dung, danh tính và báo cáo dùng service sở hữu tương ứng, không mặc định đều thuộc Core.
 
 ## Stack
 
-Chưa chốt framework Mobile; không tạo scaffold hoặc dependency trong lần tổ chức thư mục này.
+React Native + Expo + TypeScript, Expo Router, development builds, expo-camera và SecureStore theo
+[ADR-0016](../../docs/06-decisions/0016-expo-router-and-mobile-native-foundation.md).
+TanStack Query/Zustand và React Hook Form/Zod theo [README](README.md); dùng component native riêng.
+Không có kho/hàng đợi soát ngoại tuyến; thiết bị nhân viên vẫn phải online tới Core.
+Đây là lựa chọn công nghệ, chưa tạo scaffold/dependency/build hoặc kiểm chứng runtime.
 
 ## Brand Commitments
 

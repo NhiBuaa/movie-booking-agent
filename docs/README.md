@@ -14,7 +14,13 @@ Good fits include a glossary, repository map, system landscape, domain map, or h
 
 ## `02-architecture/`
 
-How the current system works: components, boundaries, ownership, runtime structure, data flow, and failure behavior.
+Accepted architecture direction and explicitly identified implementation: components, boundaries,
+ownership, runtime structure, data flow, and failure behavior. Read [CONTEXT](../CONTEXT.md)
+for implementation limits; a target architecture does not establish verified runtime.
+
+[Thiết kế microservices đích](05-specs/004-service-decomposition/spec.md) sở hữu phân chia 7 service;
+[bản ghi quyết định](05-specs/004-service-decomposition/decisions.md) giữ lý do và nguồn chấp thuận.
+Các trang kiến trúc phân biệt thiết kế đích với hiện trạng tại [CONTEXT](../CONTEXT.md).
 
 ## `03-product/`
 
@@ -47,6 +53,11 @@ Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi/bằng
 ## `06-decisions/`
 
 Rationale and trade-offs for significant decisions. This is the ADR/decision-history area.
+
+The [decision index](06-decisions/README.md) links the accepted technology choices;
+[PROJECT-OVERVIEW](../PROJECT-OVERVIEW.md#architecture-direction) projects the current direction.
+Later decisions can refine or partially supersede earlier ones. Research notes and historical
+feature plans do not override those choices or prove they have been implemented.
 
 ## `07-guides/`
 

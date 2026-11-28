@@ -7,6 +7,20 @@ Nguồn thẩm quyền duy nhất (Single Source of Truth) cho các kiểu dữ 
 - `apps/organizer-mobile` (Organizer Mobile và soát vé theo vai trò, iOS/Android)
 - `services/cinema-core` (Transactional Backend)
 - `services/agent-service` (Conversational AI Agent)
+- `services/catalog-service` (Movie Catalog)
+- `services/identity-service` (Identity & Access)
+- `services/notification-service` (Notifications & Delivery)
+- `services/community-service` (Reviews & Favorites)
+- `services/reporting-service` (Reporting Read Models)
+
+Danh sách trên ánh xạ các bên dùng hợp đồng theo [thiết kế bảy service](../../docs/05-specs/004-service-decomposition/spec.md).
+Thư mục service hiện chỉ có README, chưa phải package chạy được; việc có thư mục không chứng minh
+DTO/event schema hoặc tích hợp cho mọi service đã tồn tại.
+
+Chỉ hợp đồng giao tiếp công khai dùng chung: DTO, schema xác thực biên, định danh và sự kiện theo chủ sở hữu.
+Mô hình nghiệp vụ nội bộ, ORM/schema lưu trữ và migration thuộc từng service; package này không cấp
+quyền SQL chéo hoặc buộc các service dùng cùng mô hình dữ liệu. Hợp đồng Agent hiện có cần được hòa giải
+với ranh giới Agent đề xuất → app/BFF thực thi, không tự trao quyền giao dịch trực tiếp.
 
 **Ranh giới hiện trạng/mục tiêu:** thư viện này sở hữu hợp đồng code hiện có, không sở hữu chính sách
 sản phẩm. [Mô hình use case](../../docs/03-product/use-cases.md) và
@@ -14,6 +28,16 @@ sản phẩm. [Mô hình use case](../../docs/03-product/use-cases.md) và
 Ba role hiện có chưa ánh xạ đủ vai trò nghiệp vụ; `ETicketDto` còn trạng thái chung và yêu cầu soát
 chưa chọn tập ghế. Các phương thức thanh toán khác trong enum không mở rộng phạm vi MoMo/VNPAY đã chốt.
 Lần đồng bộ tài liệu này không sửa DTO/API; cần đặc tả/kiểm thử tương thích trước khi thay hợp đồng.
+
+**Agent Python:** [ADR-0009](../../docs/06-decisions/0009-python-fastapi-langgraph-and-uv-for-agent-service.md)
+chọn Python/FastAPI/LangGraph; package này vẫn giữ nguồn hợp đồng. Hiện có TypeScript interfaces/types,
+chưa có pipeline xuất JSON Schema/sinh Pydantic hoặc validation runtime tương ứng được kiểm chứng.
+Kiểu TypeScript không tự bảo đảm tương thích lúc chạy hoặc ràng buộc nghiệp vụ xuyên ngôn ngữ.
+
+**Pipeline đã chọn:** theo [ADR-0014](../../docs/06-decisions/0014-zod-json-schema-and-pydantic-contracts.md),
+Zod 4 schemas trong package là nguồn hợp đồng được sửa tay; suy kiểu TypeScript, xuất JSON Schema
+bằng `z.toJSONSchema()` và dùng `datamodel-code-generator` sinh Pydantic v2. JSON Schema/model Python
+là đầu ra dẫn xuất. Chưa chuyển DTO, cài Zod hoặc chạy codegen; profile/dialect và compatibility cần kiểm chứng.
 
 ---
 
@@ -38,17 +62,24 @@ packages/contracts/src/
 ## 2. Tiêu chuẩn Kỹ thuật
 
 - **Node.js ESM & Type Stripping**: Tương thích hoàn toàn với cờ `erasableSyntaxOnly: true` (TypeScript 5.8+). Không sử dụng `enum` cũ, sử dụng `as const` object constants kết hợp type union.
-- **Zero Runtime Overhead**: Không phụ thuộc vào thư viện bên ngoài; nạp siêu tốc trên cả Web, Mobile, và Backend containers.
-- **End-to-End Type Safety**: Đảm bảo mọi thay đổi về cấu trúc ghế, thời gian giữ chỗ TTL, hoặc chữ ký số vé đều được TypeScript cảnh báo tự động ở toàn bộ các ứng dụng.
+- **Dependency và validation**: Package hiện chưa khai báo dependency ngoài. Hướng đã chọn bổ sung Zod 4 để kiểm dữ liệu lúc chạy; codegen Python nằm ở build/CI. Không tuyên bố zero runtime overhead; cần đo và chỉ import phần schema cần dùng khi triển khai.
+- **Type Safety**: TypeScript kiểm tra các consumer TypeScript trong phạm vi build tương ứng;
+  không tự bảo đảm tương thích giữa các phiên bản service đang triển khai độc lập. Cần kiểm chứng hợp đồng
+  và quy trình thay đổi phiên bản trước khi tuyên bố tích hợp đạt. Agent Python cần model sinh từ schema
+  và kiểm tra tương thích riêng; thay đổi TTL, chữ ký hoặc bất biến nghiệp vụ vẫn cần kiểm thử runtime.
 
 ---
 
 ## 3. Chạy kiểm thử
 
+Scripts dưới đây là hiện trạng `node:test` cho contracts/Web, chưa bao phủ toàn bộ nền tảng mục tiêu.
+[ADR-0021](../../docs/06-decisions/0021-layered-testing-stack-for-platform.md) chọn Vitest cho suite TS mới
+và pytest cho phía Python; chưa migrate scripts hoặc cấu hình kiểm tương thích schema xuyên ngôn ngữ.
+
 ```bash
 # Kiểm tra riêng thư viện contracts
 npm run test:contracts
 
-# Kiểm tra toàn bộ monorepo (contracts + apps/customer-web)
+# Kiểm tra hai workspace hiện có (contracts + apps/customer-web)
 npm run test:all
 ```

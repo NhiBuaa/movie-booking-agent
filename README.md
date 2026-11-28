@@ -4,6 +4,12 @@ Hệ sinh thái đặt vé xem phim và quản trị rạp chiếu phim thế h�
 
 ---
 
+Kiến trúc đích gồm **7 service**: Cinema Core, Agent, Catalog, Identity & Access, Notification,
+Community và Reporting. [Bản thiết kế](docs/05-specs/004-service-decomposition/spec.md) sở hữu ranh giới
+dữ liệu/giao tiếp/xử lý lỗi; [quyết định](docs/05-specs/004-service-decomposition/decisions.md) giữ lý do đã duyệt.
+Cây dưới đây phản ánh thư mục hiện có. Bảy thư mục service hiện chỉ có README định vị trách nhiệm,
+chưa có code hoặc cấu hình chạy; không phải bảy service đã triển khai.
+
 ## 🏛️ Cấu trúc Nền tảng (Platform Monorepo)
 
 ```text
@@ -15,17 +21,23 @@ movie-booking-agent/
 │   └── organizer-mobile/        # App quản trị/vận hành, soát vé iOS/Android (tài liệu mục tiêu)
 ├── services/
 │   ├── cinema-core/             # Backend thẩm quyền tồn kho ghế, khóa giữ vé (Hold TTL), vé điện tử
-│   └── agent-service/           # Dịch vụ AI Agent điều phối tác vụ hội thoại và tool calling
+│   ├── agent-service/           # Hội thoại, truy vấn và đề xuất; app/BFF thực thi lệnh theo quyền khách
+│   ├── catalog-service/         # Nội dung phim và snapshot phiên bản cho Core
+│   ├── identity-service/        # Tài khoản, xác thực, vai trò và phạm vi rạp
+│   ├── notification-service/    # Hộp thông báo và chuyển phát email
+│   ├── community-service/       # Đánh giá, kiểm duyệt và phim yêu thích
+│   └── reporting-service/       # Mô hình đọc và báo cáo có mốc cập nhật
 ├── packages/
 │   ├── design-tokens/           # Biến màu, kiểu chữ Dark Cinema (từ DESIGN.md)
 │   ├── ui/                      # Thư viện component UI dùng chung
 │   ├── contracts/               # Hợp đồng dữ liệu, DTOs và TypeScript types
-│   └── shared-logic/            # Thuật toán ma trận ghế, tính giá, kiểm tra thời hạn giữ vé
+│   └── shared-logic/            # Logic thuần dùng chung theo phạm vi; không thay thẩm quyền Core
 ├── docs/                        # Tài liệu kiến trúc, đặc tả nghiệp vụ và quy chuẩn
 │   ├── 02-architecture/         # Kiến trúc và ranh giới dịch vụ
 │   ├── 03-product/              # Mô hình UML use case, mô tả và BR/OPEN
 │   ├── 04-standards/            # Quy chuẩn UML và chất lượng UI
-│   └── 05-specs/                # Đặc tả nghiệp vụ và đặt vé hội thoại
+│   ├── 05-specs/                # Đặc tả nghiệp vụ và đặt vé hội thoại
+│   └── 06-decisions/            # Quyết định công nghệ/kiến trúc và đánh đổi
 ├── .specify/                    # GitHub Spec Kit
 ├── DESIGN.md                    # Single Source of Truth về Brand Identity & Tokens
 ├── PROJECT-OVERVIEW.md          # Nền tảng và phạm vi sản phẩm
@@ -39,14 +51,35 @@ movie-booking-agent/
 ## 🚀 Khởi chạy Nhanh
 
 ### Yêu cầu môi trường
-- **Node.js**: `>= 24.19.0`
+- **Node.js**: `>= 24.19.0 <25` theo manifest Web hiện có.
 - **npm**: `>= 11.0.0`
 
 ### Chạy kiểm thử tự động
 ```bash
-# Chạy toàn bộ bộ kiểm thử hiện tại của Web App
-npm test
+# Cài dependency theo lockfile gốc, từ thư mục gốc repository
+npm ci
+
+# Chạy toàn bộ test contracts và Customer Web hiện có
+npm run test:all
+
+# Kiểm kiểu contracts và Customer Web; build Customer Web
+npm run typecheck
+npm run build
 ```
+
+### CI nền
+
+[Workflow CI](.github/workflows/ci.yml) chạy trên Ubuntu cho PR vào `main` và push `main`.
+Job code chạy các lệnh trên, giữ suite `node:test`; job tài liệu dùng checkout sạch riêng và
+`check-kit.ps1` từ [Agentic Repo Kit](https://github.com/NhiBuaa/agentic-repo-kit) đã pin commit
+trong workflow. Không cài dependency trong job tài liệu để tránh quét dependency lồng.
+Giữ cảnh báo ngoại lệ Spec Kit theo [hướng dẫn agent](.agents/README.md#spec-kit-integration).
+
+PR kiểm merge commit của sự kiện; push kiểm commit được push. Mỗi job xác nhận và ghi SHA thực
+kiểm, PR ghi thêm head SHA để đối chiếu. Kết quả local và Actions thuộc SHA tương ứng trong PR;
+cấu hình trigger `main` không phải bằng chứng lượt push `main` đã đạt.
+Các app/service chưa có code không có job giả. CI chưa chạy E2E/native, dịch vụ thật, build image,
+publish hoặc deploy; kiểm tài liệu giữ phạm vi và giới hạn của bộ kiểm kit hiện hành.
 
 ### Chạy ứng dụng Web ở môi trường phát triển
 ```bash
@@ -75,6 +108,10 @@ Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinem
   [Organizer Mobile](apps/organizer-mobile/PRODUCT.md).
 - [Quyết định phân chia ứng dụng và ánh xạ đường dẫn cũ](docs/06-decisions/0002-customer-organizer-app-boundaries.md).
 - [Phạm vi sản phẩm](PROJECT-OVERVIEW.md) và [hiện trạng bản làm việc](CONTEXT.md).
+- [Các quyết định công nghệ/kiến trúc đã chốt](docs/06-decisions/README.md).
+  `Accepted` ghi lựa chọn thiết kế, chưa xác nhận đã cài đặt/tích hợp hoặc đạt hiệu năng.
+  Hosting/provider, topology máy và CD giữ hoãn đến lúc chuẩn bị deploy.
+- [Kiến trúc microservices và các luồng quan trọng](docs/05-specs/004-service-decomposition/spec.md).
 - [UML use case: General → ánh xạ → chi tiết](docs/03-product/use-cases.md),
   [mô tả use case](docs/03-product/use-case-descriptions.md) và [thuật ngữ](GLOSSARY.md).
 - [Quy chuẩn phân tích/vẽ UML](docs/04-standards/use-case-modeling.md) và [bản đồ docs](docs/README.md).

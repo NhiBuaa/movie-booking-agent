@@ -6,7 +6,20 @@ Accepted
 
 Phần phân chia ứng dụng trong quyết định này được thay bởi
 [ADR-0002](0002-customer-organizer-app-boundaries.md) ngày 2026-11-16.
-Nội dung bên dưới giữ ngữ cảnh quyết định ban đầu; các ranh giới dịch vụ vẫn có hiệu lực.
+Phần ranh giới backend được mở rộng và làm rõ bởi
+[thiết kế bảy service](../05-specs/004-service-decomposition/spec.md) và
+[quyết định đã duyệt ngày 2026-11-17](../05-specs/004-service-decomposition/decisions.md):
+Core giữ hạt nhân giao dịch; Agent đề xuất, app/BFF thực thi; thêm năm chủ dữ liệu độc lập.
+Mô hình nội bộ/ORM không dùng chung qua contracts. Nội dung bên dưới giữ nguyên ngữ cảnh quyết định
+ban đầu, không là danh sách đầy đủ service đích hoặc bằng chứng triển khai độc lập đã đạt.
+
+Các lựa chọn công nghệ tiếp nối: npm workspaces quản lý JavaScript/TypeScript, Agent Python dùng uv
+theo [ADR-0009](0009-python-fastapi-langgraph-and-uv-for-agent-service.md); nguồn public contracts là
+Zod 4 → JSON Schema → Pydantic v2 tại [ADR-0014](0014-zod-json-schema-and-pydantic-contracts.md).
+Không chia sẻ domain model/ORM giữa service và không coi TypeScript tự kiểm Agent Python.
+[ADR-0035](0035-search-module-in-cinema-core.md) bổ sung module Search thuộc Core, không thêm service thứ tám.
+Các câu về ba app, toàn bộ services dùng npm hay codebase đã tách runtime ở phần lịch sử dưới đây
+không mô tả trạng thái hiện hành; xem [CONTEXT](../../CONTEXT.md) và danh mục ADR.
 
 ## Context
 

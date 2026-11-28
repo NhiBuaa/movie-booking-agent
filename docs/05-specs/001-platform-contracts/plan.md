@@ -1,5 +1,10 @@
 # Implementation Plan: Standard Platform Data Contracts (@platform/contracts)
 
+> **Thiết kế backend mới hơn:** [thiết kế bảy service](../004-service-decomposition/spec.md) sở hữu
+> ranh giới dữ liệu và hợp đồng đích: mô hình lưu trữ riêng từng service; Agent đề xuất, app/BFF thực thi.
+> Kế hoạch và Constitution Check bên dưới giữ bối cảnh/phiên bản hiến pháp của feature ban đầu,
+> không xác nhận tuân thủ hiến pháp mới hoặc đã triển khai kiến trúc đích.
+
 > **Đường dẫn lịch sử:** danh sách workspace, React Native/Expo và số test bên dưới thuộc kế hoạch
 > feature ban đầu. Cấu trúc và nền tảng hiện hành theo
 > [ADR-0002](../../06-decisions/0002-customer-organizer-app-boundaries.md); framework Mobile chưa chốt.
@@ -14,6 +19,13 @@
 **Branch**: `feat/platform-contracts` | **Date**: 2026-11-15 | **Spec**: [docs/05-specs/001-platform-contracts/spec.md](spec.md)
 
 **Input**: Feature specification from `docs/05-specs/001-platform-contracts/spec.md`
+
+> **Quyết định tiếp nối — 2026-11-17:** kế hoạch gốc bên dưới chưa là kế hoạch migration được duyệt
+> cho [ADR-0014](../../06-decisions/0014-zod-json-schema-and-pydantic-contracts.md) (Zod 4/JSON Schema/Pydantic v2).
+> Zero runtime dependencies, TypeScript workspaces và các checklist giữ bằng chứng của feature ban đầu;
+> Python Agent dùng model sinh tự động theo hướng mới, không import TypeScript trực tiếp.
+> [ADR-0021](../../06-decisions/0021-layered-testing-stack-for-platform.md) giữ runner `node:test` hiện có,
+> chọn Vitest cho suite mới; chưa cài công cụ, chạy codegen hoặc tái xác nhận các kết quả test cũ.
 
 ## Summary
 
