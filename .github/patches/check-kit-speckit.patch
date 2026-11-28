@@ -1,0 +1,33 @@
+--- a/scripts/check-kit.ps1
++++ b/scripts/check-kit.ps1
+@@ -102,8 +102,8 @@
+     }
+     $cleaned = $sb.ToString().Trim()
+     
+-    # 4. Collapse spaces into single hyphen
+-    return [regex]::Replace($cleaned, '\s+', '-')
++    # 4. GitHub keeps one hyphen per space, including spaces around removed punctuation.
++    return $cleaned.Replace(' ', '-')
+ }
+ 
+ function Parse-SimpleYaml ([string]$yamlText) {
+@@ -538,8 +538,18 @@
+             $rel -notmatch '^(?:\.git|templates|node_modules)[\\/]'
+         }
+         foreach ($f in $foundForbidden) {
++            $rel = $f.FullName.Substring($resolvedTarget.Length).TrimStart('\', '/')
++            $normalizedRel = $rel.Replace('\', '/')
++            # Spec Kit design decomposition belongs beside its spec and plan, not in root trackers.
++            if (
++                $normalizedRel -cmatch '^docs/05-specs/[0-9]{3}-[^/]+/tasks\.md$' -and
++                (Test-Path -LiteralPath (Join-Path $resolvedTarget '.specify/memory/constitution.md') -PathType Leaf) -and
++                (Test-Path -LiteralPath (Join-Path $f.DirectoryName 'spec.md') -PathType Leaf) -and
++                (Test-Path -LiteralPath (Join-Path $f.DirectoryName 'plan.md') -PathType Leaf)
++            ) {
++                continue
++            }
+             $passStats.SsotViolations++
+-            $rel = $f.FullName.Substring($resolvedTarget.Length).TrimStart('\', '/')
+             $errors.Add("Pass 4 (SSoT): Prohibited work-state tracking file '$rel' detected. Work tracking belongs in Issues/PRs.")
+         }
+     }
