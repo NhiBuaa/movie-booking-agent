@@ -75,7 +75,7 @@ vẫn là mặc định và dữ liệu/đường lệnh giao dịch thuộc Cor
 ## Brand Commitments
 
 Tên nền tảng là Movie Booking Platform; metadata Web hiện dùng CinoraAgent và tên trợ lý Buaa AI.
-Kế thừa bản sắc Ferrari Dark Cinema tại [DESIGN.md](../../DESIGN.md) và token dùng chung;
+Kế thừa bản sắc Ferrari Dark Cinema — Cinematic Kinetic Editorial tại [DESIGN.md](../../DESIGN.md) và token dùng chung;
 không tạo bộ nhận diện riêng trong tài liệu này. Tên bản sắc không chứng minh quan hệ với thương hiệu
 bên ngoài hoặc quyền sử dụng tài sản của họ.
 
@@ -98,6 +98,9 @@ bên ngoài hoặc quyền sử dụng tài sản của họ.
 
 ## Accessibility & Inclusion
 
-Tuân theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md): WCAG AA,
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Web](../../docs/05-specs/nfr/performance.md).
+
+Tuân theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md): WCAG 2.2 AA,
 điều hướng bàn phím, tương phản và kiểm chứng giao diện ở kích thước liên quan.
 Đây là yêu cầu chất lượng; chưa phải kết quả đánh giá khả năng tiếp cận của ứng dụng.

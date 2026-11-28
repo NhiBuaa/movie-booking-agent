@@ -61,7 +61,7 @@ Giữ component native riêng, không dùng primitive DOM React Aria như compon
 
 ## Brand Commitments
 
-Kế thừa tên Movie Booking Platform, trợ lý Buaa AI và bản sắc tại [DESIGN.md](../../DESIGN.md).
+Kế thừa tên Movie Booking Platform, trợ lý Buaa AI và bản sắc Ferrari Dark Cinema — Cinematic Kinetic Editorial tại [DESIGN.md](../../DESIGN.md).
 Chuyển bản sắc chung sang điều hướng, tương tác và khả năng tiếp cận phù hợp iOS/Android;
 không sao chép nguyên bố cục Web thành trải nghiệm native.
 
@@ -79,6 +79,9 @@ không chứng minh tích hợp thật hoặc chất lượng của app Mobile. 
 4. Giữ tác vụ khách hàng và quyền vận hành ở đúng ứng dụng, đúng vai trò.
 
 ## Accessibility & Inclusion
+
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Mobile](../../docs/05-specs/nfr/performance.md).
 
 Theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md), hỗ trợ chữ theo cỡ hệ thống,
 trình đọc màn hình, vùng chạm và thao tác điều hướng phù hợp từng hệ. Kiểm chứng trên simulator/emulator

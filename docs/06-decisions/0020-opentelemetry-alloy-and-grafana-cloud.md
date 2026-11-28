@@ -45,6 +45,9 @@ Mục tiêu portfolio là chứng minh correlation, phát hiện sự cố và p
 
 ## Consequences
 
+- [NFR dữ liệu chẩn đoán](../05-specs/nfr/privacy-and-audit.md) quy định trường được phép và hạn lưu áp dụng cho demo.
+  [NFR vận hành](../05-specs/nfr/operations.md) quy định phát hiện, cảnh báo và xác nhận phục hồi.
+  Cấu hình collector/backend và đường email cần được kiểm chứng theo các yêu cầu đó.
 - Cần pin compatibility và kiểm thứ tự khởi tạo SDK, ESM, Nest Fastify adapter, Python async/context,
   outbound HTTP, stream và worker thật. Chưa xác nhận Fastify tự được instrument đầy đủ bởi Node bundle.
 - Thu dữ liệu theo allowlist; loại credential/token/cookie, OTP/reset URL, QR/chữ ký vé và dữ liệu

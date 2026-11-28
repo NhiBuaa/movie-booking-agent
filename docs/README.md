@@ -38,7 +38,7 @@ hoặc thiết kế chung; ranh giới bốn app theo [ADR-0002](06-decisions/00
 ## `04-standards/`
 
 Normative engineering and modeling rules shared by humans and agents, including
-[use case modeling](04-standards/use-case-modeling.md) and UI quality (`ui-quality.md`).
+[use case modeling](04-standards/use-case-modeling.md), [chuẩn chất lượng UI](04-standards/ui-quality.md) và [chuẩn thiết kế chuyển động](04-standards/motion-design.md).
 
 Agent-only working rules belong under `.agents/rules/`, not here.
 
@@ -47,7 +47,8 @@ Agent-only working rules belong under `.agents/rules/`, not here.
 Durable required behavior for capabilities whose contracts should survive individual tasks.
 
 [Domain context](05-specs/domain-context.md) và [đặc tả chat](05-specs/conversational-booking.md)
-diễn giải yêu cầu mục tiêu và dẫn tới BR/OPEN. Chúng không tự sửa hợp đồng code hiện có.
+diễn giải hành vi mục tiêu và dẫn tới BR/OPEN. [Bộ NFR demo portfolio](05-specs/nfr/README.md)
+sở hữu mục tiêu chất lượng, ngưỡng, điều kiện đo và cách nghiệm thu dùng chung.
 Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi/bằng chứng ban đầu; ghi quan hệ với yêu cầu mới khi đặc tả phần thay thế.
 
 ## `06-decisions/`

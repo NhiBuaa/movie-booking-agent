@@ -108,8 +108,8 @@ Các nhóm phục vụ tổng quát:
 - **Security**: Kiểm tra quyền theo actor, dữ liệu và rạp được giao. Ba giá trị `CUSTOMER`,
   `CINEMA_STAFF`, `ORGANIZER_ADMIN` là hợp đồng hiện tại, chưa ánh xạ đầy đủ các vai trò mục tiêu;
   không suy chúng thành quyền mới. Không lưu trữ bí mật API trên client.
-- **Performance**: Giữ vững trải nghiệm 60fps trên web và mobile; chuyển động tối ưu qua GPU composite (`transform`, `opacity`).
-- **Compatibility**: Tương thích hoàn toàn chuẩn WCAG AA về khả năng tiếp cận (a11y) và điều hướng bàn phím.
+- **Performance**: Giữ mục tiêu chuyển động 60 fps và áp dụng [chuẩn UI](docs/04-standards/ui-quality.md). Đo hành trình Web và app Mobile theo [NFR hiệu năng](docs/05-specs/nfr/performance.md). Phép đo khung hình native bổ sung còn mở.
+- **Accessibility**: Web áp dụng WCAG 2.2 AA. App native theo tiêu chí áp dụng và hướng dẫn WCAG2ICT. Phạm vi kiểm và thiết bị tham chiếu ở [NFR trợ năng](docs/05-specs/nfr/accessibility.md).
 - **Deployment**: Web Frontend (Next.js/Node) và Backend Services có thể triển khai độc lập; chưa chọn nhà cung cấp/topology hosting. Chủ sản phẩm chọn portfolio công khai online liên tục ngày 2026-11-17 trong hội thoại Tech Stack (`01a1e2f4-4de8-75d2-a43e-efd7365dbd58`): người tuyển dụng có thể trải nghiệm mà không cần hẹn bật demo. Dịch vụ thiết yếu chạy thường trực; đây chưa phải cam kết uptime/SLA, yêu cầu HA nhiều máy hoặc chấp thuận mua/triển khai hạ tầng.
   Cùng ngày, chủ sản phẩm yêu cầu **hoãn lựa chọn hosting/provider, topology và cấu hình máy đến lúc chuẩn bị deploy**.
   Các so sánh tại [nghiên cứu triển khai](docs/99-notes/deployment-approach-research.md) chỉ là tham khảo;
@@ -123,8 +123,8 @@ Mục tiêu là triển khai portfolio hoạt động, thể hiện năng lực 
 và thiết kế hệ thống. Chủ sản phẩm làm rõ mục tiêu thể hiện năng lực **kiến trúc phân tán**, chấp nhận
 thêm độ phức tạp vận hành cho luồng sự kiện tại ADR-0007. Mỗi lựa chọn cần gắn với bài toán,
 đánh đổi, cách kiểm chứng và hướng mở rộng.
-Chưa có yêu cầu tải sản xuất cụ thể; mốc kiểm thử tải cần được đề xuất và xác nhận như giả định
-kiểm chứng, không trình bày thành số người dùng thực tế hoặc năng lực đã được chứng minh.
+[Bản NFR cơ sở](docs/05-specs/nfr/README.md) áp dụng cho demo portfolio với dữ liệu thử.
+[Bài tải có kiểm soát](docs/05-specs/nfr/recovery-and-correctness.md) đã có hồ sơ cơ sở. Quy mô người dùng thực tế và năng lực đo được là hai thông tin riêng.
 
 - Ưu tiên công nghệ hiện đại, có độ trưởng thành và hỗ trợ phù hợp; đánh giá theo nghiệp vụ,
   tính đúng đắn/an toàn, hiệu năng, khả năng mở rộng, kiểm thử và vận hành/bảo trì.
@@ -200,16 +200,16 @@ sự hiện diện của màn hình/scaffold để khẳng định giao dịch, 
   test vectors (đặc biệt bất nhất tài liệu ký response MoMo), quyền/phí và lỗi/đối soát cần xác minh,
   đặc tả và kiểm sandbox trước tích hợp. [Nghiên cứu thanh toán](docs/99-notes/payment-gateway-integration-research.md)
   giữ bằng chứng/giới hạn nguồn; không suy lựa chọn thành đã vận hành.
-- Primary Workers AI Free và dự phòng Groq Free 120B đã chọn tại ADR-0028. Còn cần đặc tả/kiểm routing,
-  retry/circuit breaker, capability/stream và cách tiếp tục booking trực tiếp khi cả hai gián đoạn.
+- Primary Workers AI Free và dự phòng Groq Free 120B đã chọn tại ADR-0028. [NFR của Agent](docs/05-specs/nfr/ai-agent.md) quy định chuyển dự phòng, retry, thời hạn lượt và giữ đường trực tiếp.
+  Còn cần đặc tả và kiểm chứng routing, circuit breaker, khả năng của model và streaming.
   [Nghiên cứu khả năng phục hồi Agent](docs/99-notes/agent-provider-resilience-research.md) giữ đánh đổi;
   không cho phép nâng gói/chi tiêu hoặc hứa hai free tier bảo đảm AI 24/7.
 - Kênh đồng bộ ghế đã chọn tại ADR-0029; còn cần đặc tả contract/revision, snapshot/event race,
   expiry, freshness bình thường/suy giảm, chu kỳ polling/resync và kiểm fanout/phục hồi qua các replica.
   [Nghiên cứu đồng bộ ghế](docs/99-notes/seat-map-synchronization-research.md) giữ đánh đổi và giới hạn.
 - Thuật toán khóa Redis, ngưỡng chuyển/quay lại đường giữ ghế dự phòng PostgreSQL, hàng đợi và cấu hình triển khai theo phần còn mở của ADR-0004.
-- Topology/HA/backup, chi tiết khóa/isolation và các hợp đồng còn mở cần đặc tả theo
+- Topology/HA, kế hoạch backup vận hành, chi tiết khóa/isolation và các hợp đồng còn mở cần đặc tả theo
   [mục 7 của thiết kế microservices](docs/05-specs/004-service-decomposition/spec.md#7-đánh-đổi-và-phần-để-mở).
-  Không suy lựa chọn công nghệ thành cơ chế đã triển khai hoặc kết quả runtime.
-- Các chính sách nghiệp vụ chưa chốt giữ tại [OPEN-01–OPEN-10](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);
+  Phạm vi diễn tập mất Core DB và restart đã duyệt tại [NFR phục hồi](docs/05-specs/nfr/recovery-and-correctness.md).
+- Các chính sách nghiệp vụ chưa chốt giữ tại [BR và các mục OPEN](docs/03-product/use-cases.md#6-các-quyết-định-còn-mở);
   tham chiếu nguồn này thay vì tạo danh sách chính sách song song.
