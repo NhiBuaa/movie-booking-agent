@@ -37,7 +37,7 @@ soát vé, giao combo hoặc quản trị vận hành. Xem bảng phạm vi kên
 | **Cinema Core (`services/cinema-core`)** | Xác thực tồn kho ghế, tạo lệnh Hold có thời hạn (TTL), tạo booking, kiểm tra thanh toán và phát hành vé điện tử có chữ ký số. |
 | **Catalog** | Cung cấp nội dung phim; lịch/giá/ghế của suất và snapshot phục vụ giao dịch thuộc Core. |
 | **Notification** | Nhận sự kiện sau commit để chuyển phát email vé; không quyết định vé đã phát hành hay thay Core xác minh giao dịch. |
-| **Dịch vụ mô hình AI ngoài (ACT-LLM)** | Agent Service gọi API với ngữ cảnh tối thiểu đã lọc theo C-01/BR-34; không bí mật/QR/PII/toàn hồ sơ. Quan hệ Q153/ADR-0028 cần hòa giải OPEN-12 trước routing. |
+| **Dịch vụ mô hình AI ngoài (ACT-LLM)** | Agent Service gọi API với ngữ cảnh tối thiểu đã lọc theo C-01/BR-34; không bí mật/QR/PII/toàn hồ sơ. Dùng [chính sách chuyển dự phòng đã duyệt](nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) cho inference. |
 | **Cổng thanh toán** | Xử lý giao dịch MoMo/VNPAY và cung cấp kết quả để Cinema Core xác minh/đối soát. |
 
 ---
@@ -148,6 +148,7 @@ email lỗi không hủy vé. Q149 đã chọn chính sách, còn tham số và 
 Chat không tự xóa theo kỳ; khách chủ động xóa A-06, độc lập đơn/vé/hoàn. Các hành vi nghiệp vụ
 khác theo Q32–Q172, không lấy phần OPEN làm lý do hỏi lại lựa chọn đã chốt.
 
-Q153 chọn gián đoạn thì hướng màn hình trực tiếp và chưa tự đổi provider; ADR-0028 chọn Groq Free
-dự phòng inference cho Workers AI. OPEN-12 giữ quan hệ cần xác nhận trước khi triển khai tự fallback;
-chưa chọn thay người dùng hoặc phát lại toàn graph/giao dịch. Cấu hình và kiểm chứng runtime vẫn còn mở.
+Điều kiện chuyển dự phòng, thời hạn lượt và giới hạn xử lý theo [NFR của Agent](nfr/ai-agent.md).
+Chính sách chuyển dự phòng inference đã được duyệt tại OPEN-12. Luồng giao dịch tiếp tục dùng mã thao tác ổn định theo quy tắc Core ở trên.
+Vòng đời chat/checkpoint và kiểm tra lại trước khi hiển thị hoặc tiếp tục sau kết nối lại theo
+[NFR-PRIV-02](nfr/privacy-and-audit.md#961-nfr-priv-02---xóa-lịch-sử-chat-và-checkpoint-theo-yêu-cầu). Chi tiết hợp đồng, cấu hình và kiểm chứng thực tế còn mở.

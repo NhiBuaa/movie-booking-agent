@@ -88,4 +88,4 @@ Q147–Q150 đã chọn hộp thông báo/email, chính sách thử lại có gi
 Q163 đã chốt không thêm khôi phục tài khoản dự phòng khi mất hộp thư. Các chỗ “còn mở” về chính sách
 ở bối cảnh nghiên cứu trước đây được đọc theo lựa chọn hiện hành tại mô hình sản phẩm; chỉ tham số,
 gói/cấu hình, dữ liệu/pháp lý và kiểm chứng tích hợp còn chưa hoàn tất. Provider đã chọn không có nghĩa
-đã gửi email/inference thành công. Quan hệ Q153 với fallback ADR-0028 giữ tại OPEN-12.
+đã gửi email/inference thành công. Đường email cảnh báo vận hành được thiết kế riêng theo [NFR-OPS-01](../05-specs/nfr/operations.md).

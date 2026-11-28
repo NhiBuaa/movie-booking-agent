@@ -91,7 +91,7 @@ Webhook thanh toán và tra cứu công khai không phụ thuộc phiên khách 
 
 Combo và sự cố giao theo M-08/M-09/O-04/O-07 và BR-23…BR-24. Chính sách hội viên/đổi điểm/sửa sai theo M-10/L-01/L-02/L-09/L-10, BR-28…BR-29; tỷ lệ/giá đã được chọn, không dùng fixture thay chính sách.
 Đánh giá/hậu kiểm/xét lại theo L-04/L-05/L-07/L-08, BR-16/BR-32; tác giả chủ động gửi, khác người ẩn xét, thời hạn 48 tiếng liên tục, phiên bản phải khớp.
-C-01/BR-34 xác định dữ liệu mô hình ngoài và hướng xử lý gián đoạn và điểm cần hòa giải OPEN-12; L-06/N-01/BR-33 xác định hộp thông báo/email, không SMS/push.
+C-01/BR-34 xác định dữ liệu gửi mô hình ngoài. [NFR-RES-01](nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) sở hữu điều kiện chuyển dự phòng inference đã duyệt tại OPEN-12. L-06/N-01/BR-33 xác định hộp thông báo/email, không SMS/push.
 A-04/A-05/BR-36 xác định đổi email/khôi phục, A-06…A-08/BR-37…BR-39 xác định không tự xóa chat theo kỳ, xóa chủ động/tài khoản và ngoại lệ; bảng lưu/xóa/pháp lý/tích hợp còn bắt buộc.
 Báo cáo tổng hợp M-07/BR-35 tách tiền/ghế/ngày sự kiện, không tự thành kế toán hoặc mở quyền đọc hồ sơ. Phụ thuộc còn lại tham chiếu
 [OPEN-01–OPEN-12](../03-product/use-cases.md#6-các-quyết-định-còn-mở), không tự chốt trong tài liệu này.

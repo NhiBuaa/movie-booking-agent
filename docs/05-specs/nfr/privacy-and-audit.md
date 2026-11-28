@@ -267,7 +267,7 @@ dữ liệu bị cấm vào log/trace chẩn đoán tại mục [9.6](#96-nfr-pr
 | Mức ưu tiên | A đã được chọn làm yêu cầu audit tối thiểu cho mốc demo có đăng nhập/giao dịch nhạy cảm; phạm vi nhỏ phục vụ truy vết, chưa yêu cầu mua dịch vụ thu thập log hoặc chọn kiến trúc lưu trữ mới. |
 | Cách nghiệm thu | Chạy danh mục sự kiện thử có kỳ vọng, đối chiếu từng bản ghi với Identity/Core và tác dụng phụ thực, truy vết được ai/làm gì/đối tượng/kết quả. Kiểm dữ liệu giả có ký tự xuống dòng/chèn trường không tạo sự kiện giả hoặc lộ nội dung; kiểm gọi trực tiếp ngoài quyền bị chặn. Giữ bằng chứng đã lọc bí mật, báo riêng lỗi đường ghi; không dùng audit thay trạng thái giao dịch hoặc bằng chứng chữ ký Core. |
 | Phương án B và đánh đổi | B chưa có yêu cầu audit riêng ở mốc đầu, dùng dữ liệu nghiệp vụ và log chẩn đoán hiện có để điều tra: ít việc hơn nhưng khó tái dựng người thực hiện/thứ tự/kết quả, nhất là sau đổi trạng thái; B không được chọn. A đã chọn tăng công thiết kế sự kiện và lưu/quyền nhưng có bằng chứng truy vết rõ. Không coi A là chứng nhận tuân thủ hoặc bảo đảm chống người có toàn quyền máy/DB sửa dữ liệu. |
-| Phần còn mở | Danh mục sự kiện/trường chi tiết, cơ chế cấp/thu hồi quyền vận hành, quyền quản lý/xóa, thời hạn lưu/xóa và quan hệ với yêu cầu xóa dữ liệu; đường ghi bền vững, xử lý khi ghi lỗi/DB restart, phát hiện sửa/xóa, độ trễ và dung lượng cần chốt trước nghiệm thu. Không tự hủy hoặc làm lại giao dịch vì lỗi audit. Chưa chọn store, công cụ hoặc triển khai. |
+| Phần còn mở | Chính sách lưu/xóa, lỗi đường ghi và kiểm chứng toàn vẹn đã duyệt ở các quyết định bên dưới. Danh mục sự kiện/trường, quyền quản lý và dọn kho, cơ chế ghi bền/đối chiếu toàn vẹn, độ trễ, dung lượng và công cụ cần thiết kế theo [NFR-OPEN05](README.md#9173-phần-còn-mở-và-điều-kiện-hoàn-tất-trước-nghiệm-thu). |
 
 Căn cứ đối chiếu ngày 2026-11-22:
 [OWASP — Which events to log](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html#which-events-to-log),
@@ -533,7 +533,7 @@ collector mất kết nối, restart/retry và phục hồi trước/sau hạn; 
 và báo cáo khoảng thiếu. Dữ liệu còn hạn/giao dịch đối chứng được bảo toàn; lỗi dọn phải báo không đạt,
 không suy chặn đọc thành đã xóa. Mức ưu tiên: A đã được chọn cho nghiệm thu vòng đời audit tại nguồn/hàng đợi.
 A dùng cùng hạn gốc để tránh bản sao ẩn; B đặt hạn riêng cho các nơi này cần duyệt thêm độ dài,
-mục đích và đánh đổi; B không được chọn. Chưa chọn cấu hình hàng đợi, lịch dọn hoặc ngoại lệ điều tra.
+mục đích và đánh đổi; B không được chọn. Cấu hình hàng đợi và lịch dọn còn mở. Quyết định về ngoại lệ điều tra được ghi ngay bên dưới.
 Căn cứ là cửa sổ audit chính/bản xuất/backup đã được dự án duyệt trong mục này;
 đây là lựa chọn mở rộng phạm vi cùng hạn đã duyệt, không phải con số bắt buộc của tiêu chuẩn hoặc kết quả chạy thử.
 

@@ -75,5 +75,8 @@ Dữ liệu báo cáo mẫu chưa chứng minh chỉ số đối soát hay doanh
 
 ## Accessibility & Inclusion
 
-Tuân theo [chuẩn UI](../../docs/04-standards/ui-quality.md): WCAG AA, bàn phím, tương phản,
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Web](../../docs/05-specs/nfr/performance.md).
+
+Tuân theo [chuẩn UI](../../docs/04-standards/ui-quality.md): WCAG 2.2 AA, bàn phím, tương phản,
 nhãn và thông báo lỗi rõ ràng; kiểm chứng tác vụ trên máy tính và trình duyệt điện thoại khi triển khai.

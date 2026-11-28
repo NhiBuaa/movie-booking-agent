@@ -559,8 +559,8 @@ Timeout tra cứu mã thao tác cũ, không mặc định tạo lệnh mới. To
 - **Điều kiện trước:** Khách chưa đăng nhập có thể hỏi thông tin công khai; thao tác tài khoản/giao dịch phải xác thực và kiểm quyền tương ứng.
 - **Luồng chính:** Khách nhập nhu cầu → Agent Service lọc/tối thiểu hóa chat và dữ liệu trước gọi mô hình AI ngoài → diễn giải phản hồi, kiểm công cụ/quyền → truy vấn hoặc lập đề xuất để app/BFF thực thi sau xác nhận đúng phiên bản Core, dưới danh tính khách → trình bày kết quả đã xác minh từ Core và cách tiếp tục.
 - **Kết quả:** Có câu trả lời/hành trình đặt, đổi ghế hoặc hỗ trợ sau mua trong phạm vi kênh AI; mô hình không xác nhận tiền/vé hoặc phê duyệt hủy.
-- **Ngoại lệ:** Không gửi tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ ra mô hình. Lỗi/hết hạn mức báo Buaa gián đoạn, hướng màn hình trực tiếp khi Core còn hoạt động, quan hệ tự chuyển provider theo Q153/ADR-0028 còn phải chốt OPEN-12; tra cứu giao dịch trước thử lại, không kéo TTL. Không tự xóa chat định kỳ; khách xóa qua A-06.
-- **Quy tắc:** BR-17, BR-34, BR-37, BR-39; ACT-LLM là dịch vụ ngoài, Agent Service/Core là nội bộ; vendor/model đã chọn ở ADR-0012/0028; cấu hình/ngân sách/lọc dữ liệu còn OPEN-09, hành vi fallback còn OPEN-12.
+- **Ngoại lệ:** Không gửi tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ ra mô hình. Áp dụng [chuyển dự phòng inference có kiểm soát](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider). Khi AI vẫn không khả dụng, báo Buaa gián đoạn và hướng sang màn hình trực tiếp khi Core còn hoạt động. Tra cứu giao dịch trước khi thử lại và giữ thời hạn hold gốc. Không tự xóa chat định kỳ; khách xóa qua A-06.
+- **Quy tắc:** BR-17, BR-34, BR-37, BR-39; ACT-LLM là dịch vụ ngoài, Agent Service/Core là nội bộ; vendor/model đã chọn ở ADR-0012/0028; cấu hình/ngân sách/lọc dữ liệu còn OPEN-09. OPEN-12 truy vết quyết định tiếp nối Q153 và phần triển khai.
 - **Nguồn quyết định:** Q8, Q30, Q42, Q151–Q154.
 
 ### N-01 — Gửi và gửi lại thông báo dịch vụ
@@ -582,7 +582,7 @@ Timeout tra cứu mã thao tác cũ, không mặc định tạo lệnh mới. To
 - **Luồng chính:** Chọn một cuộc hoặc toàn bộ lịch sử → xem phạm vi/hệ quả → xác nhận → xử lý xóa phần đủ điều kiện → hiển thị kết quả, phần cần giữ/chờ với lý do và chuyển A-08 nếu có ngoại lệ.
 - **Kết quả:** Chat đủ điều kiện được xử lý theo yêu cầu; đơn/vé/hoàn tại Core vẫn độc lập. Không tự xóa chat định kỳ.
 - **Ngoại lệ:** Không đủ quyền/xác nhận thì không xóa; chưa xóa được bản sao/log/đối tác thì không báo xóa tất cả. Phản hồi có nội dung trong 24 tiếng liên tục từ tiếp nhận, không chỉ báo đã nhận.
-- **Quy tắc:** BR-37…BR-39; OPEN-10: bảng lưu/xóa, thời hạn thực hiện/gia hạn và xử lý bản sao/nhà cung cấp phải đặc tả/kiểm chứng trước dữ liệu thật.
+- **Quy tắc:** BR-37…BR-39 và [NFR-PRIV-02](../05-specs/nfr/privacy-and-audit.md#961-nfr-priv-02---xóa-lịch-sử-chat-và-checkpoint-theo-yêu-cầu) quy định riêng hạn hoàn tất xóa chat/checkpoint đủ điều kiện ở kho và backup do dự án quản lý. OPEN-10 theo dõi bảng lưu/xóa chi tiết và xử lý bản sao/nhà cung cấp trước dữ liệu thật.
 - **Nguồn quyết định:** Q164–Q165, Q169–Q170.
 
 ### A-07 — Yêu cầu và theo dõi xóa tài khoản
@@ -592,7 +592,7 @@ Timeout tra cứu mã thao tác cũ, không mặc định tạo lệnh mới. To
 - **Luồng chính:** Khách xác nhận yêu cầu xóa → nếu còn dịch vụ/hủy–hoàn thì chờ đóng, dừng mua/đổi điểm mới nhưng giữ dùng/theo dõi đơn cũ, cho rút yêu cầu khi chờ → vẫn xóa dữ liệu không cần thiết đủ điều kiện → khi đủ điều kiện, xác nhận từ bỏ điểm/voucher gắn riêng chưa dùng → hoàn tất xóa dữ liệu đủ điều kiện, thu hồi phiên và gửi kết quả qua N-01.
 - **Kết quả:** Tài khoản được xử lý xóa thực sự theo phạm vi đủ điều kiện; phần cần giữ có căn cứ/lý do/thời hạn rõ, nghĩa vụ hoàn/đơn cũ không biến mất.
 - **Ngoại lệ:** Không giữ toàn bộ hồ sơ chỉ vì một khoản hoàn. Khách muốn dùng quyền lợi có thể rút khi chờ; không tự quy điểm/voucher thành tiền/chuyển tài khoản hoặc vô hiệu mã công khai. Hồ sơ vướng có người xử lý/thời hạn, chuyển A-08; 24 tiếng là phản hồi có nội dung, không hứa mọi bản sao xóa xong.
-- **Quy tắc:** BR-38…BR-39; OPEN-10. Xóa tài khoản khác đăng xuất/khóa đăng nhập; chưa xác nhận pháp lý/kho ứng dụng đã đáp ứng.
+- **Quy tắc:** BR-38…BR-39 và [NFR-SEC-02](../05-specs/nfr/privacy-and-audit.md#9147-nfr-sec-02---nhật-ký-kiểm-toán-tối-thiểu) quy định xử lý phần audit đủ điều kiện xóa và phần cần giữ có căn cứ. OPEN-10 theo dõi dữ liệu còn lại và kiểm chứng pháp lý/kho ứng dụng.
 - **Nguồn quyết định:** Q166–Q170.
 
 ### A-08 — Xử lý ngoại lệ xóa dữ liệu

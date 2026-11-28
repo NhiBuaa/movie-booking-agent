@@ -64,13 +64,13 @@ soát vé ngoại tuyến hoặc collaborative filtering/mô hình đề xuất 
 | ACT-ADMIN | Quản trị viên toàn chuỗi | Danh mục phim, giá/ưu đãi, quyền quản lý rạp, báo cáo toàn chuỗi, quản lý tổng thể; ngoại lệ hoàn tiền, duyệt hủy suất, kiểm duyệt/xét lại đánh giá, chính sách/sửa sai hội viên, danh mục combo, ngoại lệ xóa dữ liệu được giao. |
 | ACT-PAY | Cổng thanh toán | Thu tiền, cung cấp kết quả/đối soát và xử lý hoàn tiền; phạm vi là MoMo, VNPAY. |
 | ACT-MAIL | Dịch vụ email | Chuyển email xác minh, khôi phục, mã xác nhận và thông báo dịch vụ. Đã chọn Resend theo ADR-0018; chưa xác nhận tích hợp runtime. |
-| ACT-LLM | Dịch vụ mô hình AI | API mô hình bên ngoài hỗ trợ hiểu/trả lời Buaa qua Agent Service; chỉ nhận dữ liệu tối thiểu đã lọc theo quyền. Primary Workers AI GPT-OSS 120B theo ADR-0012; Groq Free dự phòng theo ADR-0028, quan hệ hành vi với Q153 còn OPEN-12. Chưa xác nhận runtime. |
+| ACT-LLM | Dịch vụ mô hình AI | API mô hình bên ngoài hỗ trợ hiểu/trả lời Buaa qua Agent Service; chỉ nhận dữ liệu tối thiểu đã lọc theo quyền. Primary Workers AI GPT-OSS 120B theo ADR-0012; Groq Free dự phòng theo ADR-0028 và [chính sách chuyển nguồn đã duyệt](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider). Chưa xác nhận runtime. |
 
 Actor là vai trò, không phải mỗi actor một con người hoặc một tài khoản bắt buộc.
 Một người có thể được cấp cả hai vai trò nhân viên. Không dùng kế thừa actor để ngầm cấp quyền
 soát vé/giao combo cho quản lý, hoặc quyền của khách hàng cho tài khoản vận hành.
 Q151–Q154 phân biệt Agent Service nội bộ với ACT-LLM bên ngoài. Vai trò dịch vụ ngoài không cấp
-quyền gọi Core trực tiếp, xem toàn hồ sơ hoặc xác nhận giao dịch. Nhà cung cấp đã chọn ở ADR-0012/0018/0028; gói/cấu hình/dữ liệu và kiểm chứng tích hợp còn mở. OPEN-12 giữ điểm cần hòa giải giữa Q153 và hướng fallback ADR-0028.
+quyền gọi Core trực tiếp, xem toàn hồ sơ hoặc xác nhận giao dịch. Nhà cung cấp đã chọn ở ADR-0012/0018/0028; gói/cấu hình/dữ liệu và kiểm chứng tích hợp còn mở. OPEN-12 ghi nguồn duyệt chuyển dự phòng và các phụ thuộc triển khai còn lại.
 
 ## 2. Sơ đồ use case: tổng quát đến chi tiết
 
@@ -680,7 +680,7 @@ xác minh trước khi UI/Buaa trình bày thành công. Nhánh 0đ không tạo
 | BR-31 | Hiển thị rõ phân loại/giới hạn giờ trẻ em/giấy tờ trước mua cả hai kênh; người đặt xác nhận cả nhóm, không khai tuổi từng người. Kiểm tra từng người ở cửa khi cần; ảnh chụp rời chưa đủ, xuất trình giấy tờ hợp lệ, chưa rõ nhờ quản lý; chưa thu/lưu ảnh/số giấy tờ. Sai tuổi hoặc thiếu giấy tờ phía khách sau thông báo đúng: không vào khi chưa đủ căn cứ, không thêm ngoại lệ hoàn tự nguyện sau hạn; xác minh kịp còn phim vẫn được vào. Giữ quyền bắt buộc theo luật và BR-26 lỗi thông tin phía rạp. | Q128–Q132 |
 | BR-32 | Chỉ ẩn vi phạm cộng đồng Q138, không ẩn vì chê/điểm thấp, không sửa lời. Cốt truyện che có cảnh báo, người đọc chủ động mở, quản trị thêm nhãn được. Tác giả lưu sửa rồi gửi xét lại; một hồ sơ đang mở/quyết định/phiên bản, mới sau xử lý cần sửa khắc phục/căn cứ mới. Quản trị khác người ẩn xét trong 48 tiếng liên tục; thiếu căn cứ ghi vướng mắc/thông báo và cập nhật mỗi 24 tiếng, quá hạn cảnh báo không tự khôi phục/bác. Thêm chứng cứ cùng phiên bản không reset hạn. Điểm trung bình cộng bài công khai/chưa xóa, kể cả che cốt truyện; hiển thị một số lẻ và số lượt, không có bài thì chưa có đánh giá. | Q138–Q146 |
 | BR-33 | Customer/Organizer có hộp thông báo và email, chưa SMS/push. Email các sự kiện quan trọng Q148, cộng điểm thường chỉ trong tài khoản. Tự thử lại giới hạn, khách gửi lại kiểm quyền/chống spam, đúng trạng thái hiện hành; lỗi không đảo giao dịch/phát vé mới, cảnh báo đúng người. Gửi email chưa là tiếp nhận/xử lý xong, các hạn tính từ phát cảnh báo. Không gửi lại mã bảo mật hết hạn. | Q147–Q150 |
-| BR-34 | Agent Service gọi API mô hình ngoài; chỉ gửi phim/rạp/suất/giá cần, chat đã lọc và kết quả tối thiểu đúng quyền. Không đính kèm tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ. Mô hình lỗi/hết hạn mức: báo gián đoạn và hướng màn hình trực tiếp, chưa tự đổi mô hình/vendor; tra cứu Core trước thử giao dịch, không gia hạn hold. Quan hệ với lựa chọn provider dự phòng ADR-0028 cần chốt tại OPEN-12 trước routing. | Q151–Q153; OPEN-12 |
+| BR-34 | Agent Service gọi API mô hình ngoài; chỉ gửi phim/rạp/suất/giá cần, chat đã lọc và kết quả tối thiểu đúng quyền. Không đính kèm tên/email/điện thoại/toàn hồ sơ/đơn, mật khẩu/OTP/token/khóa/QR/thẻ. Chuyển dự phòng inference theo [NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) khi đủ điều kiện. Nếu AI vẫn không khả dụng, báo gián đoạn và hướng sang màn hình trực tiếp. Tra cứu Core trước khi thử lại giao dịch, giữ nguyên thời hạn hold. | Q151–Q153; OPEN-12 |
 | BR-35 | Báo cáo tổng hợp đúng phạm vi, không danh sách đơn/PII. Tách thực thu/đã hoàn/còn phải hoàn/bán ròng; ngày lịch giờ Việt Nam, theo sự kiện xác nhận, duyệt hủy giảm bán ròng, hoàn không giảm lại. Phải hoàn là số cuối kỳ, không cộng số dư ngày; thu thừa không thành bán. Tỷ lệ bán/soát riêng, hold không bán, Sweetbox hai ghế; suất hủy loại tử/mẫu nhưng báo riêng hủy/lịch sử soát, giữ số tiền. Tỷ lệ chính gồm suất kết thúc bình thường thuộc kỳ theo ngày bắt đầu niêm yết: cộng ghế rồi chia, không mẫu số thì chưa có dữ liệu; đang/chưa chiếu tạm tính riêng. | Q155–Q161 |
 | BR-36 | Đổi email: mật khẩu + xác minh cả email cũ/mới, email mới chưa thuộc tài khoản khác, giữ tài khoản/quyền cũ. Mất email: hướng khôi phục hộp thư, chưa bỏ xác minh hoặc thêm đường dự phòng; còn mật khẩu vẫn đăng nhập bằng địa chỉ cũ theo quyền. Mất cả mật khẩu/hộp thư không khôi phục được thì chưa có đường dự phòng. Quyền dữ liệu xét riêng, nhân viên không đổi email bằng QR/mã đơn/bằng chứng thanh toán. | Q162–Q163 |
 | BR-37 | Không tự xóa chat theo hạn thông thường. Khách xác minh chủ sở hữu, chọn/xác nhận xóa một cuộc hoặc toàn bộ trên Customer Web/Mobile; xóa phần đủ điều kiện, nêu đúng phần giữ/chờ và căn cứ. Không xóa đơn/vé/hoàn theo chat, không tự cấp quyền Buaa xóa hoặc hiểu thành giữ mọi dữ liệu vĩnh viễn. | Q164–Q165 |
@@ -730,7 +730,7 @@ không gán nghĩa thời gian cho đường UML use case.
 
 ## 6. Các quyết định còn mở
 
-OPEN-01…OPEN-10 giữ mã truy vết nhóm ban đầu; OPEN-11 giữ phần dữ liệu cá nhân hóa từ Tech Stack, OPEN-12 giữ hòa giải fallback AI. **Các lựa chọn sản phẩm Q32–Q172 đã được xác nhận;
+OPEN-01…OPEN-10 giữ mã truy vết nhóm ban đầu; OPEN-11 giữ phần dữ liệu cá nhân hóa từ Tech Stack, OPEN-12 truy vết quyết định fallback AI và phần triển khai còn mở. **Các lựa chọn sản phẩm Q32–Q172 đã được xác nhận;
 Q173-A duyệt cách hiểu chung và đồng bộ tài liệu.** Phần còn mở là đặc tả/kiểm chứng có nêu dưới đây,
 không phải yêu cầu hỏi lại các chính sách đã chọn. Chi tiết lịch sử lựa chọn giữ tại mục 6.1.
 
@@ -747,7 +747,7 @@ không phải yêu cầu hỏi lại các chính sách đã chọn. Chi tiết l
 | OPEN-09 | Kênh Customer/Organizer, email/gửi lại, mô hình AI ngoài/dữ liệu tối thiểu/lỗi: C-01/L-06/N-01, ACT-LLM, BR-33…BR-34 | Provider đã chọn tại ADR-0012/0018/0028; còn gói/cấu hình/ngân sách và điều kiện dữ liệu theo Q154; kiểm chứng lọc dữ liệu, chưa SMS/push. |
 | OPEN-10 | Báo cáo/email/xóa chat/tài khoản, ngoại lệ/phản hồi: M-07/A-04…A-08, BR-35…BR-39 | Bảng lưu/xóa chi tiết, pháp lý, bản sao/log/nhà cung cấp theo Q170 và đặc tả/kiểm chứng; không tự áp hạn lưu chung. |
 | OPEN-11 | Cách nhận diện/hết hạn phiên khách; thời hạn lưu tín hiệu thô và hồ sơ dẫn xuất; xử lý tín hiệu cũ khi đặt lại/bật lại cá nhân hóa; phạm vi dữ liệu gửi/log/trace ra ngoài. | D-01, BR-40–43; không tự lưu khách ẩn danh dài hạn, nhập chat, xóa chứng từ giao dịch hoặc quyết định cách dùng/replay tín hiệu cũ sau đặt lại. Chi tiết hợp đồng/công thức và hành vi khi index hỏng cần đặc tả/kiểm chứng riêng. |
-| OPEN-12 | Q153 chọn báo gián đoạn/chưa tự đổi provider; ADR-0028 chọn Groq Free dự phòng inference cho Workers AI. Giữ cả nguồn đã chấp thuận, chưa có xác nhận rõ ADR thay thế phạm vi Q153. | Cần chủ sản phẩm xác nhận quan hệ tiếp nối và phạm vi tự chuyển; không suy commit mới hơn là quyền tự thay chính sách. Chưa triển khai routing, không phát lại giao dịch/graph hoặc tự bật trả phí. |
+| OPEN-12 | Ngày 2026-11-20, chủ sản phẩm duyệt [NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) cập nhật Q153 trong phạm vi chuyển dự phòng inference có kiểm soát theo ADR-0028. Bản ghi Q153 tại mục 6.1 giữ quyết định gốc. | Thiết kế và kiểm chứng routing, quota, cấu hình dữ liệu, khả năng tương thích model và bộ nghiệm thu theo [NFR](../05-specs/nfr/README.md#9173-phần-còn-mở-và-điều-kiện-hoàn-tất-trước-nghiệm-thu). |
 
 Không coi xác nhận sản phẩm hoặc đồng bộ UML là kiểm chứng runtime/pháp lý/tích hợp.
 Các phụ thuộc bắt buộc được tổng hợp ở mục 6.2.
@@ -993,14 +993,15 @@ Các ghi chú nêu giới hạn xác minh; không lấy chính sách rạp tham 
 
 **Hòa giải với main khi chuẩn bị PR:** giữ bảy service và executor app/BFF theo thiết kế đã duyệt.
 Các lựa chọn provider tiếp nối Q154 ở ADR-0012/0018/0028 không đồng nghĩa tích hợp đã đạt.
-Q153 và ADR-0028 chưa có ghi nhận rõ quan hệ thay thế: OPEN-12 cần được chốt trước triển khai tự fallback.
+[NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) ghi xác nhận ngày 2026-11-20 về phạm vi cập nhật Q153 tại OPEN-12. Cấu hình và kiểm chứng routing còn mở.
 BR-40…BR-43 giữ đủ bốn quy tắc cá nhân hóa upstream, đổi mã từ BR-18…BR-21 để không trùng nghiệp vụ UML.
 OPEN-11 vẫn còn hạn phiên/retention/tín hiệu cũ, không bị Q173 của nhóm OPEN-01…10 đóng thay.
 
 ### 6.3. Bản tổng hợp trước khi đồng bộ UML
 
 **Trạng thái:** chủ sản phẩm đã xác nhận Q173-A ngày 2026-11-17. Bản này tổng hợp Q32–Q172;
-chi tiết từng lựa chọn tại mục 6.1 vẫn có hiệu lực. Phạm vi đồng bộ là tài liệu, không phải triển khai.
+chi tiết từng lựa chọn tại mục 6.1 ghi trạng thái ở thời điểm duyệt Q173. Xem OPEN-12 và
+[NFR-RES-01](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) để áp dụng quyết định tiếp nối về chuyển dự phòng inference.
 
 | Nhóm | Nội dung sản phẩm đã chọn |
 |---|---|
@@ -1012,12 +1013,12 @@ chi tiết từng lựa chọn tại mục 6.1 vẫn có hiệu lực. Phạm vi
 | OPEN-06 — Nhận khách | Mở từ giờ niêm yết khi phòng sẵn sàng; khách muộn vẫn được vào khi phim chưa kết thúc và đủ điều kiện. Soát vẫn online, theo từng ghế. Nhận diện khi quay lại bằng thẻ/dấu tạm và đối chiếu; xác minh tuổi/giấy tờ và lỗi tại cửa giữ các điều kiện đã chốt. |
 | OPEN-07 — Combo | Quản trị quản lý danh mục/giá, quản lý rạp bật/tắt cung cấp, nhân viên quầy giao. Nhận toàn bộ một lần trong ca phục vụ; sửa ghi nhầm/giao bù/thay combo có phê duyệt, khách đồng ý, thu/hoàn chênh lệch theo Q88–Q89. |
 | OPEN-08 — Đánh giá | Tài khoản đặt có vé đã soát được đánh giá 1–5 sao; một bài/phim, đăng ngay/hậu kiểm. Không ẩn chỉ vì chê/điểm thấp; che cốt truyện khác ẩn vi phạm. Xét lại do quản trị viên khác người ẩn, hạn 48 tiếng; điểm chỉ tính bài công khai/chưa xóa. |
-| OPEN-09 — Thông báo và Buaa | Hộp thông báo/email cho Customer và Organizer theo quyền, chưa SMS/push. Buaa gọi mô hình AI ngoài, tối thiểu hóa dữ liệu, giữ thẩm quyền Core; mô hình lỗi thì hướng sang màn hình trực tiếp, việc tự đổi mô hình/nhà cung cấp cần hòa giải OPEN-12. |
+| OPEN-09 — Thông báo và Buaa | Hộp thông báo/email cho Customer và Organizer theo quyền, chưa SMS/push. Buaa gọi mô hình AI ngoài, tối thiểu hóa dữ liệu, giữ thẩm quyền Core. Tại mốc Q173, khi mô hình lỗi thì hướng sang màn hình trực tiếp và việc tự chuyển nguồn còn chờ hòa giải OPEN-12. |
 | OPEN-10 — Báo cáo và tài khoản | Báo cáo tổng hợp, tách bốn chỉ số tiền và hai tỷ lệ ghế. Đổi email cần xác minh cũ/mới; chưa khôi phục dự phòng khi mất hộp thư. Chat không tự xóa theo kỳ; khách được chủ động xóa. Xóa tài khoản có chờ đóng để giữ quyền đơn cũ, vẫn xử lý phần dữ liệu đủ điều kiện; từ bỏ điểm/voucher chưa dùng phải xác nhận, ngoại lệ do quản trị viên được giao xử lý, phản hồi trong 24 tiếng. |
 
 **Các điều kiện chưa hoàn tất phải tiếp tục giữ rõ khi đồng bộ:**
 
-- Provider/model đã chọn theo ADR-0012/0018/0028; gói/ngân sách/cấu hình, điều kiện dữ liệu và OPEN-12 còn cần hoàn tất theo Q154.
+- Provider/model đã chọn theo ADR-0012/0018/0028; gói/ngân sách/cấu hình và điều kiện dữ liệu còn cần hoàn tất theo Q154. Quyết định tiếp nối về fallback tại OPEN-12.
 - Bảng lưu/xóa chi tiết, phân loại chứng từ/căn cứ/thời hạn, bản sao/log/nhà cung cấp và rà soát pháp lý theo Q170;
   danh mục giấy tờ/hiệu lực quy định tuổi cũng cần rà soát trước vận hành, không tự chọn chính sách trái quy định.
 - Hợp đồng Core, giữ ghế đích/QR khi đổi, giao dịch thu thêm combo, đối soát thu muộn/chưa rõ kết quả,
