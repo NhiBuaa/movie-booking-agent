@@ -52,6 +52,9 @@ Các ranh giới service/dữ liệu/giao tiếp đã chốt được sở hữu
 Bản tổng hợp vẫn chờ chủ sản phẩm đọc lại; việc đồng bộ tài liệu không thay trạng thái chấp thuận đó.
 Các đặc tả feature tại `docs/05-specs/<feature>/` giữ phạm vi kỹ thuật riêng; thay đổi contracts, phân quyền, giữ ghế và vòng đời vé
 phải được thiết kế/kiểm thử theo workflow Spec Kit, không suy ra là đã thực hiện từ lần đồng bộ docs.
+[Thiết kế dữ liệu Feature 005](docs/05-specs/005-data-design/spec.md) đã có ERD, từ điển dữ liệu cho
+7 database logic, luồng giao dịch và cấu trúc kho hỗ trợ. Xem Mục 1 và 7 của đặc tả để biết phạm vi đã
+review, các quyết định kỹ thuật đã duyệt và phần còn chờ nghiệm thu. Migration và kiểm chứng vận hành thuộc giai đoạn triển khai.
 
 ## BFF hiện tại và nguồn đối chiếu mới hơn
 

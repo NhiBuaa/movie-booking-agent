@@ -84,7 +84,7 @@ Typesense lưu trữ collection `movies_search` phục vụ tìm kiếm kết h�
 | `average_rating` | `float` | Điểm sao phục vụ xếp hạng và lọc | `community.movie_rating_summaries` |
 | `total_reviews` | `int32` | Số lượt đánh giá | `community.movie_rating_summaries` |
 | `embedding` | `float[]` (Dim: 1024) | Vector nhúng ngữ nghĩa (Qwen3 qua Cloudflare Workers AI) | Tóm tắt phim và thể loại |
-| `popularity_score` | `int32` | Điểm phổ biến (lượt xem/click) phục vụ cá nhân hóa ([TECH-PROP-07]: đề xuất kỹ thuật chưa chốt owner/lifecycle) | Tín hiệu tương tác [TECH-PROP-07] |
+| `popularity_score` | `int32` | Điểm phổ biến (lượt xem/click) phục vụ cá nhân hóa ([TECH-PROP-07]: lựa chọn kho đã duyệt tại [spec.md Mục 7](spec.md); owner/lifecycle còn theo OPEN-11) | Tín hiệu tương tác [TECH-PROP-07] |
 
 ### 3. Cơ chế Đồng bộ, Vector Ngoài, Catch-up Rebuild và Xử lý Tombstone (R2-N04, F23)
 - **External Vectors Pipeline (ADR-0032, ADR-0034):** Khi có phim mới hoặc cập nhật nội dung từ Catalog, worker nền của Core Search trích xuất văn bản (`title + synopsis + genres`), gọi Cloudflare Workers AI để sinh vector nhúng 1024 chiều và cập nhật document vào Typesense.
@@ -120,7 +120,7 @@ Typesense lưu trữ collection `movies_search` phục vụ tìm kiếm kết h�
   - Mọi job vector embedding chậm trễ gửi đến đều bị loại bỏ ngay tại điều kiện `document.is_tombstone == FALSE`, ngăn chặn triệt để việc hồi sinh một bộ phim đã gỡ bỏ.
 
 ### 4. Tái dựng chỉ mục (Index Rebuild & Generation Swap)
-- Khi cập nhật phiên bản model embedding mới hoặc khi chỉ mục Typesense bị lỗi: Core Search tạo collection mới có đánh số thế hệ (`movies_search_gen2`), nạp lại dữ liệu, tráo đổi alias collection trong Typesense trong thời gian thực và xóa collection cũ sau 24 giờ (`[TECH-PROP-STORE-01]`: đề xuất thời hạn lưu vết tạm 24h chờ đối soát trước khi giải phóng bộ nhớ).
+- Khi cập nhật phiên bản model embedding mới hoặc khi chỉ mục Typesense bị lỗi: Core Search tạo collection mới có đánh số thế hệ (`movies_search_gen2`), nạp lại dữ liệu, tráo đổi alias collection trong Typesense trong thời gian thực và xóa collection cũ sau 24 giờ (`[TECH-PROP-STORE-01]`: thời hạn lưu vết tạm 24h đã duyệt ngày 2026-11-28; vẫn cần đối soát trước khi giải phóng bộ nhớ).
 
 ---
 
@@ -268,13 +268,14 @@ Mọi sự kiện trên Kafka đều tuân thủ cấu trúc phong bì chuẩn (
   - Phương pháp chuẩn hóa được phê duyệt: **`pg_dump` định dạng custom (`-Fc`) + `pg_restore` vào một Cinema Core Database sạch mới**.
   - Duy trì tối thiểu **hai thế hệ bản sao lưu** (`NFR §9.7.5`) và thực thi bằng **kịch bản sao lưu và phục hồi theo nhu cầu** (`scripts on-demand`, `NFR §9.7.6`).
   - Toàn bộ 6 database còn lại (`identity`, `catalog`, `community`, `agent`, `notification`, `reporting`) được giữ nguyên vẹn, tuyệt đối không bị ghi đè hay xóa dữ liệu.
-  - *Lịch sao lưu định kỳ hàng ngày, vị trí lưu trữ cụ thể và công cụ tự động hóa là đề xuất kỹ thuật `[TECH-PROP-STORE-02]` đang chờ phê duyệt.*
+  - Vị trí lưu trữ cụ thể, lịch sao lưu vận hành và công cụ tự động hóa còn cần đặc tả. Bài diễn tập sử dụng scripts on-demand theo NFR §9.7.6.
 - **Bảo vệ Tệp Sao lưu và Quản lý Khóa Độc lập (F26, NFR Mục 9.7.2):**
   - Theo yêu cầu đã duyệt tại NFR §9.7.2: Toàn bộ tệp sao lưu bắt buộc phải được mã hóa khi xuất xưởng và khóa mã hóa do nhân sự có thẩm quyền nắm giữ riêng biệt.
-  - *Đề xuất kỹ thuật [TECH-PROP-STORE-02] (đang chờ phê duyệt):* Đề xuất lưu trữ tệp sao lưu tách biệt hoàn toàn off-host (khỏi thư mục gốc và máy chủ cơ sở dữ liệu), mã hóa bằng thuật toán AES-256, quản lý khóa trên hạ tầng KMS độc lập (AWS KMS / HashiCorp Vault) và áp dụng cơ chế xác thực đa yếu tố (MFA) cho tài khoản vận hành sao lưu/phục hồi.
+  - **`TECH-PROP-STORE-02` đã duyệt cho thiết kế lưu trữ:** Sao lưu off-host (ngoài máy chủ DB), mã hóa AES-256, quản lý khóa trên hạ tầng KMS độc lập và áp dụng MFA cho tài khoản vận hành sao lưu/phục hồi. Nhà cung cấp KMS và cấu hình cụ thể còn mở. [Quyết định tại Mục 7](spec.md#7-quyết-định-kỹ-thuật-và-phần-còn-mở)
   - Trước khi thực hiện phục hồi, quy trình bắt buộc kiểm tra tính hợp lệ của khóa mã hóa và kiểm tra tính toàn vẹn (Integrity Verification) của tệp sao lưu qua mã băm SHA-256 Checksum; nếu sai lệch checksum, tệp bị hỏng hoặc sai khóa thì lập tức từ chối nạp dữ liệu.
 - **Kịch bản Diễn tập Phục hồi Thảm họa Đầu tiên (NFR Mục 9.7.3):**
   - Bài diễn tập DR đầu tiên **chỉ gây mất duy nhất Cinema Core Database**, phục hồi sang một Core Database sạch mới; **tuyệt đối không ghi đè hay làm ảnh hưởng đến dữ liệu của 6 database còn lại**.
+  - NFR §9.7.7 cho phép bài diễn tập dùng thư mục local riêng, nằm ngoài repository và vùng dữ liệu bị gây mất, giữ khóa riêng. Sau khi đóng bài và chấp nhận hồ sơ kết quả, dọn tệp sao lưu dữ liệu thử theo §9.7.8. Điều kiện đạt theo bộ ca §9.7.9, gồm đo RTO/RPO khi phục hồi thật và dừng đúng ở các ca lỗi. [NFR phục hồi](https://github.com/NhiBuaa/movie-booking-agent/blob/ad002e99936231fac0f8493830b9ec36dc3aedb2/docs/05-specs/nfr/recovery-and-correctness.md)
 - **Ma trận Fencing trong Trạng thái Recovery Mode (Finding 25):**
 
 | Thành phần / Worker | Quyền trong `READ_ONLY_RECOVERY_MODE` | Cơ chế Fencing / Hành động đối soát |

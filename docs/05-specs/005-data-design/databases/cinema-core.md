@@ -19,7 +19,7 @@ version: 1.1.0
 - [Quy tắc nghiệp vụ BR-01–BR-35](../../../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất).
 - [Kiến trúc microservices](../../004-service-decomposition/spec.md) và [Quyết định kiến trúc](../../004-service-decomposition/decisions.md).
 - [ADR-0003](../../../06-decisions/0003-postgresql-and-redis-for-platform-data.md), [ADR-0004](../../../06-decisions/0004-redis-roles-and-seat-hold-coordination.md), [ADR-0005](../../../06-decisions/0005-drizzle-orm-and-kit-for-cinema-core.md), [ADR-0027](../../../06-decisions/0027-direct-http-and-node-crypto-for-payment-gateways.md), [ADR-0035](../../../06-decisions/0035-search-module-in-cinema-core.md), [ADR-0036](../../../06-decisions/0036-nestjs-fastify-for-cinema-core.md).
-- [NFR-COR-01 (Mục 9.15)](../../domain-context.md) và [NFR-DUR-01 (Mục 9.16)](../../domain-context.md).
+- [NFR phục hồi và tính đúng đắn](https://github.com/NhiBuaa/movie-booking-agent/blob/ad002e99936231fac0f8493830b9ec36dc3aedb2/docs/05-specs/nfr/recovery-and-correctness.md) (§9.15–§9.16). Xem [phạm vi NFR đã review](../spec.md#nguồn-nfr-mới-hơn-bản-đã-review) để đối chiếu các bổ sung sau snapshot.
 
 ---
 

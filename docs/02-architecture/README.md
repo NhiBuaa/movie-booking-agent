@@ -18,5 +18,5 @@ Starter: `templates/architecture.md`
 
 - [Kiến trúc microservices](../05-specs/004-service-decomposition/spec.md) — bản tổng hợp 7 service,
   sở hữu dữ liệu, giao tiếp và ranh giới lỗi; chưa mô tả runtime đã triển khai.
-- [Thiết kế dữ liệu microservices](../05-specs/005-data-design/spec.md) — bộ thiết kế dữ liệu 7 database PostgreSQL,
-  luồng giao dịch và kho lưu trữ hỗ trợ; bản thiết kế tài liệu.
+- [Thiết kế dữ liệu microservices](../05-specs/005-data-design/spec.md) — ERD và từ điển cho 7 database PostgreSQL logic,
+  luồng giao dịch, phục hồi và kho hỗ trợ. Xem Mục 1 và 7 để đối chiếu trạng thái review, nghiệm thu và quyết định kỹ thuật.

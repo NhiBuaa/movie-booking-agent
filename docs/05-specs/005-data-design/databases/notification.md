@@ -20,7 +20,7 @@ version: 1.1.0
 - [Quy tắc nghiệp vụ BR-33](../../../03-product/use-cases.md#4-quy-tắc-đã-thống-nhất) (Hộp thông báo và email; chưa hỗ trợ SMS/push; lỗi email không đảo giao dịch Core; chống spam gửi lại).
 - [Kiến trúc microservices](../../004-service-decomposition/spec.md) và [Quyết định kiến trúc](../../004-service-decomposition/decisions.md) (Mục 3, 4: Claim Check cho email bảo mật).
 - [ADR-0018](../../../06-decisions/0018-resend-for-transactional-email.md) (Resend cho email giao dịch).
-- [NFR-PRIV-01](../../domain-context.md) (Bảo vệ thông tin bí mật và nhật ký kỹ thuật).
+- [NFR-PRIV-01](https://github.com/NhiBuaa/movie-booking-agent/blob/ad002e99936231fac0f8493830b9ec36dc3aedb2/docs/05-specs/nfr/privacy-and-audit.md) (Bảo vệ thông tin bí mật và nhật ký kỹ thuật).
 
 ---
 
@@ -309,7 +309,7 @@ erDiagram
 
 1. `idx_inbox_notifications_user_unread`: B-Tree trên `inbox_notifications(user_id, is_read, created_at DESC)` — Hiển thị số lượng thông báo chưa đọc và danh sách thông báo.
 2. `idx_email_intents_pending_retry`: B-Tree trên `email_dispatch_intents(next_retry_at) WHERE status = 'PENDING'` — Worker định kỳ quét các email cần gửi lại.
-3. `idx_resend_rate_limit`: B-Tree trên `email_resend_requests(requested_by_user_id, requested_at DESC)` — Kiểm tra giới hạn tần suất bấm "Gửi lại mã" của người dùng (tối đa 1 lần mỗi 60 giây theo BR-33, gắn nhãn đề xuất kỹ thuật TECH-PROP-09).
+3. `idx_resend_rate_limit`: B-Tree trên `email_resend_requests(requested_by_user_id, requested_at DESC)` — Kiểm tra giới hạn tần suất bấm "Gửi lại mã" của người dùng (BR-33 và Q149 yêu cầu kiểm quyền, trạng thái hiện hành và chống spam). Giới hạn 1 lần mỗi 60 giây là đề xuất kỹ thuật còn mở.
 4. `idx_delivery_attempts_provider_id`: B-Tree trên `email_delivery_attempts(provider_message_id)` — Xử lý webhook phản hồi từ Resend.
 
 ---

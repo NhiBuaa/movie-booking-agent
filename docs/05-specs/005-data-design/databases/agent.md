@@ -22,7 +22,7 @@ version: 1.1.0
 - [ADR-0009](../../../06-decisions/0009-python-fastapi-langgraph-and-uv-for-agent-service.md) (Python/FastAPI cho Agent Service).
 - [ADR-0012](../../../06-decisions/0012-cloudflare-workers-ai-and-gpt-oss-120b.md) và [ADR-0028](../../../06-decisions/0028-groq-free-for-agent-provider-fallback.md) (Cloudflare Workers AI GPT-OSS 120B làm chính, Groq Free làm dự phòng).
 - [ADR-0013](../../../06-decisions/0013-modular-agent-postgres-checkpoints-and-httpx.md) (PostgresSaver cho checkpoint LangGraph v0.2.x+).
-- [NFR-REL-01 (Mục 9.5)](../../domain-context.md) và [NFR-RES-01 (Mục 9.11)](../../domain-context.md):
+- [NFR cho AI Agent](https://github.com/NhiBuaa/movie-booking-agent/blob/ad002e99936231fac0f8493830b9ec36dc3aedb2/docs/05-specs/nfr/ai-agent.md) (§9.5 và §9.11):
   - Giới hạn tối đa một lượt xử lý AI đang chạy trên mỗi tài khoản (`max 1 active run / account`).
   - Hard deadline 60 giây không được cấp mới hay reset khi reconnect, resume, đổi replica hoặc chuyển đổi provider.
   - Tối đa một lần chuyển nguồn AI (Cloudflare → Groq Free) trong một lượt xử lý; không bao giờ tự động kích hoạt gói trả phí.
@@ -629,4 +629,4 @@ sequenceDiagram
 
 ### 8.2. Quyết định còn thiếu và phụ thuộc
 - *OPEN-11 (Vị trí lưu trữ dữ liệu cá nhân hóa):* Dữ liệu hội thoại Agent chỉ phục vụ ngữ cảnh phiên chat hiện tại; chưa tự động trích xuất toàn bộ nội dung chat đưa vào hồ sơ sở thích lâu dài của người dùng theo BR-43.
-- *Số vòng lặp tối đa của Agent:* Giữ nguyên nguyên tắc hard deadline 60s tuyệt đối để bảo vệ tài nguyên; giới hạn tối đa 10 bước trong một lượt chạy là đề xuất kỹ thuật phụ thuộc `TECH-PROP-08` cho mốc demo để kiểm soát chi phí, chưa phải chính sách sản phẩm cố định đã duyệt.
+- *Số vòng lặp tối đa của Agent:* Giữ nguyên nguyên tắc hard deadline 60s tuyệt đối để bảo vệ tài nguyên; giới hạn tối đa 10 bước trong một lượt chạy cho mốc demo đã được phê duyệt ngày 2026-11-28 theo `TECH-PROP-08` tại [spec.md Mục 7](../spec.md). Khi nghiệm thu theo NFR §9.11.3, vẫn cần định nghĩa cách đếm bước, đối chiếu các kịch bản và kiểm riêng ngân sách gọi model.

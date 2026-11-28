@@ -53,7 +53,7 @@ Template spec/checklist của dự án yêu cầu nguồn sở hữu, mã/phiên
 | Web BFF routes | [Specification](002-web-bff-routes/spec.md) | [Plan](002-web-bff-routes/plan.md) |
 | App boundaries | [Accepted design (ADR-0002)](../06-decisions/0002-customer-organizer-app-boundaries.md) | [Migration plan](003-app-boundaries/plan.md) |
 | Service decomposition | [Bản kiến trúc 7 service](004-service-decomposition/spec.md), [quyết định và lý do đã xác nhận](004-service-decomposition/decisions.md); bản tổng hợp chờ chủ sản phẩm đọc lại | Chỉ phân tích/thiết kế, chưa lập kế hoạch triển khai |
-| Data design | [Đặc tả thiết kế dữ liệu 7 service](005-data-design/spec.md) | [Kế hoạch thiết kế tài liệu](005-data-design/plan.md); chưa phải schema/migration đã triển khai |
+| Data design | [Đặc tả thiết kế dữ liệu 7 service](005-data-design/spec.md), bản đã qua review độc lập và chờ nghiệm thu | [Kế hoạch thiết kế tài liệu](005-data-design/plan.md) |
 | Customer login — Web và Mobile (A-03) | [Spec chung](006-customer-login/spec.md), [nguồn đối chiếu](006-customer-login/sources.md) | [Plan](006-customer-login/plan.md), [phân rã tasks](006-customer-login/tasks.md); không cấp quyền triển khai |
 | Customer registration — Web và Mobile (A-01) | [Spec chung](007-customer-registration/spec.md), [nguồn đối chiếu](007-customer-registration/sources.md) | [Plan](007-customer-registration/plan.md), [phân rã tasks](007-customer-registration/tasks.md); không cấp quyền triển khai |
 

@@ -18,12 +18,13 @@ version: 1.1.0
 ### Nguồn nghiệp vụ và quyết định kỹ thuật
 - [Use case A-01–A-08, M-05, M-06](../../../03-product/use-cases.md) và [Mô tả use case](../../../03-product/use-case-descriptions.md).
 - [ADR-0008](../../../06-decisions/0008-better-auth-with-direct-login.md) (Better Auth v1.2.9+ cho xác thực trực tiếp và quản lý phiên).
-- [NFR-SEC-01 (Mục 9.14 trong domain-context.md)](../../domain-context.md):
+- [NFR-SEC-01 §9.14](https://github.com/NhiBuaa/movie-booking-agent/blob/ad002e99936231fac0f8493830b9ec36dc3aedb2/docs/05-specs/nfr/security.md) (các mục có trong snapshot đã review):
   - Mục 9.14.1: Phạm vi đăng xuất vô hiệu phiên hiện tại (Option A), không mặc định ngắt các phiên độc lập khác.
   - Mục 9.14.2: MFA bắt buộc cho Quản trị viên toàn chuỗi và Quản lý rạp bằng TOTP kết hợp bộ mã dự phòng dùng một lần.
   - Mục 9.14.3: Chưa hỗ trợ khôi phục tự động khi mất cả TOTP và mã dự phòng trong mốc demo.
   - Mục 9.14.4: Quy tắc đổi yếu tố TOTP và tạo lại bộ mã dự phòng (phải xác thực lại mật khẩu và yếu tố hiện có).
 - [Quyết định kiến trúc 7 service](../../004-service-decomposition/decisions.md) (Thời hạn bằng chứng quyền vận hành: 90 phút, làm mới 15 phút, tiếp tục soát vé 60 phút khi mất liên lạc).
+- NFR §9.14.6 mở rộng MFA lúc đăng nhập tới `TICKET_SCANNER` và `CONCESSION_STAFF`. Luồng cấp phiên, hết hạn và thu hồi trong bản này cần đối chiếu tiếp các yêu cầu mới hơn theo [Mục 1 của đặc tả](../spec.md#nguồn-nfr-mới-hơn-bản-đã-review).
 
 ---
 
@@ -385,7 +386,7 @@ Lưu vết quy trình đổi email hai bước bảo vệ tài khoản người 
 |---|---|---|---|---|---|
 | `id` | `VARCHAR(36)` | NOT NULL | Không có | Khóa chính, tiền tố `tfa_` theo UUIDv7 | Better Auth 2FA Plugin |
 | `user_id` | `VARCHAR(36)` | NOT NULL | Không có | Khóa ngoại tham chiếu `users(id)`, UNIQUE | NFR-SEC-01 mục 9.14.2 |
-| `secret_encrypted`| `VARCHAR(255)`| NOT NULL | Không có | Khóa bí mật TOTP đang active (mã hóa AES-256-GCM) | NFR-SEC-01 mục 9.14.2 |
+| `secret_encrypted`| `VARCHAR(255)`| NOT NULL | Không có | Khóa bí mật TOTP đang active, lưu mã hóa | NFR-SEC-01 mục 9.14.2 |
 | `pending_secret_encrypted`| `VARCHAR(255)`| NULL | NULL | Khóa TOTP mới đang chờ xác minh qua mã thử đầu tiên | Finding 14, NFR-SEC-01 mục 9.14.4 |
 | `pending_secret_hash` | `VARCHAR(64)` | NULL | NULL | Băm SHA-256 của pending secret phục vụ CAS atomic activation | Finding 14 |
 | `pending_version` | `INTEGER` | NOT NULL | `1` | Phiên bản cấu hình pending để serialize việc kích hoạt | Finding 14 |
@@ -444,8 +445,8 @@ Lưu vết quy trình đổi email hai bước bảo vệ tài khoản người 
 | `reference_id` | `VARCHAR(36)` | NOT NULL | Không có | Định danh đối tượng nghiệp vụ liên kết (polymorphic reference), được kiểm soát logic theo `purpose`: tham chiếu logic `verifications(id)` khi `purpose IN ('EMAIL_VERIFY', 'PASSWORD_RESET', 'MFA_RECOVERY')`, hoặc tham chiếu logic `email_change_requests(id)` khi `purpose IN ('EMAIL_CHANGE_OLD', 'EMAIL_CHANGE_NEW')`. Không tạo FK vật lý đa bảng | Finding 13, F23 |
 | `purpose` | `VARCHAR(64)` | NOT NULL | Không có | Mục đích: `CHECK (purpose IN ('EMAIL_VERIFY', 'PASSWORD_RESET', 'MFA_RECOVERY', 'EMAIL_CHANGE_OLD', 'EMAIL_CHANGE_NEW'))` | Kiến trúc mục 4, Finding 13 |
 | `status` | `VARCHAR(32)` | NOT NULL | `'ACTIVE'` | Trạng thái: `CHECK (status IN ('ACTIVE', 'REVOKED', 'EXPIRED'))` | Finding 13, F23 |
-| `encrypted_payload`| `TEXT` | NOT NULL | Không có | Dữ liệu nội dung email (chứa email recipient và OTP/URL) mã hóa có xác thực [TECH-PROP-09] | Finding 13, NFR-PRIV-01, ADR-0018, F26 |
-| `expires_at` | `TIMESTAMPTZ` | NOT NULL | Không có | Thời điểm hết hạn payload [TECH-PROP-09] | NFR-PRIV-01, F26 |
+| `encrypted_payload`| `TEXT` | NOT NULL | Không có | Dữ liệu nội dung email (chứa email recipient và OTP/URL) mã hóa có xác thực theo §7.1 | Finding 13, NFR-PRIV-01, ADR-0018, F26 |
+| `expires_at` | `TIMESTAMPTZ` | NOT NULL | Không có | Thời điểm hết hạn payload. Giá trị TTL theo mục đích còn cần đặc tả | NFR-PRIV-01, F26 |
 | `created_at` | `TIMESTAMPTZ` | NOT NULL | `NOW()` | Thời điểm tạo bản ghi payload (UTC) | Mục 4.3 `spec.md` |
 | `revoked_at` | `TIMESTAMPTZ` | NULL | NULL | Thời điểm thu hồi khi yêu cầu bị hủy hoặc thay thế | Finding 13, F23 |
 
@@ -527,7 +528,7 @@ Lưu vết quy trình đổi email hai bước bảo vệ tài khoản người 
 
 ### 6.2. Giao thức Challenge và Xác minh MFA Nguyên tử (NFR-SEC-01 Mục 9.14.2 & Finding 10)
 - Khi tài khoản có vai trò `ADMIN` hoặc `CINEMA_MANAGER` đăng nhập bằng mật khẩu đúng:
-  1. Identity kiểm tra bảng `two_factors` thấy `verified = TRUE`. Hệ thống tạo bản ghi `two_factor_challenges (id = $challenge_id, user_id, status = 'PENDING', expires_at = NOW() + INTERVAL '5 minutes')` *[Thời hạn 5 phút là đề xuất kỹ thuật TECH-PROP-ID-04]*.
+  1. Identity kiểm tra bảng `two_factors` thấy `verified = TRUE`. Hệ thống tạo bản ghi `two_factor_challenges (id = $challenge_id, user_id, status = 'PENDING', expires_at = NOW() + INTERVAL '5 minutes')` *[Thời hạn 5 phút đã duyệt ngày 2026-11-28 theo TECH-PROP-09 tại spec.md Mục 7]*.
   2. Client hiển thị màn hình yêu cầu nhập mã TOTP từ Authenticator hoặc Mã dự phòng.
   3. **Phục hồi Phiên sau Mất mạng ĐƯA LÊN ĐẦU TIÊN và Khóa Bi quan (Recovery-First & Pessimistic Lock - Finding 10):**
      - Bắt đầu ACID transaction và khóa dòng challenge:
@@ -622,7 +623,7 @@ Lưu vết quy trình đổi email hai bước bảo vệ tài khoản người 
           INSERT INTO verifications (id, user_id, identifier, value, purpose, status, expires_at)
           VALUES (:v_new_id, :uid, :new_email, :token_hash_new, 'EMAIL_CHANGE_NEW', 'PENDING', NOW() + INTERVAL '24 hours');
           ```
-        - Chèn bản ghi yêu cầu đổi email mới tham chiếu tới 2 token vừa chèn (bảo vệ bởi partial unique index `uq_open_email_change_user`, thời hạn 24 giờ là đề xuất `[TECH-PROP-09]`):
+        - Chèn bản ghi yêu cầu đổi email mới tham chiếu tới 2 token vừa chèn (bảo vệ bởi partial unique index `uq_open_email_change_user`, thời hạn 24 giờ trong SQL minh họa là đề xuất kỹ thuật còn mở):
           ```sql
           INSERT INTO email_change_requests (
               id, user_id, current_email, new_email, status, current_verification_id, new_verification_id, expires_at, updated_at
@@ -690,10 +691,10 @@ Lưu vết quy trình đổi email hai bước bảo vệ tài khoản người 
 ## 7. Vòng đời và bảo vệ dữ liệu
 
 ### 7.1. Dữ liệu nhạy cảm và Chuẩn hóa mã hóa
-- Mật khẩu người dùng: Luôn băm bằng thuật toán **Argon2id** theo ADR-0008. Bộ tham số an toàn (`m=65536, t=3, p=4`) là đề xuất kỹ thuật `[TECH-PROP-09]` đang chờ đo benchmark sản xuất theo ADR-0008. Không bao giờ lưu trữ mật khẩu ở dạng thô hay dùng các thuật toán lỗi thời.
-- Khóa bí mật TOTP: Mã hóa bảo vệ bằng khóa riêng theo yêu cầu bảo mật đã duyệt (phương án dùng AES-256-GCM / KMS Managed Key là đề xuất kỹ thuật [TECH-PROP-09] theo ADR-0023).
+- Mật khẩu người dùng: Luôn băm bằng thuật toán **Argon2id** theo ADR-0008. Bộ tham số an toàn (`m=65536, t=3, p=4`) đã được duyệt làm cấu hình thiết kế ngày 2026-11-28 theo `[TECH-PROP-09]` tại [spec.md Mục 7](../spec.md); vẫn phải đo benchmark trên môi trường triển khai theo ADR-0008 trước khi xác nhận phù hợp vận hành. Không bao giờ lưu trữ mật khẩu ở dạng thô hay dùng các thuật toán lỗi thời.
+- Khóa bí mật TOTP: Mã hóa bảo vệ bằng khóa riêng. AES-256-GCM và khóa do KMS quản lý là phương án kỹ thuật còn mở.
 - Mã dự phòng: Chỉ lưu bản băm SHA-256 (`code_hash`). Không thể khôi phục mã dự phòng gốc từ cơ sở dữ liệu.
-- Payload Claim Check: Mã hóa có xác thực và tách biệt khóa theo yêu cầu đã duyệt; thuật toán AES-256-GCM và TTL cụ thể là đề xuất kỹ thuật [TECH-PROP-09].
+- Payload Claim Check: Mã hóa có xác thực và tách biệt khóa theo thiết kế Claim Check. AES-256-GCM và TTL cụ thể cho từng mục đích là các chi tiết kỹ thuật còn mở.
 
 ### 7.2. Ma trận Xóa tài khoản 4 Nhóm Dữ liệu và Xử lý Ngoại lệ 24h (BR-38 & Finding 14)
 
@@ -747,5 +748,5 @@ Quy trình xóa tài khoản phân định rạch ròi thành **4 Nhóm Dữ li�
 
 ### 8.2. Quyết định còn thiếu và phụ thuộc
 - *Chính sách phiên Web/Mobile:* Đã duyệt Phương án A (đăng xuất phiên hiện tại, giữ phiên độc lập, xóa dữ liệu riêng tư trên app).
-- *Phương thức MFA:* Đã duyệt TOTP và mã dự phòng một lần, bắt buộc cho Admin chuỗi và Quản lý rạp (Phương án A, ngày 2026-11-18).
+- *Phương thức MFA:* TOTP và mã dự phòng một lần đã duyệt cho Admin chuỗi và Quản lý rạp theo NFR §9.14.2. Yêu cầu mở rộng cho nhân viên hiện trường theo §9.14.6 được dẫn tại Mục 1.
 - *Mất cả TOTP và mã dự phòng:* Đã duyệt không hỗ trợ khôi phục tự động ở mốc demo (Phương án A, ngày 2026-11-18). Không hỏi lại các quyết định này.

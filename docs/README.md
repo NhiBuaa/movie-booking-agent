@@ -20,7 +20,8 @@ for implementation limits; a target architecture does not establish verified run
 
 [Thiết kế microservices đích](05-specs/004-service-decomposition/spec.md) sở hữu phân chia 7 service;
 [bản ghi quyết định](05-specs/004-service-decomposition/decisions.md) giữ lý do và nguồn chấp thuận.
-Các trang kiến trúc phân biệt thiết kế đích với hiện trạng tại [CONTEXT](../CONTEXT.md).
+[Thiết kế dữ liệu Feature 005](05-specs/005-data-design/spec.md) mô tả quyền sở hữu, ERD và từ điển
+của 7 database PostgreSQL logic, luồng giao dịch và các kho hỗ trợ. Xem [CONTEXT](../CONTEXT.md) để đối chiếu hiện trạng triển khai.
 
 ## `03-product/`
 
