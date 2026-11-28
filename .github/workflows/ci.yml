@@ -87,5 +87,13 @@ jobs:
           path: kit
           persist-credentials: false
 
+      - name: Apply project Spec Kit compatibility fixes
+        run: |
+          git -C kit apply --check ../project/.github/patches/check-kit-speckit.patch
+          git -C kit apply ../project/.github/patches/check-kit-speckit.patch
+
+      - name: Test validation kit compatibility
+        run: pwsh -File project/.github/scripts/test-kit-compatibility.ps1 -KitScript kit/scripts/check-kit.ps1
+
       - name: Check documentation integrity
         run: pwsh -File kit/scripts/check-kit.ps1 -TargetPath project
