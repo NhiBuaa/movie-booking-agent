@@ -5,6 +5,8 @@ Customer Web/Mobile và Organizer Web/Mobile theo
 [ADR-0002](../06-decisions/0002-customer-organizer-app-boundaries.md).
 Đọc PRODUCT của app để xác định người dùng, tác vụ và nền tảng;
 [hướng dẫn công cụ](../07-guides/development-tools.md#bối-cảnh-impeccable) dẫn tới từng bối cảnh.
+Phạm vi và điều kiện nghiệm thu demo theo [NFR hiệu năng](../05-specs/nfr/performance.md) và
+[NFR trợ năng](../05-specs/nfr/accessibility.md).
 
 ---
 
@@ -34,7 +36,7 @@ Mọi màn hình hoặc thành phần UI mới phải trải qua 4 giai đoạn 
    - App cảm ứng không phụ thuộc hover để hoàn thành tác vụ.
    - Phản hồi tức thời với các tác vụ chọn ghế, bộ đếm ngược thời gian giữ vé và thanh toán.
 3. **Giai đoạn 3 — Khả năng tiếp cận & Render thực tế (a11y & Render Verification)**:
-   - Độ tương phản chữ và nền đạt chuẩn WCAG AA (tối thiểu 4.5:1 cho body text).
+   - Độ tương phản chữ thường và nền tối thiểu 4,5:1. Web theo WCAG 2.2 AA và app native áp dụng các tiêu chí phù hợp theo NFR trợ năng.
    - Hai app Web hỗ trợ điều hướng bàn phím (Tab, Enter, Space, Escape).
      App iOS/Android hỗ trợ trình đọc màn hình, cỡ chữ hệ thống, vùng an toàn và thao tác quay lại của hệ.
    - Vùng chạm tối thiểu: Web 44×44 CSS px; iOS 44×44 pt; Android 48×48 dp.

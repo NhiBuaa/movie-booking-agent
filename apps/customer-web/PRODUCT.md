@@ -98,6 +98,9 @@ bên ngoài hoặc quyền sử dụng tài sản của họ.
 
 ## Accessibility & Inclusion
 
-Tuân theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md): WCAG AA,
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Web](../../docs/05-specs/nfr/performance.md).
+
+Tuân theo [chuẩn chất lượng UI](../../docs/04-standards/ui-quality.md): WCAG 2.2 AA,
 điều hướng bàn phím, tương phản và kiểm chứng giao diện ở kích thước liên quan.
 Đây là yêu cầu chất lượng; chưa phải kết quả đánh giá khả năng tiếp cận của ứng dụng.

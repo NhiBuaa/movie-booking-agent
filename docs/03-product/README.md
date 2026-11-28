@@ -21,7 +21,8 @@ Phương pháp vẽ/kiểm chứng thuộc [quy chuẩn UML](../04-standards/use
 
 Chủ sản phẩm xác nhận tổng hợp tại **Q173-A** ngày 2026-11-17. Bộ tài liệu đã đồng bộ General → ánh xạ → chi tiết,
 danh mục, mô tả và BR theo Q32–Q172: 9 actor, 55 use case, 10 khối Mermaid.
-Đã hòa giải với kiến trúc/Tech Stack trên main; BR-40…BR-43 giữ quy tắc cá nhân hóa, OPEN-11/OPEN-12 vẫn mở.
+Đã hòa giải với kiến trúc/Tech Stack trên main; BR-40…BR-43 giữ quy tắc cá nhân hóa và OPEN-11 theo dõi các phần còn mở. OPEN-12 dẫn tới
+[quyết định đã duyệt về chuyển dự phòng AI](../05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider) và phần triển khai cần kiểm chứng.
 Các phụ thuộc tích hợp/pháp lý/nhân sự vẫn ở mục 6.2; tài liệu không xác nhận chức năng đã vận hành.
 
 PRODUCT ghi người dùng, công việc, nền tảng và giới hạn của từng app theo
