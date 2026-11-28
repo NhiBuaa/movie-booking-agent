@@ -70,6 +70,8 @@ Không chọn B cũng không loại khả năng bổ sung OAuth/SSO sau này khi
   sau xác nhận đúng nội dung/phiên bản Core kiểm tra theo thiết kế bảy service. Không chuyển credential
   giao dịch rộng vào Agent/model/checkpoint, tự sửa `sub` hoặc bỏ kiểm audience.
   Hợp đồng quyền đọc riêng tư của Agent và token cụ thể vẫn cần đặc tả; chỉ hiển thị vé sau kiểm chứng Core.
+- [NFR-SEC-01](../05-specs/nfr/security.md) quy định MFA, vòng đời phiên và hành vi thu hồi đã duyệt.
+  Hợp đồng phiên và đồng bộ thu hồi cần hoàn thiện theo [NFR-OPEN04](../05-specs/nfr/README.md#9173-phần-còn-mở-và-điều-kiện-hoàn-tất-trước-nghiệm-thu).
 - Chưa pin Better Auth, adapter/plugin, Expo hoặc thư viện xác thực JWT phía NestJS. Cần kiểm chứng
   tổ hợp phiên bản và reconciliation contracts hiện tại; `AuthSessionDto` hiện có không tự chốt thiết kế mới.
 - Portfolio cần chứng minh đăng nhập/xác minh, token sai/hết hạn/sai audience, đăng xuất/khóa tài khoản,

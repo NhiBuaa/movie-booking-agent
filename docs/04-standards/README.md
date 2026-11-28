@@ -4,6 +4,7 @@
 
 - [Quy chuẩn phân tích và trình bày UML use case](use-case-modeling.md).
 - [Chuẩn chất lượng UI/UX](ui-quality.md).
+- [Chuẩn thiết kế chuyển động (Motion Design Language)](motion-design.md).
 
 This directory contains normative engineering and modeling rules shared by humans and agents.
 

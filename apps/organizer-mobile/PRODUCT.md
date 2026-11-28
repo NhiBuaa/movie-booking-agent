@@ -80,6 +80,9 @@ Xem [CONTEXT](../../CONTEXT.md); việc chuyển trách nhiệm trong tài liệ
 
 ## Accessibility & Inclusion
 
+Phạm vi nghiệm thu demo theo [NFR trợ năng](../../docs/05-specs/nfr/accessibility.md) và
+[NFR hiệu năng Mobile](../../docs/05-specs/nfr/performance.md).
+
 Theo [chuẩn UI](../../docs/04-standards/ui-quality.md), hỗ trợ cỡ chữ hệ thống, trình đọc màn hình,
 vùng chạm và điều hướng theo hệ điều hành. Kết quả quét/lỗi cần thông tin đọc được, không chỉ dùng màu.
 Kiểm chứng bằng emulator/simulator hoặc thiết bị khi có app; chưa có bằng chứng đạt trong lần này.

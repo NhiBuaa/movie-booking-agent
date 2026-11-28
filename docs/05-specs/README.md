@@ -17,6 +17,7 @@ Suggested validity states:
 ## Movie Booking Platform
 
 - [Domain context và ràng buộc giao dịch](domain-context.md).
+- [Yêu cầu phi chức năng cho demo portfolio](nfr/README.md).
 - [Đặc tả kênh đặt vé/hỗ trợ sau mua trong chat](conversational-booking.md).
 
 [Mô hình sản phẩm](../03-product/use-cases.md) sở hữu actor, mục tiêu và BR/OPEN;

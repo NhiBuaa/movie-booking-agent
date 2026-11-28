@@ -43,7 +43,9 @@ không dùng trạng thái checkout khác làm bằng chứng của bản này.
 
 ## Active Direction
 
-Dùng mô hình mục tiêu làm đầu vào cho đặc tả và kiểm chứng từng tính năng trước khi sửa code.
+Dùng mô hình mục tiêu và [bản NFR cơ sở cho demo portfolio](docs/05-specs/nfr/README.md) làm đầu vào cho đặc tả từng tính năng.
+Bản NFR ghi các quyết định đã duyệt và [phần cần hoàn thiện trước nghiệm thu](docs/05-specs/nfr/README.md#9173-phần-còn-mở-và-điều-kiện-hoàn-tất-trước-nghiệm-thu).
+Trạng thái thực thi và số đo thuộc bằng chứng của từng phiên bản.
 Các ranh giới service/dữ liệu/giao tiếp đã chốt được sở hữu bởi
 [thiết kế](docs/05-specs/004-service-decomposition/spec.md) và
 [quyết định](docs/05-specs/004-service-decomposition/decisions.md) ngày 2026-11-17.
@@ -159,8 +161,8 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
   và [đặc tả nghiệp vụ](docs/05-specs/domain-context.md).
 - [Kiến trúc microservices](docs/05-specs/004-service-decomposition/spec.md) và
   [nguồn chấp thuận/lý do](docs/05-specs/004-service-decomposition/decisions.md).
-- [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md)
-  và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
+- [Cấu hình agent](.agents/README.md), [chuẩn UI](docs/04-standards/ui-quality.md),
+  [chuẩn chuyển động](docs/04-standards/motion-design.md) và [điều phối skill UI](.agents/rules/ui-skill-routing.md).
 - [Công cụ phát triển](docs/07-guides/development-tools.md): chọn PRODUCT theo app, quy trình Impeccable/live
   và CodeGraph theo worktree. Cài công cụ/có index không xác nhận code hoặc giao dịch đã vận hành.
 - Quản lý công việc và bằng chứng kiểm chứng: GitHub Issues/PRs.
@@ -168,8 +170,6 @@ Các ghi nhận dưới đây lấy từ nguồn kỹ thuật đó; lần xử l
 ## Chính sách UML đã đồng bộ
 
 Q32–Q172 và xác nhận Q173 đã được đồng bộ trong mô hình/mô tả/BR và PRODUCT. Các nhóm OPEN-01…10
-đã có lựa chọn sản phẩm; phần đặc tả/kiểm chứng vẫn giữ. OPEN-11 về chính sách dữ liệu cá nhân hóa còn mở.
-OPEN-12 đã có quyết định tiếp nối cho chuyển dự phòng inference có kiểm soát, nêu tại Mục 6 của
-[thiết kế dữ liệu](docs/05-specs/005-data-design/spec.md). Cấu hình và kiểm chứng routing còn mở.
-BR-40…BR-43 là mã mới của bốn BR cá nhân hóa upstream, nội dung giữ nguyên.
+đã có lựa chọn sản phẩm và còn phần đặc tả/kiểm chứng. OPEN-11 về dữ liệu cá nhân hóa vẫn mở.
+OPEN-12 đã có [quyết định chuyển dự phòng inference](docs/05-specs/nfr/ai-agent.md#9112-chính-sách-thử-lại-inference-và-chuyển-provider), còn thiết kế và kiểm chứng routing. BR-40…BR-43 là mã mới của bốn BR cá nhân hóa upstream, nội dung giữ nguyên.
 Chính sách email lỗi/gửi lại đã chọn ở Q149; tham số/tích hợp Resend còn chưa kiểm chứng.

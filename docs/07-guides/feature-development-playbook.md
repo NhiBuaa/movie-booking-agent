@@ -28,6 +28,9 @@ trước khi lập kế hoạch; không chọn lại stack hoặc coi lựa ch�
 
 *Ví dụ — Archive Conversation:* Chủ sở hữu bấm Archive thì cuộc trò chuyện rời danh sách đang hoạt động nhưng vẫn xem được trong Archived; người dùng khác không được archive cuộc trò chuyện đó.
 
+Đối chiếu các [NFR áp dụng](../05-specs/nfr/README.md) trước khi chốt yêu cầu tính năng. Ghi mã NFR,
+điều kiện đo và bằng chứng cần có vào đặc tả hoặc Issue. Chỗ còn mở dẫn tới mã NFR-OPEN tương ứng.
+
 Đây là **Requirements chi tiết của tính năng**. Ghi vào GitHub Issue đủ rõ để test; với thay đổi lớn,
 thực hiện Spec Kit theo quy định dự án. Khi thay đổi actor, mục tiêu, quyền, quan hệ, điều kiện trước,
 luồng, kết quả hoặc ngoại lệ, cập nhật các phần bị ảnh hưởng của mô hình, ánh xạ, mô tả, bảng quan hệ

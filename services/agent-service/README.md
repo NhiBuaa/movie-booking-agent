@@ -71,7 +71,8 @@ không suy danh sách tool hiện có thành quyền thực thi trực tiếp ho
 
 B-09 cho đổi ghế cùng suất trong chat, xác nhận rõ cũ → mới; Agent lập đề xuất, app/BFF thực thi dưới
 quyền khách theo thiết kế bảy service. C-01/BR-34 tối thiểu hóa dữ liệu, không gửi PII/bí mật/QR/thẻ
-hoặc toàn bộ hồ sơ/đơn cho model. Q153 và hướng fallback ADR-0028 cần chốt quan hệ tại OPEN-12.
+hoặc toàn bộ hồ sơ/đơn cho model. Quy tắc chuyển dự phòng inference, deadline và hạn mức theo [NFR của Agent](../../docs/05-specs/nfr/ai-agent.md).
+Vòng đời chat/checkpoint và phạm vi dữ liệu chẩn đoán theo [NFR dữ liệu riêng tư](../../docs/05-specs/nfr/privacy-and-audit.md).
 Hội viên/đổi điểm, đánh giá/xét lại, tài khoản/xóa chat/xóa tài khoản và gửi lại email dùng màn hình riêng.
 Chat không tự xóa theo kỳ; khách xóa qua A-06, không xóa đơn/vé/hoàn. L-06/N-01/BR-33 đã chọn hộp
 thông báo và email, chưa SMS/push; tham số và kiểm chứng Resend còn OPEN-09, không phải toàn chính sách gửi lại chưa chốt.

@@ -96,10 +96,11 @@ Ba app ngoài Customer Web hiện mới có tài liệu; chưa có lệnh build/
 ---
 
 ## 🎨 Quy chuẩn Thiết kế (Design System)
-Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinema**:
+Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinema — Cinematic Kinetic Editorial**:
 - Màu nền đen sâu (`#000000`, `#181818`), viền mảnh tinh tế (`#303030`).
 - Điểm nhấn tín hiệu màu đỏ Rosso Corsa (`#DA291C`).
-- Chi tiết quy định xem tại [`DESIGN.md`](DESIGN.md).
+- Bố cục biên tập điện ảnh, chữ động kinetic và dàn dựng không gian (spatial choreography).
+- Chi tiết quy định xem tại [`DESIGN.md`](DESIGN.md) và chuẩn chuyển động tại [`docs/04-standards/motion-design.md`](docs/04-standards/motion-design.md).
 
 ## Tài liệu sản phẩm
 
@@ -112,6 +113,7 @@ Toàn bộ nền tảng áp dụng ngôn ngữ thiết kế **Ferrari Dark Cinem
   `Accepted` ghi lựa chọn thiết kế, chưa xác nhận đã cài đặt/tích hợp hoặc đạt hiệu năng.
   Hosting/provider, topology máy và CD giữ hoãn đến lúc chuẩn bị deploy.
 - [Kiến trúc microservices và các luồng quan trọng](docs/05-specs/004-service-decomposition/spec.md).
+- [Mục tiêu chất lượng và cách nghiệm thu demo portfolio](docs/05-specs/nfr/README.md).
 - [UML use case: General → ánh xạ → chi tiết](docs/03-product/use-cases.md),
   [mô tả use case](docs/03-product/use-case-descriptions.md) và [thuật ngữ](GLOSSARY.md).
 - [Quy chuẩn phân tích/vẽ UML](docs/04-standards/use-case-modeling.md) và [bản đồ docs](docs/README.md).

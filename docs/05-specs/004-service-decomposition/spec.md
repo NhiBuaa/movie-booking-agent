@@ -111,7 +111,8 @@ riêng ở mục 4. Sơ đồ tổng quát không quy định mọi lời gọi 
 - Các module Core cùng dùng database Core và có thể tham gia transaction cục bộ qua interface.
   Không import ORM/schema nội bộ của service khác làm hợp đồng chung.
 - Dùng cùng cụm PostgreSQL không đồng nghĩa cùng chủ dữ liệu; database riêng cũng không tự tạo cách
-  ly CPU/RAM, WAL, sự cố hoặc khôi phục. Số cụm và backup/restore chưa chọn.
+  ly CPU/RAM, WAL, sự cố hoặc khôi phục. Số cụm và backup vận hành còn mở.
+  Phạm vi diễn tập mất Core DB đã được duyệt tại [NFR phục hồi](../nfr/recovery-and-correctness.md).
 - CDC có quyền hạ tầng giới hạn để đọc nguồn outbox/WAL; không trao quyền đó cho business service
   hoặc mặc định phát mọi bảng nghiệp vụ. `packages/contracts` giữ hợp đồng, không giữ quyền dữ liệu.
 
@@ -346,8 +347,8 @@ Không dùng thiếu nhân lực hoặc chi phí làm lý do tự hạ mục ti�
   đặc tả trước khi triển khai, không tự coi đã đạt chỉ nhờ HTTP/Kafka/callback.
 - Quyền đọc riêng tư Agent và chi tiết hợp đồng ủy quyền/xác thực giữa các lớp ngoài phần đã chốt.
 - Tương thích phiên bản hợp đồng, độ trễ sự kiện, retention/rebuild và phục hồi dữ liệu liên service.
-- Topology/HA/số cụm, backup/restore, ngân sách kết nối và các chỉ tiêu tải/mức sẵn sàng chưa có kết luận
-  từ phiên này; cần đối chiếu nguồn NFR/công nghệ riêng, không bịa số hoặc coi đã triển khai.
+- Topology/HA/số cụm, backup vận hành và ngân sách kết nối còn mở. Mục tiêu tải, cảnh báo và phục hồi
+  của demo theo [bộ NFR](../nfr/README.md).
 
 **Để lại cho đặc tả tính năng/kỹ thuật khi được giao:** endpoint/DTO/schema/enum, TTL đề xuất và mã
 thao tác, thuật toán khóa/isolation, số lần retry, UI xác nhận, chi tiết worker/hủy từng đơn và quy trình

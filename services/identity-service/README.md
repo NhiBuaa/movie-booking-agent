@@ -16,7 +16,8 @@ Better Auth với form đăng nhập trực tiếp, session và hướng JWT ký
 [ADR-0008](../../docs/06-decisions/0008-better-auth-with-direct-login.md). Session quản lý đăng nhập;
 JWT không thay kiểm quyền tài nguyên hoặc bảo đảm quyền vẫn hiện hành. Identity giữ dữ liệu Auth
 trong database PostgreSQL riêng, không dùng chung bảng/migration Core.
-Chưa chọn framework/ORM triển khai Identity hoặc hợp đồng claim/phiên/luân chuyển khóa cụ thể.
+[NFR-SEC-01](../../docs/05-specs/nfr/security.md) quy định MFA, thời hạn phiên và hành vi thu hồi.
+Framework/ORM triển khai Identity, chi tiết hợp đồng và luân chuyển khóa còn mở.
 Không cấp Agent credential giao dịch rộng hoặc token giả danh mọi khách; chưa tích hợp runtime.
 
 ## Ranh giới tích hợp
